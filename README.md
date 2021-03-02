@@ -1,2 +1,7 @@
 # tsr_ml
-TL;DR
+project
+    |__data
+    |__data_exploration
+    |__data_cleaning
+    |__task_1
+    |__...
