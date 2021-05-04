@@ -2,8 +2,6 @@ import pandas as pd
 import os
 import numpy as np
 
-#os.chdir('C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning')
-
 csv_path = os.path.join("..","data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_cleaned.csv")
 tsr_all3 = pd.read_csv(csv_path, low_memory=False)
 tsr_all3.head()
@@ -216,7 +214,7 @@ for i in tsr_all3[date]:
     tsr_all3[i][(tsr_all3[i].dt.year < 2006) | (tsr_all3[i].dt.year > 2021)] = np.nan
     tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
 
-
+#SAVE FILE
 TSR_ALL3_TIDY = pd.concat([tsr_all3, nominal_onehot], axis = 1)
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_TIDY.csv")
