@@ -2,54 +2,84 @@ import pandas as pd
 import os
 import numpy as np
 
-csv_path = os.path.join("..","data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_cleaned.csv")
-tsr_all3 = pd.read_csv(csv_path, low_memory=False)
+csv_path = os.path.join("..","data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
+tsr_all3 = pd.read_csv(csv_path, low_memory=False, encoding = "windows-1252")
 tsr_all3.head()
 
 tsr_all3.describe()
 
-#icase_id, idcase_id, icd_id, off_id, cd_id, tccs_id, mcd_id
+#drop unrelated features
+tsr_all3 = tsr_all3.drop(["fstatus_id_1", "location_id_1", "torg_id_1", "flu_id_1", "fluorg_id_1", "fluorg_tx_1",
+                          "fluresult_tx_1", "death_dt_1", "death_id_1", "deathsk_id_1", "deatho_tx_1", 
+                          "veihdorg_id_1", "versorg_id_1", "torg_tx_1", "versorg_tx_1", "veihdorg_tx_1", 
+                          "fstatus_id_3", "location_id_3", "torg_id_3", "flu_id_3", "fluorg_id_3", "fluorg_tx_3",
+                          "fluresult_tx_3", "deatho_tx_3", "versorg_id_3", "veihdorg_id_3", "torg_tx_3", 
+                          "versorg_tx_3", "veihdorg_tx_3", "index", "iprotocol_id", "icase_id.1", "idcase_id.1",
+                          "cstatus_id", "org_id", "dctype24_id", "patient_id", "input_nm", "age_nm", "proot_tx",
+                          "itown_id", "addr_tx", "telh_tx", "telp_tx", "telf_tx", "ftitle_tx", "casememo_tx", 
+                          "ivtpath_fl", "ivtpaah_fl", "nivtpa99_tx", "icd_tx", "icdtia_id", "icdo_tx", 
+                          "toastscat_tx", "toastso_tx", "cich_id", "csah_id", "csaho_tx", "thdo_fl", "thdoo_tx",
+                          "trmot_tx", "om_id", "omwa_tx", "omand_id", "omli_id", "omliot_tx", "omliot2_tx", 
+                          "amliot_tx", "amliot2_tx", "como_tx", "deto_tx", "offd_tx", "offdtorg_id", "offdtorg_tx",
+                          "nihsinti_tx", "nihsotti_tx", "brs_dt", "ctti_tx", "cto_tx", "mriti_tx", "mrio_tx", 
+                          "ecgo_tx", "create_dt", "createstaff_id", "sysupd_dt", "sysupdstaff_id", "modify_nm",
+                          "iguid_ft", "icase_id.2", "idcase_id.2", "icase_id.3", "idcase_id.3", "index.1", 
+                          "iprotocol_id.1", "icase_id.4", "idcase_id.4", "hdmt_id", "pcvamt_id", "pomt_id",
+                          "ua_id", "uamt_id", "urmt_id", "ptiamt_id", "hcy_nm", "hcmt_id", "hty_nm", "htmt_id",
+                          "dmy_nm", "dmmt_id", "padmt_id", "ca_tx", "ot_tx", "thishc_id", "iguid_ft.1", 
+                          "icase_id.5", "idcase_id.5", "icase_id.6", "idcase_id.6", "index.2", "iprotocol_id.2",
+                          "icase_id.7", "cname_tx", "cid_id", "birth_dt", "ve_id_1", "ve_id_3", "offd_id", 
+                          "nivtpa99_fl", "toastso_fl", "thdoo_fl", "trmot_fl", "omliot_fl", "omliot2_fl", 
+                          "amliot_fl", "amliot2_fl", "como_fl", "deto_fl", "ot_id", "smc_nm", "smy_nm", "ecgo_fl", 
+                          "omora_fl", "omins_fl", "omst_fl", "omns_fl", "cd_id", "tccs_id", "mcd_id"],
+                          axis = 1)
+
+tsr_all3 = tsr_all3.drop(["verscich_id_1", "vers_dt_1", "veihd_id_1", "veihd_dt_1", "death_dt_3", "deathsk_id_3",
+                          "verscich_id_3", "vers_dt_3", "veihd_id_3", "veihd_dt_3", "ivtpath_id", "ivtpa_dt", 
+                          "ivtpah_nm", "ivtpam_nm", "ivtpamg_nm", "toastu_id", "thd_id", "trm_id", "trmen_id", 
+                          "trmop_id", "com_id", "offd_dt", "offre_dt", "omad_id", "smcp_id", "thishy_id", 
+                          "thisdi_id", "det_id", "death_id_3"],
+                          axis = 1)
+
+#icase_id, idcase_id, icd_id, off_id
 nominal_features = ["pro_id", "opc_id", "nivtpa_id", "toast_id", "offdt_id", "gender_tx"]
 
 ordinal_features = ["mrs_tx_1", "mrs_tx_3", "edu_id", "gcse_nm", "gcsv_nm", "gcsm_nm", "cdr_id", "cdl_id",
                     "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id", "mcdri_id", "mcdli_id", 
-                    "discharged_mrs"]
+                    "discharged_mrs", "hd_id", "pcva_id", "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id",
+                    "ptia_id", "hc_id", "hcht_id", "hchc_id", "ht_id", "dm_id", "pad_id", "al_id", "ca_id", 
+                    "fahiid_parents_1", "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", 
+                    "fahiid_brsi_1", "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4"]
 
 boolean = ["vers_fl_1", "veihd_fl_1", "vers_fl_3", "veihd_fl_3", "ih_fl", "onset_fl", "ot_fl", "flook_fl",
            "fctoh_fl", "nivtpa1_fl", "nivtpa2_fl", "nivtpa3_fl", "nivtpa4_fl", "nivtpa5_fl", "nivtpa6_fl", 
-           "nivtpa7_fl", "nivtpa8_fl", "nivtpa9_fl", "nivtpa10_fl", "nivtpa11_fl", "nivtpa99_fl", "toastle_fl", 
-           "toastli_fl", "toastsce_fl", "toastsmo_fl", "toastsra_fl", "toastsdi_fl", "toastsmi_fl", 
-           "toastsantip_fl", "toastsau_fl", "toastshy_fl", "toastspr_fl", "toastsantit_fl", "toastsho_fl", 
-           "toastshys_fl", "toastsca_fl", "toastso_fl", "thda_fl", "thdh_fl", "thdi_fl", "thdam_fl", "thdv_fl", 
-           "thde_fl", "thdm_fl", "thdr_fl", "thdp_fl", "thdoo_fl", "trman_fl", "trmas_fl", "trmti_fl", 
-           "trmhe_fl", "trmwa_fl", "trmia_fl", "trmfo_fl", "trmta_fl", "trmsd_fl", "trmre_fl", "trmen_fl", 
-           "trmag_fl", "trmcl_fl", "trmpl_fl", "trmlm_fl", "trmiv_fl", "trmve_fl", "trmng_fl", "trmdy_fl", 
-           "trmicu_fl", "trmsm_fl", "trmed_fl", "trmop_fl", "trmot_fl", "om_fl", "omas_fl", "omag_fl", 
-           "omti_fl", "omcl_fl", "omwa_fl", "ompl_fl", "omanh_fl", "omand_fl", "omora_fl", "omins_fl", 
-           "omli_fl", "omst_fl", "omns_fl", "omliot_fl", "omliot2_fl", "am_fl", "amas_fl", "amag_fl", 
-           "amti_fl", "amcl_fl", "amwa_fl", "ampl_fl", "amanh_fl", "amand_fl", "amli_fl", "amliot_fl", 
-           "amliot2_fl", "compn_fl", "comut_fl", "comug_fl", "compr_fl", "compu_fl", "comac_fl", "comse_fl", 
-           "comde_fl", "como_fl", "detst_fl", "dethe_fl", "detho_fl", "detha_fl", "detva_fl", "detre_fl", 
-           "detme_fl", "deto_fl", "ct_fl", "mri_fl", "ecg_id", "ecgl_fl", "ecga_fl", "ecgq_fl", "ecgo_fl", 
-           "mra_fl", "cta_fl", "dsa_fl", "omad_fl", "dethoh_fl", "cortical_aca_ctr",
-           "cortical_mca_ctr", "subcortical_aca_ctr", "subcortical_mca_ctr", "pca_cortex_ctr", 
-           "thalamus_ctr", "brainstem_ctr", "cerebellum_ctr", "watershed_ctr", "hemorrhagic_infarct_ctr", 
-           "old_stroke_ctci", "cortical_aca_ctl", "cortical_mca_ctl", "subcortical_aca_ctl", 
-           "subcortical_mca_ctl", "pca_cortex_ctl", "thalamus_ctl", "brainstem_ctl", "cerebellum_ctl", 
-           "watershed_ctl", "hemorrhagic_infarct_ctl", "old_stroke_ctch", "cortical_aca_mrir", 
-           "cortical_mca_mrir", "subcortical_aca_mrir", "subcortical_mca_mrir", "pca_cortex_mrir", 
-           "thalamus_mrir", "brainstem_mrir", "cerebellum_mrir", "watershed_mrir", "hemorrhagic_infarct_mrir", 
-           "old_stroke_mrici", "cortical_aca_mril", "cortical_mca_mril", "subcortical_aca_mril", 
-           "subcortical_mca_mril", "pca_cortex_mril", "thalamus_mril", "brainstem_mril", "cerebellum_mril", 
-           "watershed_mril", "hemorrhagic_infarct_mril", "old_stroke_mrich", "hd_id", "pcva_id", "pcvaci_id", 
-           "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", "hchc_id", "ht_id", "dm_id", 
-           "pad_id", "al_id", "ca_id", "ot_id", "fahiid_parents_1", "fahiid_parents_2", "fahiid_parents_3", 
-           "fahiid_parents_4", "fahiid_brsi_1", "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4"]
+           "nivtpa7_fl", "nivtpa8_fl", "nivtpa9_fl", "nivtpa10_fl", "nivtpa11_fl", "toastle_fl", "toastli_fl",
+           "toastsce_fl", "toastsmo_fl", "toastsra_fl", "toastsdi_fl", "toastsmi_fl", "toastsantip_fl",
+           "toastsau_fl", "toastshy_fl", "toastspr_fl", "toastsantit_fl", "toastsho_fl", "toastshys_fl",
+           "toastsca_fl", "thda_fl", "thdh_fl", "thdi_fl", "thdam_fl", "thdv_fl", "thde_fl", "thdm_fl",
+           "thdr_fl", "thdp_fl", "trman_fl", "trmas_fl", "trmti_fl", "trmhe_fl", "trmwa_fl", "trmia_fl",
+           "trmfo_fl", "trmta_fl", "trmsd_fl", "trmre_fl", "trmen_fl", "trmag_fl", "trmcl_fl", "trmpl_fl",
+           "trmlm_fl", "trmiv_fl", "trmve_fl", "trmng_fl", "trmdy_fl", "trmicu_fl", "trmsm_fl", "trmed_fl",
+           "trmop_fl", "om_fl", "omas_fl", "omag_fl", "omti_fl", "omcl_fl", "omwa_fl", "ompl_fl", "omanh_fl",
+           "omand_fl", "omli_fl", "am_fl", "amas_fl", "amag_fl", "amti_fl", "amcl_fl", "amwa_fl", "ampl_fl",
+           "amanh_fl", "amand_fl", "amli_fl", "compn_fl", "comut_fl", "comug_fl", "compr_fl", "compu_fl",
+           "comac_fl", "comse_fl", "comde_fl", "detst_fl", "dethe_fl", "detho_fl", "detha_fl", "detva_fl", 
+           "detre_fl", "detme_fl", "ct_fl", "mri_fl", "ecg_id", "ecgl_fl", "ecga_fl", "ecgq_fl", "mra_fl",
+           "cta_fl", "dsa_fl", "omad_fl", "dethoh_fl", "cortical_aca_ctr","cortical_mca_ctr", 
+           "subcortical_aca_ctr", "subcortical_mca_ctr", "pca_cortex_ctr", "thalamus_ctr", "brainstem_ctr",
+           "cerebellum_ctr", "watershed_ctr", "hemorrhagic_infarct_ctr", "old_stroke_ctci", "cortical_aca_ctl",
+           "cortical_mca_ctl", "subcortical_aca_ctl", "subcortical_mca_ctl", "pca_cortex_ctl", "thalamus_ctl",
+           "brainstem_ctl", "cerebellum_ctl", "watershed_ctl", "hemorrhagic_infarct_ctl", "old_stroke_ctch",
+           "cortical_aca_mrir", "cortical_mca_mrir", "subcortical_aca_mrir", "subcortical_mca_mrir",
+           "pca_cortex_mrir", "thalamus_mrir", "brainstem_mrir", "cerebellum_mrir", "watershed_mrir", 
+           "hemorrhagic_infarct_mrir", "old_stroke_mrici", "cortical_aca_mril", "cortical_mca_mril",
+           "subcortical_aca_mril", "subcortical_mca_mril", "pca_cortex_mril", "thalamus_mril", "brainstem_mril",
+           "cerebellum_mril", "watershed_mril", "hemorrhagic_infarct_mril", "old_stroke_mrich"]
 
 continuous = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
               "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm", 
               "cre_nm", "alb_nm", "crp_nm", "hbac_nm", "ac_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm", 
-              "ldl_nm", "got_nm", "gpt_nm", "smc_nm", "smy_nm", "age", "hospitalised_time"]
+              "ldl_nm", "got_nm", "gpt_nm", "age", "hospitalised_time"]
 
 barthel = ["feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs", "dressing", 
            "bowel_control", "bladder_control"]
@@ -80,14 +110,12 @@ tsr_all3["toast_id"][(tsr_all3["toast_id"] != 1) & (tsr_all3["toast_id"] != 2) &
 tsr_all3["offdt_id"][(tsr_all3["offdt_id"] != 1) & (tsr_all3["offdt_id"] != 2) & (tsr_all3["offdt_id"] != 3) & (tsr_all3["offdt_id"] != 4) & (tsr_all3["offdt_id"] != 5)]  = np.nan
 tsr_all3["gender_tx"][(tsr_all3["gender_tx"] != 1) & (tsr_all3["gender_tx"] != 0)]  = np.nan
 
-nominal_onehot = pd.get_dummies(tsr_all3[nominal_features], columns = nominal_features)
-
 #ordinal_features
 for i in tsr_all3[ordinal_features]:
     tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
 
 tsr_all3["mrs_tx_1"][(tsr_all3["mrs_tx_1"] != 0) & (tsr_all3["mrs_tx_1"] != 1) & (tsr_all3["mrs_tx_1"] != 2) & (tsr_all3["mrs_tx_1"] != 3) & (tsr_all3["mrs_tx_1"] != 4) & (tsr_all3["mrs_tx_1"] != 5) & (tsr_all3["mrs_tx_1"] != 6)]  = np.nan
-tsr_all3["mrs_tx_3"][(tsr_all3["mrs_tx_3"] != 0) & (tsr_all3["mrs_tx_3"] != 1) & (tsr_all3["mrs_tx_3"] != 2) & (tsr_all3["mrs_tx_3"] != 3) & (tsr_all3["mrs_tx_3"] != 4) & (tsr_all3["mrs_tx_3"] != 5) & (tsr_all3["mrs_tx_3"] != 6)]  = np.nan
+tsr_all3["mrs_tx_3"][(tsr_all3["mrs_tx_3"] != 0) & (tsr_all3["mrs_tx_3"] != 1) & (tsr_all3["mrs_tx_3"] != 2) & (tsr_all3["mrs_tx_3"] != 3) & (tsr_all3["mrs_tx_3"] != 4) & (tsr_all3["mrs_tx_3"] != 5) & (tsr_all3["mrs_tx_3"] != 6) & (tsr_all3["mrs_tx_3"] != 9)]  = np.nan
 tsr_all3["edu_id"][(tsr_all3["edu_id"] != 98) & (tsr_all3["edu_id"] != 1) & (tsr_all3["edu_id"] != 2) & (tsr_all3["edu_id"] != 3) & (tsr_all3["edu_id"] != 4) & (tsr_all3["edu_id"] != 5) & (tsr_all3["edu_id"] != 6)]  = np.nan
 tsr_all3["gcse_nm"][(tsr_all3["gcse_nm"] != 1) & (tsr_all3["gcse_nm"] != 2) & (tsr_all3["gcse_nm"] != 3) & (tsr_all3["gcse_nm"] != 4)]  = np.nan
 tsr_all3["gcsv_nm"][(tsr_all3["gcsv_nm"] != 1) & (tsr_all3["gcsv_nm"] != 2) & (tsr_all3["gcsv_nm"] != 3) & (tsr_all3["gcsv_nm"] != 4) & (tsr_all3["gcsv_nm"] != 5)]  = np.nan
@@ -104,29 +132,24 @@ tsr_all3["mcdri_id"][(tsr_all3["mcdri_id"] != 1) & (tsr_all3["mcdri_id"] != 2) &
 tsr_all3["mcdli_id"][(tsr_all3["mcdli_id"] != 1) & (tsr_all3["mcdli_id"] != 2) & (tsr_all3["mcdli_id"] != 3)]  = np.nan
 tsr_all3["discharged_mrs"][(tsr_all3["discharged_mrs"] != 0) & (tsr_all3["discharged_mrs"] != 1) & (tsr_all3["discharged_mrs"] != 2) & (tsr_all3["discharged_mrs"] != 3) & (tsr_all3["discharged_mrs"] != 4) & (tsr_all3["discharged_mrs"] != 5) & (tsr_all3["discharged_mrs"] != 6)]  = np.nan
 
-tsr_all3["cdr_id"][tsr_all3["cd_id"] == 0]  = 999
-tsr_all3["cdl_id"][tsr_all3["cd_id"] == 0]  = 999
-tsr_all3["tccsr_id"][(tsr_all3["tccs_id"] == 0) | (tsr_all3["tccs_id"] == 1)]  = 999
-tsr_all3["tccsl_id"][(tsr_all3["tccs_id"] == 0) | (tsr_all3["tccs_id"] == 1)]  = 999
-tsr_all3["tccsl_id"][(tsr_all3["tccs_id"] == 0) | (tsr_all3["tccs_id"] == 1)]  = 999
-tsr_all3["tccsba_id"][(tsr_all3["tccs_id"] == 0) | (tsr_all3["tccs_id"] == 1)]  = 999
-tsr_all3["mcdr_id"][tsr_all3["mcd_id"] == '0'] = 999
-tsr_all3["mcdl_id"][tsr_all3["mcd_id"] == '0'] = 999
-tsr_all3["mcdba_id"][tsr_all3["mcd_id"] == '0'] = 999
-tsr_all3["mcdri_id"][tsr_all3["mcd_id"] == '0'] = 999
-tsr_all3["mcdli_id"][tsr_all3["mcd_id"] == '0'] = 999
+for i in tsr_all3.loc[ : , "hd_id":"ca_id"]:
+    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
+    tsr_all3[i][(tsr_all3[i] != 0) & (tsr_all3[i] != 1) & (tsr_all3[i] != 2)] = np.nan
+    
+for i in tsr_all3.loc[ : , "fahiid_parents_1":"fahiid_brsi_4"]:
+    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
+    tsr_all3[i][(tsr_all3[i] != 0) & (tsr_all3[i] != 1) & (tsr_all3[i] != 2) & (tsr_all3[i] != 9)] = np.nan
 
 #boolean
 for i in tsr_all3[boolean]:
-    tsr_all3[i].replace(1,"1", inplace=True)
-    tsr_all3[i].replace(0,"0", inplace=True)
-    tsr_all3[i].replace("1","Y", inplace=True)
-    tsr_all3[i].replace("0","N", inplace=True)
-    tsr_all3[i][(tsr_all3[i] != "Y") & (tsr_all3[i] != "N")] = np.nan
+    tsr_all3[i].replace("1",1, inplace=True)
+    tsr_all3[i].replace("0",0, inplace=True)
+    tsr_all3[i].replace("Y",1, inplace=True)
+    tsr_all3[i].replace("N",0, inplace=True)
+    tsr_all3[i][(tsr_all3[i] != 1) & (tsr_all3[i] != 0)] = np.nan
     
 #continuous
 for i in tsr_all3[continuous]:
-    print(i)
     q1 = tsr_all3[i].quantile(0.25)
     q3 = tsr_all3[i].quantile(0.75)
     iqr = q3 - q1
@@ -135,6 +158,8 @@ for i in tsr_all3[continuous]:
     inner_fence_low = q1 - inner_fence
     inner_fence_upp = q3 + inner_fence
     tsr_all3[i][(tsr_all3[i] < inner_fence_low) | (tsr_all3[i] > inner_fence_upp)] = np.nan
+
+#tsr_all3[continuous] = tsr_all3[continuous].fillna(9999)
     
 #barthel
 for i in tsr_all3[barthel]:
@@ -150,6 +175,8 @@ tsr_all3["stairs"][(tsr_all3["stairs"] < 0) | (tsr_all3["stairs"] > 10)] = np.na
 tsr_all3["dressing"][(tsr_all3["dressing"] < 0) | (tsr_all3["dressing"] > 10)] = np.nan
 tsr_all3["bowel_control"][(tsr_all3["bowel_control"] < 0) | (tsr_all3["bowel_control"] > 10)] = np.nan
 tsr_all3["bladder_control"][(tsr_all3["bladder_control"] < 0) | (tsr_all3["bladder_control"] > 10)] = np.nan
+
+tsr_all3[barthel] = tsr_all3[barthel].fillna(9999)
 
 ## total scores of barthel
 
@@ -173,6 +200,8 @@ tsr_all3["nihs_9_in"][(tsr_all3["nihs_9_in"] < 0) | (tsr_all3["nihs_9_in"] > 3)]
 tsr_all3["nihs_10_in"][(tsr_all3["nihs_10_in"] < 0) | (tsr_all3["nihs_10_in"] > 2)] = np.nan
 tsr_all3["nihs_11_in"][(tsr_all3["nihs_11_in"] < 0) | (tsr_all3["nihs_11_in"] > 2)] = np.nan
 
+tsr_all3[nihss_in] = tsr_all3[nihss_in].fillna(9999)
+
 ## total scores of nihss_in
 
 #nihss_out
@@ -195,6 +224,8 @@ tsr_all3["nihs_9_out"][(tsr_all3["nihs_9_out"] < 0) | (tsr_all3["nihs_9_out"] > 
 tsr_all3["nihs_10_out"][(tsr_all3["nihs_10_out"] < 0) | (tsr_all3["nihs_10_out"] > 2)] = np.nan
 tsr_all3["nihs_11_out"][(tsr_all3["nihs_11_out"] < 0) | (tsr_all3["nihs_11_out"] > 2)] = np.nan
 
+tsr_all3[nihss_out] = tsr_all3[nihss_out].fillna(9999)
+
 ## total scores of nihss_out
 
 #hour & minute
@@ -203,10 +234,14 @@ for i in tsr_all3[hour]:
     tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 24)] = np.nan
     tsr_all3[i].replace(24, 0, inplace=True)
 
+tsr_all3[hour] = tsr_all3[hour].fillna(9999)
+
 for i in tsr_all3[minute]:
     tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
     tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 60)] = np.nan
     tsr_all3[i].replace(60, 0, inplace=True)
+
+tsr_all3[minute] = tsr_all3[minute].fillna(9999)
 
 # date
 for i in tsr_all3[date]:
@@ -214,8 +249,15 @@ for i in tsr_all3[date]:
     tsr_all3[i][(tsr_all3[i].dt.year < 2006) | (tsr_all3[i].dt.year > 2021)] = np.nan
     tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
 
+#___________________________________________________________________________________________
+a = tsr_all3.isna().sum()
+a_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "missingness.csv")
+a.to_csv(a_save, index = True, header=None)
+#___________________________________________________________________________________________
+
 #SAVE FILE
-TSR_ALL3_TIDY = pd.concat([tsr_all3, nominal_onehot], axis = 1)
+#TSR_ALL3_TIDY = pd.concat([tsr_all3, nominal_onehot], axis = 1)
+TSR_ALL3_TIDY = tsr_all3.dropna()
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_TIDY.csv")
 TSR_ALL3_TIDY.to_csv(csv_save, index=False)
