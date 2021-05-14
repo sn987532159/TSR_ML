@@ -258,9 +258,13 @@ for i in tsr_all3[date]:
     tsr_all3[i][(tsr_all3[i].dt.year < 2006) | (tsr_all3[i].dt.year > 2021)] = np.nan
     tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
 
+tsr_all3 = tsr_all3.drop(hour, axis = 1)
+tsr_all3 = tsr_all3.drop(minute, axis = 1)
+tsr_all3 = tsr_all3.drop(date, axis = 1)
+tsr_all3 = tsr_all3.drop(["icase_id", "idcase_id"], axis = 1)
+
 #SAVE FILE
-#TSR_ALL3_TIDY = pd.concat([tsr_all3, nominal_onehot], axis = 1)
 TSR_ALL3_TIDY = tsr_all3.dropna()
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_TIDY.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_IMP_999.csv")
 TSR_ALL3_TIDY.to_csv(csv_save, index=False)
