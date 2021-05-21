@@ -145,6 +145,7 @@ for i in tsr_all3[boolean]:
     
 #continuous
 for i in tsr_all3[continuous]:
+    tsr_all3[i][tsr_all3[i] == 999.9] = np.nan
     q1 = tsr_all3[i].quantile(0.25)
     q3 = tsr_all3[i].quantile(0.75)
     iqr = q3 - q1

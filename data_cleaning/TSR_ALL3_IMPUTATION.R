@@ -1,12 +1,14 @@
 install.packages("mice")
 install.packages("VIM")
+install.packages("Gmisc")
 library(mice)
 library(VIM)
+library(Gmisc)
 
 setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
 file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_IMP_9999.csv")
 TSR_ALL3 <- read.csv(file_path)
-TSR_ALL3[(TSR_ALL3 == 9999) | (TSR_ALL3 == 999.9)] = ""
+TSR_ALL3[TSR_ALL3 == 9999] = ""
 
 nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
                     "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", 
@@ -91,11 +93,11 @@ methods_TSR_ALL3 <- c(mrs_tx_1 = "polr", mrs_tx_3 = "polr", height_nm = "pmm", w
                       nihs_11_in = "pmm", nihs_1a_out = "pmm", nihs_1b_out = "pmm", nihs_1c_out = "pmm", nihs_2_out = "pmm", nihs_3_out = "pmm", nihs_4_out = "pmm", nihs_5al_out = "pmm", nihs_5br_out = "pmm", nihs_6al_out= "pmm",
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
-TSR_ALL3_imp <- mice(TSR_ALL3, maxit = 100, m = 1, method = "pmm", print = TRUE, seed = 19)
+TSR_ALL3_imp <- mice(TSR_ALL3, maxit = 20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
 #summary(TSR_ALL3_imp)
 
-TSR_ALL3_mice <- complete(TSR_ALL3_imp, 1)
+TSR_ALL3_mice <- complete(TSR_ALL3_imp, 5)
 
-save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_MICE.csv")
-write.csv(TSR_ALL3_mice, save_file)
+save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_MICE5.csv")
+write.csv(TSR_ALL3_mice, save_file, row.names=FALSE)
 
