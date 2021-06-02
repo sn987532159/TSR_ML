@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 
-csv_path = os.path.join("..","data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
+csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
 tsr_all3 = pd.read_csv(csv_path, low_memory=False, encoding = "windows-1252")
 tsr_all3.head()
 
