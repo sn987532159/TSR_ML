@@ -37,24 +37,24 @@ discharged[(discharged == 3) | (discharged == 4) | (discharged == 5) | (discharg
 
 ## From discharge to 1-month follow-up
 
-print("GOOD remained GOOD:", len(discharged[(discharged==1) & (mRS1 == 1)]), "(",round(19504/(19504+792),3),"%)")
-print("GOOD became worse into BAD:", len(discharged[(discharged==1) & (mRS1 == 0)]), "(",round(792/(19504+792),3),"%)")
-print("BAD became better into GOOD:", len(discharged[(discharged==0) & (mRS1 == 1)]), "(",round(3011 /(3011 +20452),3),"%)")
-print("BAD remained BAD:", len(discharged[(discharged==0) & (mRS1 == 0)]), "(",round(20452/(3011 +20452),3),"%)")
+print("GOOD remained GOOD:", len(discharged[(discharged==1) & (mRS1 == 1)]), "(",round(19504/(19504+792)*100,1),"%)")
+print("GOOD became worse into BAD:", len(discharged[(discharged==1) & (mRS1 == 0)]), "(",round(792/(19504+792)*100,1),"%)")
+print("BAD became better into GOOD:", len(discharged[(discharged==0) & (mRS1 == 1)]), "(",round(3011 /(3011 +20452)*100,1),"%)")
+print("BAD remained BAD:", len(discharged[(discharged==0) & (mRS1 == 0)]), "(",round(20452/(3011 +20452)*100,1),"%)")
 
 ## From discharge to 3-month follow-up
 
-print("GOOD remained GOOD:", len(discharged[(discharged==1) & (mRS3 == 1)]), "(",round(19311/(19311+985),3),"%)")
-print("GOOD became worse into BAD:", len(discharged[(discharged==1) & (mRS3 == 0)]), "(",round(985/(19311+985),3),"%)")
-print("BAD became better into GOOD:", len(discharged[(discharged==0) & (mRS3 == 1)]), "(",round(5313 /(5313 +18150),3),"%)")
-print("BAD remained BAD:", len(discharged[(discharged==0) & (mRS3 == 0)]), "(",round(18150/(5313 +18150),3),"%)")
+print("GOOD remained GOOD:", len(discharged[(discharged==1) & (mRS3 == 1)]), "(",round(19311/(19311+985)*100,1),"%)")
+print("GOOD became worse into BAD:", len(discharged[(discharged==1) & (mRS3 == 0)]), "(",round(985/(19311+985)*100,1),"%)")
+print("BAD became better into GOOD:", len(discharged[(discharged==0) & (mRS3 == 1)]), "(",round(5313 /(5313 +18150)*100,1),"%)")
+print("BAD remained BAD:", len(discharged[(discharged==0) & (mRS3 == 0)]), "(",round(18150/(5313 +18150)*100,1),"%)")
 
 ## From 1-month follow-up to 3-month follow-up
 
-print("GOOD remained GOOD:", len(mRS1[(mRS1==1) & (mRS3 == 1)]), "(",round(21942/(21942+573),3),"%)")
-print("GOOD became worse into BAD:", len(mRS1[(mRS1==1) & (mRS3 == 0)]), "(",round(573/(21942+573),3),"%)")
-print("BAD became better into GOOD:", len(mRS1[(mRS1==0) & (mRS3 == 1)]), "(",round(2682 /(2682 +18562),3),"%)")
-print("BAD remained BAD:", len(mRS1[(mRS1==0) & (mRS3 == 0)]), "(",round(18562/(2682 +18562),3),"%)")
+print("GOOD remained GOOD:", len(mRS1[(mRS1==1) & (mRS3 == 1)]), "(",round(21942/(21942+573)*100,1),"%)")
+print("GOOD became worse into BAD:", len(mRS1[(mRS1==1) & (mRS3 == 0)]), "(",round(573/(21942+573)*100,1),"%)")
+print("BAD became better into GOOD:", len(mRS1[(mRS1==0) & (mRS3 == 1)]), "(",round(2682 /(2682 +18562)*100,1),"%)")
+print("BAD remained BAD:", len(mRS1[(mRS1==0) & (mRS3 == 0)]), "(",round(18562/(2682 +18562)*100,1),"%)")
 
 # Sankey Diagram
 
