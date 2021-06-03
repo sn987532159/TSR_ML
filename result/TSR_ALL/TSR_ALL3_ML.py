@@ -15,7 +15,7 @@ from sklearn.metrics import confusion_matrix
 
 # Import datasets
 
-csv_path = os.path.join("..", "..", "data","LINKED_DATA", "TSR_ALL", "TSR_ALL3_IMP_MEAN.csv")
+csv_path = os.path.join("..", "..", "data","LINKED_DATA", "TSR_ALL", "TSR_ALL3_MICE5.csv")
 tsr_3_imp_mean = pd.read_csv(csv_path)
 tsr_3_imp_mean.shape
 
@@ -310,6 +310,7 @@ print('Resampled dataset shape %s' % Counter(G_y_train_smote))
 
 ## Undersampling
 
+#Method 1 - RandomUnderSampler
 from collections import Counter
 from imblearn.under_sampling import RandomUnderSampler
 
@@ -320,6 +321,7 @@ G_X_train_rus, G_y_train_rus = rus.fit_resample(G_X_train, G_y_train)
 
 print('Resampled dataset shape %s' % Counter(G_y_train_rus))
 
+#Method 2 - TomekLinks
 from collections import Counter
 from imblearn.under_sampling import TomekLinks
 
@@ -332,16 +334,15 @@ print('Resampled dataset shape %s' % Counter(G_y_train_tl))
 
 ## Algorithms
 
-rf = RandomForestClassifier(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+rf = RandomForestClassifier(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #rf = RandomForestClassifier(random_state=19)
 rf.fit(G_X_train_tl, G_y_train_tl)
 print("AUC of training set:", roc_auc_score(G_y_train_tl, rf.predict(G_X_train_tl)))
 G_y_predicted = rf.predict(G_X_test)
 print("AUC of testing set:",roc_auc_score(G_y_test, G_y_predicted))
-#oversampling is 0.51
 confusion_matrix(G_y_test, G_y_predicted)
 
-svc = SVC(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+svc = SVC(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #svc = SVC(random_state=19)
 svc.fit(G_X_train_tl, G_y_train_tl)
 print("AUC of training set:", roc_auc_score(G_y_train_tl, svc.predict(G_X_train_tl)))
@@ -349,7 +350,7 @@ G_y_predicted = svc.predict(G_X_test)
 print("AUC of testing set:",roc_auc_score(G_y_test, G_y_predicted))
 confusion_matrix(G_y_test, G_y_predicted)
 
-lsvc = LinearSVC(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+lsvc = LinearSVC(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #lsvc = LinearSVC(random_state=19)
 lsvc.fit(G_X_train_tl, G_y_train_tl)
 print("AUC of training set:", roc_auc_score(G_y_train_tl, lsvc.predict(G_X_train_tl)))
@@ -359,13 +360,6 @@ confusion_matrix(G_y_test, G_y_predicted)
 
 xgbc = XGBClassifier(random_state=19, use_label_encoder=False, eval_metric = "auc", scale_pos_weight = (680 / 13445)) #when using tl
 #xgbc = XGBClassifier(random_state=19, use_label_encoder=False, eval_metric = "auc")
-xgbc.fit(G_X_train_tl, G_y_train_tl)
-print("AUC of training set:", roc_auc_score(G_y_train_tl, xgbc.predict(G_X_train_tl)))
-G_y_predicted = xgbc.predict(G_X_test)
-print("AUC of testing set:",roc_auc_score(G_y_test, G_y_predicted))
-confusion_matrix(G_y_test, G_y_predicted)
-
-xgbc = XGBClassifier(random_state=19, use_label_encoder=False, eval_metric = "auc", scale_pos_weight = (13445 / 680)) #when using tl
 xgbc.fit(G_X_train_tl, G_y_train_tl)
 print("AUC of training set:", roc_auc_score(G_y_train_tl, xgbc.predict(G_X_train_tl)))
 G_y_predicted = xgbc.predict(G_X_test)
@@ -447,6 +441,7 @@ print('Resampled dataset shape %s' % Counter(B_y_train_smote))
 
 ## Undersampling
 
+#Method 1 - RandomUnderSampler
 print('Original dataset shape %s' % Counter(B_y_train))
 
 rus = RandomUnderSampler(sampling_strategy ='majority', random_state = 19) #oversampling
@@ -454,6 +449,7 @@ B_X_train_rus, B_y_train_rus = rus.fit_resample(B_X_train, B_y_train)
 
 print('Resampled dataset shape %s' % Counter(B_y_train_rus))
 
+#Method 2 - TomekLinks
 from collections import Counter
 from imblearn.under_sampling import TomekLinks
 
@@ -466,13 +462,12 @@ print('Resampled dataset shape %s' % Counter(B_y_train_tl))
 
 ## Algorithms
 
-rf = RandomForestClassifier(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+rf = RandomForestClassifier(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #rf = RandomForestClassifier(random_state=19)
 rf.fit(B_X_train_tl, B_y_train_tl)
 print("AUC of training set:", roc_auc_score(B_y_train_tl, rf.predict(B_X_train_tl)))
 B_y_predicted = rf.predict(B_X_test)
 print("AUC of testing set:",roc_auc_score(B_y_test, B_y_predicted))
-#oversampling is 0.70
 confusion_matrix(B_y_test, B_y_predicted)
 
 from sklearn.model_selection import GridSearchCV
@@ -512,7 +507,7 @@ B_y_predicted = best_rf.predict(B_X_test)
 print("AUC of testing set:",roc_auc_score(B_y_test, B_y_predicted))
 confusion_matrix(B_y_test, B_y_predicted)
 
-svc = SVC(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+svc = SVC(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #svc = SVC(random_state=19)
 svc.fit(B_X_train_tl, B_y_train_tl)
 print("AUC of training set:", roc_auc_score(B_y_train_tl, svc.predict(B_X_train_tl)))
@@ -550,7 +545,7 @@ B_y_predicted = best_svc.predict(B_X_test)
 print("AUC of testing set:",roc_auc_score(B_y_test, B_y_predicted))
 confusion_matrix(B_y_test, B_y_predicted)
 
-lsvc = LinearSVC(random_state=19, class_weight = {0 : 680, 1 : 13445}) #when using tl
+lsvc = LinearSVC(random_state=19, class_weight = {0 : (680/680+13446), 1 : (13446/680+13446)}) #when using tl
 #lsvc = LinearSVC(random_state=19)
 lsvc.fit(B_X_train_tl, B_y_train_tl)
 print("AUC of training set:", roc_auc_score(B_y_train_tl, lsvc.predict(B_X_train_tl)))
@@ -565,11 +560,3 @@ print("AUC of training set:", roc_auc_score(B_y_train_tl, xgbc.predict(B_X_train
 B_y_predicted = xgbc.predict(B_X_test)
 print("AUC of testing set:",roc_auc_score(B_y_test, B_y_predicted))
 confusion_matrix(B_y_test, B_y_predicted)
-
-xgbc = XGBClassifier(random_state=19, use_label_encoder=False, eval_metric = "auc", scale_pos_weight = (13445 / 680)) #when using tl
-xgbc.fit(B_X_train_tl, B_y_train_tl)
-print("AUC of training set:", roc_auc_score(B_y_train_tl, xgbc.predict(B_X_train_tl)))
-B_y_predicted = xgbc.predict(B_X_test)
-print("AUC of testing set:",roc_auc_score(B_y_test, B_y_predicted))
-confusion_matrix(B_y_test, B_y_predicted)
-
