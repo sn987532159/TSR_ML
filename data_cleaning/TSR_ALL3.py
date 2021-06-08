@@ -8,45 +8,7 @@ tsr_all3.head()
 
 tsr_all3.describe()
 
-#drop unrelated features
-tsr_all3 = tsr_all3.drop(["fstatus_id_1", "location_id_1", "torg_id_1", "flu_id_1", "fluorg_id_1", "fluorg_tx_1",
-                          "fluresult_tx_1", "death_dt_1", "death_id_1", "deathsk_id_1", "deatho_tx_1", 
-                          "veihdorg_id_1", "versorg_id_1", "torg_tx_1", "versorg_tx_1", "veihdorg_tx_1", 
-                          "fstatus_id_3", "location_id_3", "torg_id_3", "flu_id_3", "fluorg_id_3", "fluorg_tx_3",
-                          "fluresult_tx_3", "deatho_tx_3", "versorg_id_3", "veihdorg_id_3", "torg_tx_3", 
-                          "versorg_tx_3", "veihdorg_tx_3", "index", "iprotocol_id", "icase_id.1", "idcase_id.1",
-                          "cstatus_id", "org_id", "dctype24_id", "patient_id", "input_nm", "age_nm", "proot_tx",
-                          "itown_id", "addr_tx", "telh_tx", "telp_tx", "telf_tx", "ftitle_tx", "casememo_tx", 
-                          "ivtpath_fl", "ivtpaah_fl", "nivtpa99_tx", "icd_tx", "icdtia_id", "icdo_tx", 
-                          "toastscat_tx", "toastso_tx", "cich_id", "csah_id", "csaho_tx", "thdo_fl", "thdoo_tx",
-                          "trmot_tx", "om_id", "omwa_tx", "omand_id", "omli_id", "omliot_tx", "omliot2_tx", 
-                          "amliot_tx", "amliot2_tx", "como_tx", "deto_tx", "offd_tx", "offdtorg_id", "offdtorg_tx",
-                          "nihsinti_tx", "nihsotti_tx", "brs_dt", "ctti_tx", "cto_tx", "mriti_tx", "mrio_tx", 
-                          "ecgo_tx", "create_dt", "createstaff_id", "sysupd_dt", "sysupdstaff_id", "modify_nm",
-                          "iguid_ft", "icase_id.2", "idcase_id.2", "icase_id.3", "idcase_id.3", "index.1", 
-                          "iprotocol_id.1", "icase_id.4", "idcase_id.4", "hdmt_id", "pcvamt_id", "pomt_id",
-                          "ua_id", "uamt_id", "urmt_id", "ptiamt_id", "hcy_nm", "hcmt_id", "hty_nm", "htmt_id",
-                          "dmy_nm", "dmmt_id", "padmt_id", "ca_tx", "ot_tx", "thishc_id", "iguid_ft.1", 
-                          "icase_id.5", "idcase_id.5", "icase_id.6", "idcase_id.6", "index.2", "iprotocol_id.2",
-                          "icase_id.7", "cname_tx", "cid_id", "birth_dt", "ve_id_1", "ve_id_3", "offd_id", 
-                          "nivtpa99_fl", "toastso_fl", "thdoo_fl", "trmot_fl", "omliot_fl", "omliot2_fl", 
-                          "amliot_fl", "amliot2_fl", "como_fl", "deto_fl", "ot_id", "smc_nm", "smy_nm", "ecgo_fl", 
-                          "omora_fl", "omins_fl", "omst_fl", "omns_fl", "cd_id", "tccs_id", "mcd_id", "vers_fl_1", 
-                          "veihd_fl_1", "vers_fl_3", "veihd_fl_3", "ih_fl", "onset_fl", "ot_fl", "flook_fl",
-                          "fctoh_fl", "nivtpa_id", "nivtpa1_fl", "nivtpa2_fl", "nivtpa3_fl", "nivtpa4_fl", 
-                          "nivtpa5_fl", "nivtpa6_fl", "nivtpa7_fl", "nivtpa8_fl", "nivtpa9_fl", "nivtpa10_fl", 
-                          "nivtpa11_fl", "omad_fl", "dethoh_fl", "ecg_id", "mra_fl","cta_fl", "dsa_fl", "cdr_id", 
-                          "cdl_id", "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id", 
-                          "mcdri_id", "mcdli_id"],
-                          axis = 1)
-
-tsr_all3 = tsr_all3.drop(["verscich_id_1", "vers_dt_1", "veihd_id_1", "veihd_dt_1", "death_dt_3", "deathsk_id_3",
-                          "verscich_id_3", "vers_dt_3", "veihd_id_3", "veihd_dt_3", "ivtpath_id", "ivtpa_dt", 
-                          "ivtpah_nm", "ivtpam_nm", "ivtpamg_nm", "toastu_id", "thd_id", "trm_id", "trmen_id", 
-                          "trmop_id", "com_id", "offd_dt", "offre_dt", "omad_id", "smcp_id", "thishy_id", 
-                          "thisdi_id", "det_id", "death_id_3"],
-                          axis = 1)
-
+#Grouping Features
 #icase_id, idcase_id, icd_id, off_id
 nominal_features = ["edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
                     "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", 
@@ -100,6 +62,72 @@ minute = ["onsetm_nm", "ottim_nm", "flookm_nm", "fctm_nm", "nihsinm_nm", "nihsot
 
 date = ["rfur_dt_1", "rfur_dt_3", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
         "nihsot_dt", "ct_dt", "mri_dt"]
+
+#drop unrelated features
+tsr_all3 = tsr_all3.drop(["fstatus_id_1", "location_id_1", "torg_id_1", "flu_id_1", "fluorg_id_1", "fluorg_tx_1",
+                          "fluresult_tx_1", "death_dt_1", "death_id_1", "deathsk_id_1", "deatho_tx_1", 
+                          "veihdorg_id_1", "versorg_id_1", "torg_tx_1", "versorg_tx_1", "veihdorg_tx_1", 
+                          "fstatus_id_3", "location_id_3", "torg_id_3", "flu_id_3", "fluorg_id_3", "fluorg_tx_3",
+                          "fluresult_tx_3", "deatho_tx_3", "versorg_id_3", "veihdorg_id_3", "torg_tx_3", 
+                          "versorg_tx_3", "veihdorg_tx_3", "index", "iprotocol_id", "icase_id.1", "idcase_id.1",
+                          "cstatus_id", "org_id", "dctype24_id", "patient_id", "input_nm", "age_nm", "proot_tx",
+                          "itown_id", "addr_tx", "telh_tx", "telp_tx", "telf_tx", "ftitle_tx", "casememo_tx", 
+                          "ivtpath_fl", "ivtpaah_fl", "nivtpa99_tx", "icd_tx", "icdtia_id", "icdo_tx", 
+                          "toastscat_tx", "toastso_tx", "cich_id", "csah_id", "csaho_tx", "thdo_fl", "thdoo_tx",
+                          "trmot_tx", "om_id", "omwa_tx", "omand_id", "omli_id", "omliot_tx", "omliot2_tx", 
+                          "amliot_tx", "amliot2_tx", "como_tx", "deto_tx", "offd_tx", "offdtorg_id", "offdtorg_tx",
+                          "nihsinti_tx", "nihsotti_tx", "brs_dt", "ctti_tx", "cto_tx", "mriti_tx", "mrio_tx", 
+                          "ecgo_tx", "create_dt", "createstaff_id", "sysupd_dt", "sysupdstaff_id", "modify_nm",
+                          "iguid_ft", "icase_id.2", "idcase_id.2", "icase_id.3", "idcase_id.3", "index.1", 
+                          "iprotocol_id.1", "icase_id.4", "idcase_id.4", "hdmt_id", "pcvamt_id", "pomt_id",
+                          "ua_id", "uamt_id", "urmt_id", "ptiamt_id", "hcy_nm", "hcmt_id", "hty_nm", "htmt_id",
+                          "dmy_nm", "dmmt_id", "padmt_id", "ca_tx", "ot_tx", "thishc_id", "iguid_ft.1", 
+                          "icase_id.5", "idcase_id.5", "icase_id.6", "idcase_id.6", "index.2", "iprotocol_id.2",
+                          "icase_id.7", "cname_tx", "cid_id", "birth_dt", "ve_id_1", "ve_id_3", "offd_id", 
+                          "nivtpa99_fl", "toastso_fl", "thdoo_fl", "trmot_fl", "omliot_fl", "omliot2_fl", 
+                          "amliot_fl", "amliot2_fl", "como_fl", "deto_fl", "ot_id", "smc_nm", "smy_nm", "ecgo_fl", 
+                          "omora_fl", "omins_fl", "omst_fl", "omns_fl", "cd_id", "tccs_id", "mcd_id", "vers_fl_1", 
+                          "veihd_fl_1", "vers_fl_3", "veihd_fl_3", "ih_fl", "onset_fl", "ot_fl", "flook_fl",
+                          "fctoh_fl", "nivtpa_id", "nivtpa1_fl", "nivtpa2_fl", "nivtpa3_fl", "nivtpa4_fl", 
+                          "nivtpa5_fl", "nivtpa6_fl", "nivtpa7_fl", "nivtpa8_fl", "nivtpa9_fl", "nivtpa10_fl", 
+                          "nivtpa11_fl", "omad_fl", "dethoh_fl", "ecg_id", "mra_fl","cta_fl", "dsa_fl", "cdr_id", 
+                          "cdl_id", "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id", 
+                          "mcdri_id", "mcdli_id"],
+                          axis = 1)
+
+tsr_all3 = tsr_all3.drop(["verscich_id_1", "vers_dt_1", "veihd_id_1", "veihd_dt_1", "death_dt_3", "deathsk_id_3",
+                          "verscich_id_3", "vers_dt_3", "veihd_id_3", "veihd_dt_3", "ivtpath_id", "ivtpa_dt", 
+                          "ivtpah_nm", "ivtpam_nm", "ivtpamg_nm", "toastu_id", "thd_id", "trm_id", "trmen_id", 
+                          "trmop_id", "com_id", "offd_dt", "offre_dt", "omad_id", "smcp_id", "thishy_id", 
+                          "thisdi_id", "det_id", "death_id_3"],
+                          axis = 1)
+
+tsr_all3 = tsr_all3.drop(["icase_id", "idcase_id", "icd_id", "off_id"], axis = 1)
+
+#hour & minute
+for i in tsr_all3[hour]:
+    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
+    tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 24)] = np.nan
+    tsr_all3[i].replace(24, 0, inplace=True)
+
+tsr_all3[hour] = tsr_all3[hour].fillna(9999)
+
+for i in tsr_all3[minute]:
+    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
+    tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 60)] = np.nan
+    tsr_all3[i].replace(60, 0, inplace=True)
+
+tsr_all3[minute] = tsr_all3[minute].fillna(9999)
+
+# date
+for i in tsr_all3[date]:
+    tsr_all3[i] = pd.to_datetime(tsr_all3[i], errors="coerce", format="%Y-%m-%d")
+    tsr_all3[i][(tsr_all3[i].dt.year < 2006) | (tsr_all3[i].dt.year > 2021)] = np.nan
+    tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
+
+tsr_all3 = tsr_all3.drop(hour, axis = 1)
+tsr_all3 = tsr_all3.drop(minute, axis = 1)
+tsr_all3 = tsr_all3.drop(date, axis = 1)
 
 #nominal_features
 for i in tsr_all3[nominal_features]:
@@ -237,32 +265,6 @@ for i in tsr_all3[nihss_out]:
 tsr_all3[nihss_out] = tsr_all3[nihss_out].fillna(9999)
 
 ## total scores of nihss_out
-
-#hour & minute
-for i in tsr_all3[hour]:
-    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
-    tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 24)] = np.nan
-    tsr_all3[i].replace(24, 0, inplace=True)
-
-tsr_all3[hour] = tsr_all3[hour].fillna(9999)
-
-for i in tsr_all3[minute]:
-    tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors = "coerce")
-    tsr_all3[i][(tsr_all3[i] < 0) | (tsr_all3[i] > 60)] = np.nan
-    tsr_all3[i].replace(60, 0, inplace=True)
-
-tsr_all3[minute] = tsr_all3[minute].fillna(9999)
-
-# date
-for i in tsr_all3[date]:
-    tsr_all3[i] = pd.to_datetime(tsr_all3[i], errors="coerce", format="%Y-%m-%d")
-    tsr_all3[i][(tsr_all3[i].dt.year < 2006) | (tsr_all3[i].dt.year > 2021)] = np.nan
-    tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
-
-tsr_all3 = tsr_all3.drop(hour, axis = 1)
-tsr_all3 = tsr_all3.drop(minute, axis = 1)
-tsr_all3 = tsr_all3.drop(date, axis = 1)
-tsr_all3 = tsr_all3.drop(["icase_id", "idcase_id", "icd_id", "off_id"], axis = 1)
 
 #SAVE FILE
 TSR_ALL3_TIDY = tsr_all3.dropna()
