@@ -2,181 +2,189 @@ import pandas as pd
 import os
 import numpy as np
 
-def ischemic_stroke_cases(filename):
-    filename = filename[(filename["icd_id"] == 1) | (filename["icd_id"] == 2)]
-    print(filename.shape)
+def ischemic_stroke_cases(df):
+    df = df[(df["icd_id"] == 1) | (df["icd_id"] == 2)]
+    return df
+    print(df.shape)
 
-#def remove_unrelated_features(filename):
-    filename = filename.drop(unrelated_features, axis = 1)
-    print(filename.shape)
+def remove_unrelated_features(df, ur_f):
+    df = df.drop(ur_f, axis = 1)
+    return df
+    print(df.shape)
 
-#def remove_high_missing_features(filename):
-    filename = filename.drop(high_missing_features, axis = 1)
-    print(filename.shape)
+def remove_high_missing_features(df, h_m_f):
+    df = df.drop(h_m_f, axis = 1)
+    return df
+    print(df.shape)
 
-#def timestamp_features(filename):
-    filename = filename.drop(hour + minute + date, axis = 1)
-    print(filename.shape)
+def remove_timestamp_features(df, d, h, m):
+    df = df.drop(d + h + m, axis = 1)
+    return df
+    print(df.shape)
 
-#def categorical_features(filename):
+def categorical_features(df, nom_f, ord_f, bool):
     # nominal_features
-    for i in filename[nominal_features]:
-        filename[i] = pd.to_numeric(filename[i], errors="coerce")
+    df["gender_tx"][df["gender_tx"] == "M"] = 1
+    df["gender_tx"][df["gender_tx"] == "F"] = 0
+    for i in df[nom_f]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    filename["edu_id"][(filename["edu_id"] != 98) & (filename["edu_id"] != 1) & (filename["edu_id"] != 2) & (
-                filename["edu_id"] != 3) & (filename["edu_id"] != 4) & (filename["edu_id"] != 5) & (
-                                   filename["edu_id"] != 6)] = np.nan
-    filename["pro_id"][(filename["pro_id"] != 1) & (filename["pro_id"] != 2) & (filename["pro_id"] != 3) & (
-                filename["pro_id"] != 4) & (filename["pro_id"] != 5) & (filename["pro_id"] != 6) & (
-                                   filename["pro_id"] != 7) & (filename["pro_id"] != 8) & (filename["pro_id"] != 9) & (
-                                   filename["pro_id"] != 10) & (filename["pro_id"] != 98) & (
-                                   filename["pro_id"] != 99)] = np.nan
-    filename["opc_id"][(filename["opc_id"] != 1) & (filename["opc_id"] != 2) & (filename["opc_id"] != 3)] = np.nan
-    filename["toast_id"][(filename["toast_id"] != 1) & (filename["toast_id"] != 2) & (filename["toast_id"] != 3) & (
-                filename["toast_id"] != 4) & (filename["toast_id"] != 5)] = np.nan
-    filename["offdt_id"][(filename["offdt_id"] != 1) & (filename["offdt_id"] != 2) & (filename["offdt_id"] != 3) & (
-                filename["offdt_id"] != 4) & (filename["offdt_id"] != 5)] = np.nan
-    filename["gender_tx"][(filename["gender_tx"] != 1) & (filename["gender_tx"] != 0)] = np.nan
+    df["edu_id"][(df["edu_id"] != 98) & (df["edu_id"] != 1) & (df["edu_id"] != 2) & (
+                df["edu_id"] != 3) & (df["edu_id"] != 4) & (df["edu_id"] != 5) & (
+                                   df["edu_id"] != 6)] = np.nan
+    df["pro_id"][(df["pro_id"] != 1) & (df["pro_id"] != 2) & (df["pro_id"] != 3) & (
+                df["pro_id"] != 4) & (df["pro_id"] != 5) & (df["pro_id"] != 6) & (
+                                   df["pro_id"] != 7) & (df["pro_id"] != 8) & (df["pro_id"] != 9) & (
+                                   df["pro_id"] != 10) & (df["pro_id"] != 98) & (
+                                   df["pro_id"] != 99)] = np.nan
+    df["opc_id"][(df["opc_id"] != 1) & (df["opc_id"] != 2) & (df["opc_id"] != 3)] = np.nan
+    df["toast_id"][(df["toast_id"] != 1) & (df["toast_id"] != 2) & (df["toast_id"] != 3) & (
+                df["toast_id"] != 4) & (df["toast_id"] != 5)] = np.nan
+    df["offdt_id"][(df["offdt_id"] != 1) & (df["offdt_id"] != 2) & (df["offdt_id"] != 3) & (
+                df["offdt_id"] != 4) & (df["offdt_id"] != 5)] = np.nan
+    df["gender_tx"][(df["gender_tx"] != 1) & (df["gender_tx"] != 0)] = np.nan
 
-    for i in filename.loc[:, "hd_id":"ca_id"]:
-        filename[i] = pd.to_numeric(filename[i], errors="coerce")
-        filename[i][(filename[i] != 0) & (filename[i] != 1) & (filename[i] != 2)] = np.nan
+    for i in df.loc[:, "hd_id":"ca_id"]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
+        df[i][(df[i] != 0) & (df[i] != 1) & (df[i] != 2)] = np.nan
 
-    for i in filename.loc[:, "fahiid_parents_1":"fahiid_parents_4"]:
-        filename[i] = pd.to_numeric(filename[i], errors="coerce")
-        filename[i][(filename[i] != 0) & (filename[i] != 1) & (filename[i] != 2)] = np.nan
+    for i in df.loc[:, "fahiid_parents_1":"fahiid_parents_4"]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
+        df[i][(df[i] != 0) & (df[i] != 1) & (df[i] != 2)] = np.nan
 
-    for i in filename.loc[:, "fahiid_brsi_1":"fahiid_brsi_4"]:
-        filename[i] = pd.to_numeric(filename[i], errors="coerce")
-        filename[i][(filename[i] != 0) & (filename[i] != 1) & (filename[i] != 2) & (filename[i] != 9)] = np.nan
+    for i in df.loc[:, "fahiid_brsi_1":"fahiid_brsi_4"]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
+        df[i][(df[i] != 0) & (df[i] != 1) & (df[i] != 2) & (df[i] != 9)] = np.nan
 
     # ordinal_features
-    for i in filename[ordinal_features]:
-        filename[i] = pd.to_numeric(filename[i], errors="coerce")
+    for i in df[ord_f]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    filename["mrs_tx_1"][(filename["mrs_tx_1"] != 0) & (filename["mrs_tx_1"] != 1) & (filename["mrs_tx_1"] != 2) & (
-                filename["mrs_tx_1"] != 3) & (filename["mrs_tx_1"] != 4) & (filename["mrs_tx_1"] != 5) & (
-                                     filename["mrs_tx_1"] != 6)] = np.nan
-    filename["mrs_tx_3"][(filename["mrs_tx_3"] != 0) & (filename["mrs_tx_3"] != 1) & (filename["mrs_tx_3"] != 2) & (
-                filename["mrs_tx_3"] != 3) & (filename["mrs_tx_3"] != 4) & (filename["mrs_tx_3"] != 5) & (
-                                     filename["mrs_tx_3"] != 6) & (filename["mrs_tx_3"] != 9)] = np.nan
-    filename["gcse_nm"][(filename["gcse_nm"] != 1) & (filename["gcse_nm"] != 2) & (filename["gcse_nm"] != 3) & (
-                filename["gcse_nm"] != 4)] = np.nan
-    filename["gcsv_nm"][(filename["gcsv_nm"] != 1) & (filename["gcsv_nm"] != 2) & (filename["gcsv_nm"] != 3) & (
-                filename["gcsv_nm"] != 4) & (filename["gcsv_nm"] != 5)] = np.nan
-    filename["gcsm_nm"][(filename["gcsm_nm"] != 1) & (filename["gcsm_nm"] != 2) & (filename["gcsm_nm"] != 3) & (
-                filename["gcsm_nm"] != 4) & (filename["gcsm_nm"] != 5) & (filename["gcsm_nm"] != 6)] = np.nan
-    filename["discharged_mrs"][
-        (filename["discharged_mrs"] != 0) & (filename["discharged_mrs"] != 1) & (filename["discharged_mrs"] != 2) & (
-                    filename["discharged_mrs"] != 3) & (filename["discharged_mrs"] != 4) & (
-                    filename["discharged_mrs"] != 5) & (filename["discharged_mrs"] != 6)] = np.nan
+    df["mrs_tx_1"][(df["mrs_tx_1"] != 0) & (df["mrs_tx_1"] != 1) & (df["mrs_tx_1"] != 2) & (
+                df["mrs_tx_1"] != 3) & (df["mrs_tx_1"] != 4) & (df["mrs_tx_1"] != 5) & (
+                                     df["mrs_tx_1"] != 6)] = np.nan
+    df["mrs_tx_3"][(df["mrs_tx_3"] != 0) & (df["mrs_tx_3"] != 1) & (df["mrs_tx_3"] != 2) & (
+                df["mrs_tx_3"] != 3) & (df["mrs_tx_3"] != 4) & (df["mrs_tx_3"] != 5) & (
+                                     df["mrs_tx_3"] != 6) & (df["mrs_tx_3"] != 9)] = np.nan
+    df["gcse_nm"][(df["gcse_nm"] != 1) & (df["gcse_nm"] != 2) & (df["gcse_nm"] != 3) & (
+                df["gcse_nm"] != 4)] = np.nan
+    df["gcsv_nm"][(df["gcsv_nm"] != 1) & (df["gcsv_nm"] != 2) & (df["gcsv_nm"] != 3) & (
+                df["gcsv_nm"] != 4) & (df["gcsv_nm"] != 5)] = np.nan
+    df["gcsm_nm"][(df["gcsm_nm"] != 1) & (df["gcsm_nm"] != 2) & (df["gcsm_nm"] != 3) & (
+                df["gcsm_nm"] != 4) & (df["gcsm_nm"] != 5) & (df["gcsm_nm"] != 6)] = np.nan
+    df["discharged_mrs"][
+        (df["discharged_mrs"] != 0) & (df["discharged_mrs"] != 1) & (df["discharged_mrs"] != 2) & (
+                    df["discharged_mrs"] != 3) & (df["discharged_mrs"] != 4) & (
+                    df["discharged_mrs"] != 5) & (df["discharged_mrs"] != 6)] = np.nan
 
     # boolean
-    for i in filename[boolean]:
-        filename[i].replace("1", 1, inplace=True)
-        filename[i].replace("0", 0, inplace=True)
-        filename[i].replace("Y", 1, inplace=True)
-        filename[i].replace("N", 0, inplace=True)
-        filename[i][(filename[i] != 1) & (filename[i] != 0)] = np.nan
+    for i in df[bool]:
+        df[i].replace("1", 1, inplace=True)
+        df[i].replace("0", 0, inplace=True)
+        df[i].replace("Y", 1, inplace=True)
+        df[i].replace("N", 0, inplace=True)
+        df[i][(df[i] != 1) & (df[i] != 0)] = np.nan
 
-    print(filename.shape)
+    return df
+    print(df.shape)
 
-#def continuous_features(filename):
+def continuous_features(df, cont, b_i, ni_in, ni_out):
     # continuous
-    for i in tsr_all3[continuous]:
-        tsr_all3[i][tsr_all3[i] == 999.9] = np.nan
-        q1 = tsr_all3[i].quantile(0.25)
-        q3 = tsr_all3[i].quantile(0.75)
+    for i in df[cont]:
+        df[i][df[i] == 999.9] = np.nan
+        q1 = df[i].quantile(0.25)
+        q3 = df[i].quantile(0.75)
         iqr = q3 - q1
         inner_fence = 1.5 * iqr
 
         inner_fence_low = q1 - inner_fence
         inner_fence_upp = q3 + inner_fence
-        tsr_all3[i][(tsr_all3[i] < inner_fence_low) | (tsr_all3[i] > inner_fence_upp)] = np.nan
+        df[i][(df[i] < inner_fence_low) | (df[i] > inner_fence_upp)] = np.nan
         # choose one imputation
-        # tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mean())
+        # df[i] = df[i].fillna(df[i].mean())
 
-    # tsr_all3[continuous] = tsr_all3[continuous].fillna(9999)
+    # df[continuous] = df[continuous].fillna(9999)
 
     # barthel
-    for i in tsr_all3[barthel]:
-        tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors="coerce")
+    for i in df[b_i]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    tsr_all3["feeding"][(tsr_all3["feeding"] < 0) | (tsr_all3["feeding"] > 10)] = np.nan
-    tsr_all3["transfers"][(tsr_all3["transfers"] < 0) | (tsr_all3["transfers"] > 15)] = np.nan
-    tsr_all3["bathing"][(tsr_all3["bathing"] < 0) | (tsr_all3["bathing"] > 5)] = np.nan
-    tsr_all3["toilet_use"][(tsr_all3["toilet_use"] < 0) | (tsr_all3["toilet_use"] > 10)] = np.nan
-    tsr_all3["grooming"][(tsr_all3["grooming"] < 0) | (tsr_all3["grooming"] > 5)] = np.nan
-    tsr_all3["mobility"][(tsr_all3["mobility"] < 0) | (tsr_all3["mobility"] > 15)] = np.nan
-    tsr_all3["stairs"][(tsr_all3["stairs"] < 0) | (tsr_all3["stairs"] > 10)] = np.nan
-    tsr_all3["dressing"][(tsr_all3["dressing"] < 0) | (tsr_all3["dressing"] > 10)] = np.nan
-    tsr_all3["bowel_control"][(tsr_all3["bowel_control"] < 0) | (tsr_all3["bowel_control"] > 10)] = np.nan
-    tsr_all3["bladder_control"][(tsr_all3["bladder_control"] < 0) | (tsr_all3["bladder_control"] > 10)] = np.nan
+    df["feeding"][(df["feeding"] < 0) | (df["feeding"] > 10)] = np.nan
+    df["transfers"][(df["transfers"] < 0) | (df["transfers"] > 15)] = np.nan
+    df["bathing"][(df["bathing"] < 0) | (df["bathing"] > 5)] = np.nan
+    df["toilet_use"][(df["toilet_use"] < 0) | (df["toilet_use"] > 10)] = np.nan
+    df["grooming"][(df["grooming"] < 0) | (df["grooming"] > 5)] = np.nan
+    df["mobility"][(df["mobility"] < 0) | (df["mobility"] > 15)] = np.nan
+    df["stairs"][(df["stairs"] < 0) | (df["stairs"] > 10)] = np.nan
+    df["dressing"][(df["dressing"] < 0) | (df["dressing"] > 10)] = np.nan
+    df["bowel_control"][(df["bowel_control"] < 0) | (df["bowel_control"] > 10)] = np.nan
+    df["bladder_control"][(df["bladder_control"] < 0) | (df["bladder_control"] > 10)] = np.nan
 
     # choose one imputation
-    # for i in tsr_all3[barthel]:
-    #    tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
+    # for i in df[barthel]:
+    #    df[i] = df[i].fillna(df[i].mode()[0])
 
-    # tsr_all3[barthel] = tsr_all3[barthel].fillna(9999)
+    # df[barthel] = df[barthel].fillna(9999)
 
     ## total scores of barthel
 
     # nihss_in
-    for i in tsr_all3[nihss_in]:
-        tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors="coerce")
+    for i in df[ni_in]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    tsr_all3["nihs_1a_in"][(tsr_all3["nihs_1a_in"] < 0) | (tsr_all3["nihs_1a_in"] > 3)] = np.nan
-    tsr_all3["nihs_1b_in"][(tsr_all3["nihs_1b_in"] < 0) | (tsr_all3["nihs_1b_in"] > 2)] = np.nan
-    tsr_all3["nihs_1c_in"][(tsr_all3["nihs_1c_in"] < 0) | (tsr_all3["nihs_1c_in"] > 2)] = np.nan
-    tsr_all3["nihs_2_in"][(tsr_all3["nihs_2_in"] < 0) | (tsr_all3["nihs_2_in"] > 2)] = np.nan
-    tsr_all3["nihs_3_in"][(tsr_all3["nihs_3_in"] < 0) | (tsr_all3["nihs_3_in"] > 3)] = np.nan
-    tsr_all3["nihs_4_in"][(tsr_all3["nihs_4_in"] < 0) | (tsr_all3["nihs_4_in"] > 3)] = np.nan
-    tsr_all3["nihs_5al_in"][(tsr_all3["nihs_5al_in"] < 0) | (tsr_all3["nihs_5al_in"] > 4)] = np.nan
-    tsr_all3["nihs_5br_in"][(tsr_all3["nihs_5br_in"] < 0) | (tsr_all3["nihs_5br_in"] > 4)] = np.nan
-    tsr_all3["nihs_6al_in"][(tsr_all3["nihs_6al_in"] < 0) | (tsr_all3["nihs_6al_in"] > 4)] = np.nan
-    tsr_all3["nihs_6br_in"][(tsr_all3["nihs_6br_in"] < 0) | (tsr_all3["nihs_6br_in"] > 4)] = np.nan
-    tsr_all3["nihs_7_in"][(tsr_all3["nihs_7_in"] < 0) | (tsr_all3["nihs_7_in"] > 2)] = np.nan
-    tsr_all3["nihs_8_in"][(tsr_all3["nihs_8_in"] < 0) | (tsr_all3["nihs_8_in"] > 2)] = np.nan
-    tsr_all3["nihs_9_in"][(tsr_all3["nihs_9_in"] < 0) | (tsr_all3["nihs_9_in"] > 3)] = np.nan
-    tsr_all3["nihs_10_in"][(tsr_all3["nihs_10_in"] < 0) | (tsr_all3["nihs_10_in"] > 2)] = np.nan
-    tsr_all3["nihs_11_in"][(tsr_all3["nihs_11_in"] < 0) | (tsr_all3["nihs_11_in"] > 2)] = np.nan
+    df["nihs_1a_in"][(df["nihs_1a_in"] < 0) | (df["nihs_1a_in"] > 3)] = np.nan
+    df["nihs_1b_in"][(df["nihs_1b_in"] < 0) | (df["nihs_1b_in"] > 2)] = np.nan
+    df["nihs_1c_in"][(df["nihs_1c_in"] < 0) | (df["nihs_1c_in"] > 2)] = np.nan
+    df["nihs_2_in"][(df["nihs_2_in"] < 0) | (df["nihs_2_in"] > 2)] = np.nan
+    df["nihs_3_in"][(df["nihs_3_in"] < 0) | (df["nihs_3_in"] > 3)] = np.nan
+    df["nihs_4_in"][(df["nihs_4_in"] < 0) | (df["nihs_4_in"] > 3)] = np.nan
+    df["nihs_5al_in"][(df["nihs_5al_in"] < 0) | (df["nihs_5al_in"] > 4)] = np.nan
+    df["nihs_5br_in"][(df["nihs_5br_in"] < 0) | (df["nihs_5br_in"] > 4)] = np.nan
+    df["nihs_6al_in"][(df["nihs_6al_in"] < 0) | (df["nihs_6al_in"] > 4)] = np.nan
+    df["nihs_6br_in"][(df["nihs_6br_in"] < 0) | (df["nihs_6br_in"] > 4)] = np.nan
+    df["nihs_7_in"][(df["nihs_7_in"] < 0) | (df["nihs_7_in"] > 2)] = np.nan
+    df["nihs_8_in"][(df["nihs_8_in"] < 0) | (df["nihs_8_in"] > 2)] = np.nan
+    df["nihs_9_in"][(df["nihs_9_in"] < 0) | (df["nihs_9_in"] > 3)] = np.nan
+    df["nihs_10_in"][(df["nihs_10_in"] < 0) | (df["nihs_10_in"] > 2)] = np.nan
+    df["nihs_11_in"][(df["nihs_11_in"] < 0) | (df["nihs_11_in"] > 2)] = np.nan
 
     # choose one imputation
-    # for i in tsr_all3[nihss_in]:
-    #    tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
+    # for i in df[nihss_in]:
+    #    df[i] = df[i].fillna(df[i].mode()[0])
 
-    # tsr_all3[nihss_in] = tsr_all3[nihss_in].fillna(9999)
+    # df[nihss_in] = df[nihss_in].fillna(9999)
 
     ## total scores of nihss_in
 
     # nihss_out
-    for i in tsr_all3[nihss_out]:
-        tsr_all3[i] = pd.to_numeric(tsr_all3[i], errors="coerce")
+    for i in df[ni_out]:
+        df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    tsr_all3["nihs_1a_out"][(tsr_all3["nihs_1a_out"] < 0) | (tsr_all3["nihs_1a_out"] > 3)] = np.nan
-    tsr_all3["nihs_1b_out"][(tsr_all3["nihs_1b_out"] < 0) | (tsr_all3["nihs_1b_out"] > 2)] = np.nan
-    tsr_all3["nihs_1c_out"][(tsr_all3["nihs_1c_out"] < 0) | (tsr_all3["nihs_1c_out"] > 2)] = np.nan
-    tsr_all3["nihs_2_out"][(tsr_all3["nihs_2_out"] < 0) | (tsr_all3["nihs_2_out"] > 2)] = np.nan
-    tsr_all3["nihs_3_out"][(tsr_all3["nihs_3_out"] < 0) | (tsr_all3["nihs_3_out"] > 3)] = np.nan
-    tsr_all3["nihs_4_out"][(tsr_all3["nihs_4_out"] < 0) | (tsr_all3["nihs_4_out"] > 3)] = np.nan
-    tsr_all3["nihs_5al_out"][(tsr_all3["nihs_5al_out"] < 0) | (tsr_all3["nihs_5al_out"] > 4)] = np.nan
-    tsr_all3["nihs_5br_out"][(tsr_all3["nihs_5br_out"] < 0) | (tsr_all3["nihs_5br_out"] > 4)] = np.nan
-    tsr_all3["nihs_6al_out"][(tsr_all3["nihs_6al_out"] < 0) | (tsr_all3["nihs_6al_out"] > 4)] = np.nan
-    tsr_all3["nihs_6br_out"][(tsr_all3["nihs_6br_out"] < 0) | (tsr_all3["nihs_6br_out"] > 4)] = np.nan
-    tsr_all3["nihs_7_out"][(tsr_all3["nihs_7_out"] < 0) | (tsr_all3["nihs_7_out"] > 2)] = np.nan
-    tsr_all3["nihs_8_out"][(tsr_all3["nihs_8_out"] < 0) | (tsr_all3["nihs_8_out"] > 2)] = np.nan
-    tsr_all3["nihs_9_out"][(tsr_all3["nihs_9_out"] < 0) | (tsr_all3["nihs_9_out"] > 3)] = np.nan
-    tsr_all3["nihs_10_out"][(tsr_all3["nihs_10_out"] < 0) | (tsr_all3["nihs_10_out"] > 2)] = np.nan
-    tsr_all3["nihs_11_out"][(tsr_all3["nihs_11_out"] < 0) | (tsr_all3["nihs_11_out"] > 2)] = np.nan
+    df["nihs_1a_out"][(df["nihs_1a_out"] < 0) | (df["nihs_1a_out"] > 3)] = np.nan
+    df["nihs_1b_out"][(df["nihs_1b_out"] < 0) | (df["nihs_1b_out"] > 2)] = np.nan
+    df["nihs_1c_out"][(df["nihs_1c_out"] < 0) | (df["nihs_1c_out"] > 2)] = np.nan
+    df["nihs_2_out"][(df["nihs_2_out"] < 0) | (df["nihs_2_out"] > 2)] = np.nan
+    df["nihs_3_out"][(df["nihs_3_out"] < 0) | (df["nihs_3_out"] > 3)] = np.nan
+    df["nihs_4_out"][(df["nihs_4_out"] < 0) | (df["nihs_4_out"] > 3)] = np.nan
+    df["nihs_5al_out"][(df["nihs_5al_out"] < 0) | (df["nihs_5al_out"] > 4)] = np.nan
+    df["nihs_5br_out"][(df["nihs_5br_out"] < 0) | (df["nihs_5br_out"] > 4)] = np.nan
+    df["nihs_6al_out"][(df["nihs_6al_out"] < 0) | (df["nihs_6al_out"] > 4)] = np.nan
+    df["nihs_6br_out"][(df["nihs_6br_out"] < 0) | (df["nihs_6br_out"] > 4)] = np.nan
+    df["nihs_7_out"][(df["nihs_7_out"] < 0) | (df["nihs_7_out"] > 2)] = np.nan
+    df["nihs_8_out"][(df["nihs_8_out"] < 0) | (df["nihs_8_out"] > 2)] = np.nan
+    df["nihs_9_out"][(df["nihs_9_out"] < 0) | (df["nihs_9_out"] > 3)] = np.nan
+    df["nihs_10_out"][(df["nihs_10_out"] < 0) | (df["nihs_10_out"] > 2)] = np.nan
+    df["nihs_11_out"][(df["nihs_11_out"] < 0) | (df["nihs_11_out"] > 2)] = np.nan
 
     # choose one imputation
-    # for i in tsr_all3[nihss_out]:
-    #    tsr_all3[i] = tsr_all3[i].fillna(tsr_all3[i].mode()[0])
+    # for i in df[nihss_out]:
+    #    df[i] = df[i].fillna(df[i].mode()[0])
 
-    # tsr_all3[nihss_out] = tsr_all3[nihss_out].fillna(9999)
+    # df[nihss_out] = df[nihss_out].fillna(9999)
 
     ## total scores of nihss_out
-    print(filename.shape)
+    return df
+    print(df.shape)
 
 
 if __name__ == '__main__':
@@ -225,6 +233,13 @@ if __name__ == '__main__':
                              "trmop_id", "com_id", "offd_dt", "offre_dt", "omad_id", "smcp_id", "thishy_id",
                              "thisdi_id", "det_id", "death_id_3"]
 
+    date = ["rfur_dt_1", "rfur_dt_3", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
+            "nihsot_dt", "ct_dt", "mri_dt"]
+
+    hour = ["onseth_nm", "ottih_nm", "flookh_nm", "fcth_nm", "nihsinh_nm", "nihsoth_nm", "cth_nm", "mrih_nm"]
+
+    minute = ["onsetm_nm", "ottim_nm", "flookm_nm", "fctm_nm", "nihsinm_nm", "nihsotm_nm", "ctm_nm", "mrim_nm"]
+
     nominal_features = ["edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id",
                         "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id",
                         "hchc_id", "ht_id", "dm_id", "pad_id", "al_id", "ca_id", "fahiid_parents_1",
@@ -271,14 +286,16 @@ if __name__ == '__main__':
                  "nihs_4_out", "nihs_5al_out", "nihs_5br_out", "nihs_6al_out", "nihs_6br_out", "nihs_7_out",
                  "nihs_8_out", "nihs_9_out", "nihs_10_out", "nihs_11_out"]
 
-    hour = ["onseth_nm", "ottih_nm", "flookh_nm", "fcth_nm", "nihsinh_nm", "nihsoth_nm", "cth_nm", "mrih_nm"]
-
-    minute = ["onsetm_nm", "ottim_nm", "flookm_nm", "fctm_nm", "nihsinm_nm", "nihsotm_nm", "ctm_nm", "mrim_nm"]
-
-    date = ["rfur_dt_1", "rfur_dt_3", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
-            "nihsot_dt", "ct_dt", "mri_dt"]
 
     csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
-    tsr_all3 = pd.read_csv(csv_path, low_memory=False)
+    TSR_ALL3_df = pd.read_csv(csv_path, low_memory=False)
 
-    ischemic_stroke_cases(tsr_all3)
+    TSR_ALL3_df1 = ischemic_stroke_cases(TSR_ALL3_df)
+    TSR_ALL3_df2 = remove_unrelated_features(TSR_ALL3_df1, unrelated_features)
+    TSR_ALL3_df3 = remove_high_missing_features(TSR_ALL3_df2, high_missing_features)
+    TSR_ALL3_df4 = remove_timestamp_features(TSR_ALL3_df3, date, hour, minute)
+    TSR_ALL3_df5 = categorical_features(TSR_ALL3_df4, nominal_features, ordinal_features, boolean)
+    TSR_ALL3_df6 = continuous_features(TSR_ALL3_df5, continuous, barthel, nihss_in,nihss_out)
+
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
+    TSR_ALL3_df6.to_csv(csv_save, index=False)
