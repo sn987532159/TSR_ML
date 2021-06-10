@@ -35,9 +35,7 @@ def special_cases_deletion(df):
 
     print(df[(df["icd_id"] == 1) | (df["icd_id"] == 2)].shape)
     print(df[(df["icd_id"] == 3) | (df["icd_id"] == 4)].shape)
-
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
-    df.to_csv(csv_save, index=False)
+    return df
 
 
 if __name__ == '__main__':

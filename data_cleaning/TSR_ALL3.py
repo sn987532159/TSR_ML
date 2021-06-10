@@ -22,7 +22,7 @@ def remove_timestamp_features(df, d, h, m):
     return df
     print(df.shape)
 
-def categorical_features(df, nom_f, ord_f, bool):
+def categorical_features(df, nom_f, ord_f, bl_f):
     # nominal_features
     df["gender_tx"][df["gender_tx"] == "M"] = 1
     df["gender_tx"][df["gender_tx"] == "F"] = 0
@@ -78,7 +78,7 @@ def categorical_features(df, nom_f, ord_f, bool):
                     df["discharged_mrs"] != 5) & (df["discharged_mrs"] != 6)] = np.nan
 
     # boolean
-    for i in df[bool]:
+    for i in df[bl_f]:
         df[i].replace("1", 1, inplace=True)
         df[i].replace("0", 0, inplace=True)
         df[i].replace("Y", 1, inplace=True)
@@ -186,6 +186,26 @@ def continuous_features(df, cont, b_i, ni_in, ni_out):
     return df
     print(df.shape)
 
+def delete_error_cases(df):
+    df_1 = df[["feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs",
+                         "dressing", "bowel_control", "bladder_control", "nihs_1a_out", "nihs_1b_out",
+                         "nihs_1c_out", "nihs_2_out", "nihs_3_out", "nihs_4_out", "nihs_5al_out",
+                         "nihs_5br_out", "nihs_6al_out", "nihs_6br_out", "nihs_7_out", "nihs_8_out",
+                         "nihs_9_out", "nihs_10_out", "nihs_11_out", "discharged_mrs"]]
+
+    df_1["index"] = range(0, len(df_1), 1)
+    df_1.set_index("index", inplace=True)
+    df_2 = df_1[:]
+
+    for i in df_2:
+        df_2 = df_2[df_2[i] == 0]
+        delete_cases = df_2.index
+
+    df_1 = df_1.drop(df_1.index[delete_cases])
+    df_1["index"] = range(1, len(df_1) + 1, 1)
+    df_1.set_index("index", inplace=True)
+    return df_1
+
 
 if __name__ == '__main__':
     # Grouping Features
@@ -286,16 +306,25 @@ if __name__ == '__main__':
                  "nihs_4_out", "nihs_5al_out", "nihs_5br_out", "nihs_6al_out", "nihs_6br_out", "nihs_7_out",
                  "nihs_8_out", "nihs_9_out", "nihs_10_out", "nihs_11_out"]
 
-
+    # import data
     csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
     TSR_ALL3_df = pd.read_csv(csv_path, low_memory=False)
 
+    # pre_procesing
     TSR_ALL3_df1 = ischemic_stroke_cases(TSR_ALL3_df)
     TSR_ALL3_df2 = remove_unrelated_features(TSR_ALL3_df1, unrelated_features)
     TSR_ALL3_df3 = remove_high_missing_features(TSR_ALL3_df2, high_missing_features)
     TSR_ALL3_df4 = remove_timestamp_features(TSR_ALL3_df3, date, hour, minute)
     TSR_ALL3_df5 = categorical_features(TSR_ALL3_df4, nominal_features, ordinal_features, boolean)
-    TSR_ALL3_df6 = continuous_features(TSR_ALL3_df5, continuous, barthel, nihss_in,nihss_out)
+    TSR_ALL3_df6 = continuous_features(TSR_ALL3_df5, continuous, barthel, nihss_in, nihss_out)
 
+    # save pre_processed dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
     TSR_ALL3_df6.to_csv(csv_save, index=False)
+
+    # delete error cases
+    TSR_ALL3_score = delete_error_cases(TSR_ALL3_df6)
+
+    # save error cases deleted dataset
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score.csv")
+    TSR_ALL3_score.to_csv(csv_save, index=True)
