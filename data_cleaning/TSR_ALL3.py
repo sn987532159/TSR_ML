@@ -109,16 +109,16 @@ def continuous_features(df, cont, b_i, ni_in, ni_out):
     for i in df[b_i]:
         df[i] = pd.to_numeric(df[i], errors="coerce")
 
-    df["feeding"][(df["feeding"] < 0) | (df["feeding"] > 10)] = np.nan
-    df["transfers"][(df["transfers"] < 0) | (df["transfers"] > 15)] = np.nan
-    df["bathing"][(df["bathing"] < 0) | (df["bathing"] > 5)] = np.nan
-    df["toilet_use"][(df["toilet_use"] < 0) | (df["toilet_use"] > 10)] = np.nan
-    df["grooming"][(df["grooming"] < 0) | (df["grooming"] > 5)] = np.nan
-    df["mobility"][(df["mobility"] < 0) | (df["mobility"] > 15)] = np.nan
-    df["stairs"][(df["stairs"] < 0) | (df["stairs"] > 10)] = np.nan
-    df["dressing"][(df["dressing"] < 0) | (df["dressing"] > 10)] = np.nan
-    df["bowel_control"][(df["bowel_control"] < 0) | (df["bowel_control"] > 10)] = np.nan
-    df["bladder_control"][(df["bladder_control"] < 0) | (df["bladder_control"] > 10)] = np.nan
+    df["feeding"][(df["feeding"] != 0) & (df["feeding"] != 5) & (df["feeding"] != 10)] = np.nan
+    df["transfers"][(df["transfers"] != 0) & (df["transfers"] != 5) & (df["transfers"] != 10) & (df["transfers"] != 15)] = np.nan
+    df["bathing"][(df["bathing"] != 0) & (df["bathing"] != 5)] = np.nan
+    df["toilet_use"][(df["toilet_use"] != 0) & (df["toilet_use"] != 5) & (df["toilet_use"] != 10)] = np.nan
+    df["grooming"][(df["grooming"] != 0) & (df["grooming"] != 5)] = np.nan
+    df["mobility"][(df["mobility"] != 0) & (df["mobility"] != 5) & (df["mobility"] != 10) & (df["mobility"] != 15)] = np.nan
+    df["stairs"][(df["stairs"] != 0) & (df["stairs"] != 5) & (df["stairs"] != 10)] = np.nan
+    df["dressing"][(df["dressing"] != 0) & (df["dressing"] != 5) & (df["dressing"] != 10)] = np.nan
+    df["bowel_control"][(df["bowel_control"] != 0) & (df["bowel_control"] != 5) & (df["bowel_control"] != 10)] = np.nan
+    df["bladder_control"][(df["bladder_control"] != 0) & (df["bladder_control"] != 5) & (df["bladder_control"] != 10)] = np.nan
 
     # choose one imputation
     # for i in df[barthel]:
@@ -192,16 +192,20 @@ def delete_error_cases(df):
                          "nihs_1c_out", "nihs_2_out", "nihs_3_out", "nihs_4_out", "nihs_5al_out",
                          "nihs_5br_out", "nihs_6al_out", "nihs_6br_out", "nihs_7_out", "nihs_8_out",
                          "nihs_9_out", "nihs_10_out", "nihs_11_out", "discharged_mrs"]]
+    print(df_1.shape)
 
     df_1["index"] = range(0, len(df_1), 1)
     df_1.set_index("index", inplace=True)
     df_2 = df_1[:]
-
     for i in df_2:
         df_2 = df_2[df_2[i] == 0]
         delete_cases = df_2.index
-
     df_1 = df_1.drop(df_1.index[delete_cases])
+    print(df_1.shape)
+
+    df_1 = df_1.dropna()
+    print(df_1.shape)
+
     df_1["index"] = range(1, len(df_1) + 1, 1)
     df_1.set_index("index", inplace=True)
     return df_1
