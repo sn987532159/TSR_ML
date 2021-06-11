@@ -4,23 +4,18 @@ import numpy as np
 
 def ischemic_stroke_cases(df):
     df = df[(df["icd_id"] == 1) | (df["icd_id"] == 2)]
-    return df
     print(df.shape)
+    return df
 
 def remove_unrelated_features(df, ur_f):
     df = df.drop(ur_f, axis = 1)
-    return df
     print(df.shape)
-
-def remove_high_missing_features(df, h_m_f):
-    df = df.drop(h_m_f, axis = 1)
     return df
-    print(df.shape)
 
 def remove_timestamp_features(df, d, h, m):
     df = df.drop(d + h + m, axis = 1)
-    return df
     print(df.shape)
+    return df
 
 def categorical_features(df, nom_f, ord_f, bl_f):
     # nominal_features
@@ -85,8 +80,8 @@ def categorical_features(df, nom_f, ord_f, bl_f):
         df[i].replace("N", 0, inplace=True)
         df[i][(df[i] != 1) & (df[i] != 0)] = np.nan
 
-    return df
     print(df.shape)
+    return df
 
 def continuous_features(df, cont, b_i, ni_in, ni_out):
     # continuous
@@ -183,37 +178,66 @@ def continuous_features(df, cont, b_i, ni_in, ni_out):
     # df[nihss_out] = df[nihss_out].fillna(9999)
 
     ## total scores of nihss_out
-    return df
     print(df.shape)
+    return df
+
+def remove_high_missing_features(df):
+    missing_ratio = df.isnull().sum() / len(df) * 100
+    missing_ratio_index = missing_ratio[missing_ratio > 40].index
+    df = df.drop(missing_ratio_index, axis = 1)
+    print(df.shape)
+    return df
 
 def delete_error_cases(df):
-    df_1 = df[["feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs",
-                         "dressing", "bowel_control", "bladder_control", "nihs_1a_out", "nihs_1b_out",
-                         "nihs_1c_out", "nihs_2_out", "nihs_3_out", "nihs_4_out", "nihs_5al_out",
-                         "nihs_5br_out", "nihs_6al_out", "nihs_6br_out", "nihs_7_out", "nihs_8_out",
-                         "nihs_9_out", "nihs_10_out", "nihs_11_out", "discharged_mrs"]]
+    df_1 = df[["icase_id", "idcase_id", "feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility",
+               "stairs", "dressing", "bowel_control", "bladder_control", "nihs_1a_out", "nihs_1b_out", "nihs_1c_out",
+               "nihs_2_out", "nihs_3_out", "nihs_4_out", "nihs_5al_out", "nihs_5br_out", "nihs_6al_out", "nihs_6br_out",
+               "nihs_7_out", "nihs_8_out", "nihs_9_out", "nihs_10_out", "nihs_11_out", "discharged_mrs"]]
+    print(df_1.shape)
+
+    df_1["bi_total"] = df_1.feeding + df_1.transfers + df_1.bathing + df_1.toilet_use + df_1.grooming + df_1.mobility + df_1.stairs + df_1.dressing + df_1.bowel_control + df_1.bladder_control
+    df_1["nihss_total"] = df_1.nihs_1a_out + df_1.nihs_1b_out + df_1.nihs_1c_out + df_1.nihs_2_out + df_1.nihs_3_out + df_1.nihs_4_out + df_1.nihs_5al_out + df_1.nihs_5br_out + df_1.nihs_6al_out + df_1.nihs_6br_out + df_1.nihs_7_out + df_1.nihs_8_out + df_1.nihs_9_out + df_1.nihs_10_out + df_1.nihs_11_out
+
+    df_1["index"] = range(0, len(df_1), 1)
+    df_1.set_index("index", inplace=True)
+    all_0_index = df_1[(df_1["discharged_mrs"] == 0) & (df_1["bi_total"] == 0) & (df_1["nihss_total"] == 0)].index
+    df_1 = df_1.drop(df_1.index[all_0_index])
     print(df_1.shape)
 
     df_1["index"] = range(0, len(df_1), 1)
     df_1.set_index("index", inplace=True)
-    df_2 = df_1[:]
-    for i in df_2:
-        df_2 = df_2[df_2[i] == 0]
-        delete_cases = df_2.index
-    df_1 = df_1.drop(df_1.index[delete_cases])
+    db_0_index = df_1[(df_1["discharged_mrs"] == 0) & (df_1["bi_total"] == 0)].index
+    df_1 = df_1.drop(df_1.index[db_0_index])
+    print(df_1.shape)
+
+    df_1["index"] = range(0, len(df_1), 1)
+    df_1.set_index("index", inplace=True)
+    bn_0_index = df_1[(df_1["bi_total"] == 0) & (df_1["nihss_total"] == 0)].index
+    df_1 = df_1.drop(df_1.index[bn_0_index])
     print(df_1.shape)
 
     df_1 = df_1.dropna()
     print(df_1.shape)
-
     df_1["index"] = range(1, len(df_1) + 1, 1)
     df_1.set_index("index", inplace=True)
+
     return df_1
 
+def outlier_detection(df, var1, var2):
+    outlier_index = []
+    for i in set(df[var1]):
+        selected_df = df[df[var1] == i]
+        selected_df_mean = selected_df[var2].mean()
+        selected_df_sd = selected_df[var2].std()
+        selected_df_del_index = selected_df[(selected_df[var2] < selected_df_mean - 2 * selected_df_sd) | (selected_df[var2] > selected_df_mean + 2 * selected_df_sd)].index.values.tolist()
+        outlier_index = outlier_index + selected_df_del_index
+    print(len(outlier_index))
+    return outlier_index
 
 if __name__ == '__main__':
     # Grouping Features
-    unrelated_features = ["icase_id", "idcase_id", "icd_id", "off_id", "fstatus_id_1", "location_id_1", "torg_id_1",
+    # "icase_id", "idcase_id"
+    unrelated_features = ["icd_id", "off_id", "fstatus_id_1", "location_id_1", "torg_id_1",
                           "flu_id_1", "fluorg_id_1", "fluorg_tx_1", "fluresult_tx_1", "death_dt_1", "death_id_1",
                           "deathsk_id_1", "deatho_tx_1", "veihdorg_id_1", "versorg_id_1", "torg_tx_1", "versorg_tx_1",
                           "veihdorg_tx_1", "fstatus_id_3", "location_id_3", "torg_id_3", "flu_id_3", "fluorg_id_3",
@@ -249,13 +273,8 @@ if __name__ == '__main__':
                           "nivtpa5_fl", "nivtpa6_fl", "nivtpa7_fl", "nivtpa8_fl", "nivtpa9_fl", "nivtpa10_fl",
                           "nivtpa11_fl", "omad_fl", "dethoh_fl", "ecg_id", "mra_fl", "cta_fl", "dsa_fl", "cdr_id",
                           "cdl_id", "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id",
-                          "mcdri_id", "mcdli_id"]
-
-    high_missing_features = ["verscich_id_1", "vers_dt_1", "veihd_id_1", "veihd_dt_1", "death_dt_3", "deathsk_id_3",
-                             "verscich_id_3", "vers_dt_3", "veihd_id_3", "veihd_dt_3", "ivtpath_id", "ivtpa_dt",
-                             "ivtpah_nm", "ivtpam_nm", "ivtpamg_nm", "toastu_id", "thd_id", "trm_id", "trmen_id",
-                             "trmop_id", "com_id", "offd_dt", "offre_dt", "omad_id", "smcp_id", "thishy_id",
-                             "thisdi_id", "det_id", "death_id_3"]
+                          "mcdri_id", "mcdli_id", "vers_dt_1", "veihd_dt_1", "death_dt_3", "vers_dt_3", "veihd_dt_3",
+                          "det_id"]
 
     date = ["rfur_dt_1", "rfur_dt_3", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
             "nihsot_dt", "ct_dt", "mri_dt"]
@@ -296,8 +315,8 @@ if __name__ == '__main__':
 
     continuous = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
                   "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm",
-                  "cre_nm", "alb_nm", "crp_nm", "hbac_nm", "ac_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
-                  "ldl_nm", "got_nm", "gpt_nm", "age", "hospitalised_time"]
+                  "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
+                  "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 
     barthel = ["feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs", "dressing",
                "bowel_control", "bladder_control"]
@@ -317,18 +336,49 @@ if __name__ == '__main__':
     # pre_procesing
     TSR_ALL3_df1 = ischemic_stroke_cases(TSR_ALL3_df)
     TSR_ALL3_df2 = remove_unrelated_features(TSR_ALL3_df1, unrelated_features)
-    TSR_ALL3_df3 = remove_high_missing_features(TSR_ALL3_df2, high_missing_features)
-    TSR_ALL3_df4 = remove_timestamp_features(TSR_ALL3_df3, date, hour, minute)
-    TSR_ALL3_df5 = categorical_features(TSR_ALL3_df4, nominal_features, ordinal_features, boolean)
-    TSR_ALL3_df6 = continuous_features(TSR_ALL3_df5, continuous, barthel, nihss_in, nihss_out)
+    TSR_ALL3_df3 = remove_timestamp_features(TSR_ALL3_df2, date, hour, minute)
+    TSR_ALL3_df4 = categorical_features(TSR_ALL3_df3, nominal_features, ordinal_features, boolean)
+    TSR_ALL3_df5 = continuous_features(TSR_ALL3_df4, continuous, barthel, nihss_in, nihss_out)
+    TSR_ALL3_df6 = remove_high_missing_features(TSR_ALL3_df5)
+    TSR_ALL3_df6 = TSR_ALL3_df6.sort_values(by=["icase_id", "idcase_id"])
 
     # save pre_processed dataset
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_preprocessed.csv")
     TSR_ALL3_df6.to_csv(csv_save, index=False)
 
     # delete error cases
-    TSR_ALL3_score = delete_error_cases(TSR_ALL3_df6)
+    TSR_ALL3_score_df = delete_error_cases(TSR_ALL3_df6)
 
     # save error cases deleted dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score.csv")
-    TSR_ALL3_score.to_csv(csv_save, index=True)
+    TSR_ALL3_score_df.to_csv(csv_save, index=False)
+
+    # mRS & BI * NIHSS outlier detection
+    db_outlier = outlier_detection(TSR_ALL3_score_df, "discharged_mrs", "bi_total")
+    dn_outlier = outlier_detection(TSR_ALL3_score_df, "discharged_mrs", "nihss_total")
+    #bn_outlier = outlier_detection(TSR_ALL3_score_df, "bi_total", "nihss_total")
+
+    # delete_union = len(set(db_outlier) & set(dn_outlier) & set(bn_outlier))
+    # delete_intersection = len(set(db_outlier) | set(dn_outlier) | set(bn_outlier))
+    # delete_union_num = len(set(db_outlier) & set(dn_outlier))
+    # delete_intersection_num = len(set(db_outlier) | set(dn_outlier))
+    delete_union_index = list(set(db_outlier) & set(dn_outlier))
+    delete_intersection_index = list(set(db_outlier) | set(dn_outlier))
+
+    TSR_ALL3_score_cleaned_df = TSR_ALL3_score_df.drop(TSR_ALL3_score_df.index[delete_intersection_index])
+
+    # save outlier cases deleted dataset
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score_cleaned.csv")
+    TSR_ALL3_score_cleaned_df.to_csv(csv_save, index=False)
+
+    # merge TSR_ALL3_score_cleaned_df to the original dataset
+    TSR_ALL3_AMPUTATED_DF = pd.merge(TSR_ALL3_df6, TSR_ALL3_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
+
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
+    TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
+
+    TSR_ALL3_AMPUTATED_DF[continuous] = TSR_ALL3_AMPUTATED_DF[continuous].fillna(9999)
+    asd = TSR_ALL3_AMPUTATED_DF.dropna()
+    asd.shape
+
+
