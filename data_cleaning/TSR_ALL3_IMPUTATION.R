@@ -6,9 +6,10 @@ library(VIM)
 library(Gmisc)
 
 setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
-file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_IMP_9999.csv")
+file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
 TSR_ALL3 <- read.csv(file_path)
-TSR_ALL3[TSR_ALL3 == 9999] = ""
+TSR_ALL3_1 <- TSR_ALL3 %>% select(-icase_id, -idcase_id)
+TSR_ALL3_1[TSR_ALL3_1 == 9999] = ""
 
 nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
                     "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", 
@@ -42,8 +43,8 @@ boolean = c("toastle_fl", "toastli_fl", "toastsce_fl", "toastsmo_fl", "toastsra_
 
 continuous = c("height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
               "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm", 
-              "cre_nm", "alb_nm", "crp_nm", "hbac_nm", "ac_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm", 
-              "ldl_nm", "got_nm", "gpt_nm", "age", "hospitalised_time")
+              "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm", 
+              "ldl_nm", "gpt_nm", "age", "hospitalised_time")
 
 barthel = c("feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs", "dressing", 
            "bowel_control", "bladder_control")
@@ -58,23 +59,23 @@ nihss_out = c("nihs_1a_out", "nihs_1b_out", "nihs_1c_out", "nihs_2_out", "nihs_3
 
 #mice imputation
 
-#md.pattern(TSR_ALL3, plot = FALSE)
-#md.pairs(TSR_ALL3)
-#TSR_ALL3_plot <- aggr(TSR_ALL3,col=c('navyblue','yellow'),numbers=TRUE,sortVars=TRUE,labels=names(TSR_ALL3),cex.axis=.7,gap=3,ylab=c("Missing data","Pattern"))
+#md.pattern(TSR_ALL3_1, plot = FALSE)
+#md.pairs(TSR_ALL3_1)
+#TSR_ALL3_1_plot <- aggr(TSR_ALL3_1,col=c('navyblue','yellow'),numbers=TRUE,sortVars=TRUE,labels=names(TSR_ALL3_1),cex.axis=.7,gap=3,ylab=c("Missing data","Pattern"))
 
-TSR_ALL3[nominal_features] <- lapply(TSR_ALL3[nominal_features], as.factor)
-TSR_ALL3[ordinal_features] <- lapply(TSR_ALL3[ordinal_features], as.factor)
-TSR_ALL3[boolean] <- lapply(TSR_ALL3[boolean], as.factor)
-TSR_ALL3[continuous] <- lapply(TSR_ALL3[continuous], as.numeric)
-TSR_ALL3[barthel] <- lapply(TSR_ALL3[barthel], as.numeric)
-TSR_ALL3[nihss_in] <- lapply(TSR_ALL3[nihss_in], as.numeric)
-TSR_ALL3[nihss_out] <- lapply(TSR_ALL3[nihss_out], as.numeric)
+TSR_ALL3_1[nominal_features] <- lapply(TSR_ALL3_1[nominal_features], as.factor)
+TSR_ALL3_1[ordinal_features] <- lapply(TSR_ALL3_1[ordinal_features], as.factor)
+TSR_ALL3_1[boolean] <- lapply(TSR_ALL3_1[boolean], as.factor)
+TSR_ALL3_1[continuous] <- lapply(TSR_ALL3_1[continuous], as.numeric)
+TSR_ALL3_1[barthel] <- lapply(TSR_ALL3_1[barthel], as.numeric)
+TSR_ALL3_1[nihss_in] <- lapply(TSR_ALL3_1[nihss_in], as.numeric)
+TSR_ALL3_1[nihss_out] <- lapply(TSR_ALL3_1[nihss_out], as.numeric)
 
 methods_TSR_ALL3 <- c(mrs_tx_1 = "polr", mrs_tx_3 = "polr", height_nm = "pmm", weight_nm = "pmm", edu_id = "polyreg", pro_id = "polyreg", opc_id = "polyreg", gcse_nm = "polr", gcsv_nm = "polr", gcsm_nm = "polr", sbp_nm = "pmm", dbp_nm = "pmm", bt_nm = "pmm", hr_nm = "pmm", rr_nm = "pmm",
                       toast_id = "polyreg", toastle_fl = "logreg",toastli_fl = "logreg",toastsce_fl = "logreg",toastsmo_fl = "logreg",toastsra_fl = "logreg",toastsdi_fl = "logreg",toastsmi_fl = "logreg",toastsantip_fl = "logreg",toastsau_fl = "logreg", 
                       toastshy_fl = "logreg",toastspr_fl = "logreg",toastsantit_fl = "logreg",toastsho_fl = "logreg",toastshys_fl = "logreg",toastsca_fl = "logreg",thda_fl = "logreg",thdh_fl = "logreg",thdi_fl = "logreg",thdam_fl = "logreg",thdv_fl = "logreg",
-                      thde_fl = "logreg",thdm_fl = "logreg",thdr_fl = "logreg",thdp_fl = "logreg",hb_nm = "pmm", hct_nm = "pmm", platelet_nm = "pmm", wbc_nm = "pmm", ptt1_nm = "pmm", ptt2_nm = "pmm", ptinr_nm = "pmm", er_nm = "pmm", bun_nm = "pmm", cre_nm = "pmm", alb_nm = "pmm", 
-                      crp_nm = "pmm", hbac_nm = "pmm", ac_nm = "pmm", ua_nm = "pmm", tcho_nm = "pmm", tg_nm = "pmm", hdl_nm = "pmm", ldl_nm = "pmm", got_nm = "pmm", gpt_nm = "pmm", trman_fl = "logreg",trmas_fl = "logreg",trmti_fl = "logreg",trmhe_fl = "logreg",trmwa_fl = "logreg",
+                      thde_fl = "logreg",thdm_fl = "logreg",thdr_fl = "logreg",thdp_fl = "logreg",hb_nm = "pmm", hct_nm = "pmm", platelet_nm = "pmm", wbc_nm = "pmm", ptt1_nm = "pmm", ptt2_nm = "pmm", ptinr_nm = "pmm", er_nm = "pmm", bun_nm = "pmm", cre_nm = "pmm",
+                      ua_nm = "pmm", tcho_nm = "pmm", tg_nm = "pmm", hdl_nm = "pmm", ldl_nm = "pmm", gpt_nm = "pmm", trman_fl = "logreg",trmas_fl = "logreg",trmti_fl = "logreg",trmhe_fl = "logreg",trmwa_fl = "logreg",
                       trmia_fl = "logreg",trmfo_fl = "logreg",trmta_fl = "logreg",trmsd_fl = "logreg",trmre_fl = "logreg",trmen_fl = "logreg",trmag_fl = "logreg",trmcl_fl = "logreg",trmpl_fl = "logreg",trmlm_fl = "logreg",trmiv_fl = "logreg",trmve_fl = "logreg",
                       trmng_fl = "logreg",trmdy_fl = "logreg",trmicu_fl = "logreg",trmsm_fl = "logreg",trmed_fl = "logreg",trmop_fl = "logreg",om_fl = "logreg",omas_fl = "logreg",omag_fl = "logreg",omti_fl = "logreg",omcl_fl = "logreg",omwa_fl = "logreg",ompl_fl = "logreg",omanh_fl = "logreg",
                       omand_fl = "logreg",omli_fl = "logreg",am_fl = "logreg",amas_fl = "logreg",amag_fl = "logreg",amti_fl = "logreg",amcl_fl = "logreg",amwa_fl = "logreg",ampl_fl = "logreg",amanh_fl = "logreg",amand_fl = "logreg",amli_fl = "logreg",compn_fl = "logreg",comut_fl = "logreg",
@@ -93,10 +94,12 @@ methods_TSR_ALL3 <- c(mrs_tx_1 = "polr", mrs_tx_3 = "polr", height_nm = "pmm", w
                       nihs_11_in = "pmm", nihs_1a_out = "pmm", nihs_1b_out = "pmm", nihs_1c_out = "pmm", nihs_2_out = "pmm", nihs_3_out = "pmm", nihs_4_out = "pmm", nihs_5al_out = "pmm", nihs_5br_out = "pmm", nihs_6al_out= "pmm",
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
-TSR_ALL3_imp <- mice(TSR_ALL3, maxit = 20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
+TSR_ALL3_imp <- mice(TSR_ALL3_1, maxit = 20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
 #summary(TSR_ALL3_imp)
 
-TSR_ALL3_mice <- complete(TSR_ALL3_imp, 5)
+with(TSR_ALL3_imp, lm(mrs_tx_3 ~ . -mrs_tx_3))
+
+TSR_ALL3_mice <- TSR_ALL3 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL3_imp, 5))
 
 save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_MICE5.csv")
 write.csv(TSR_ALL3_mice, save_file, row.names=FALSE)
