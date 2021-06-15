@@ -185,6 +185,7 @@ def remove_high_missing_features(df):
     missing_ratio = df.isnull().sum() / len(df) * 100
     missing_ratio_index = missing_ratio[missing_ratio > 40].index
     df = df.drop(missing_ratio_index, axis = 1)
+    df = df.sort_values(by=["icase_id", "idcase_id"])
     print(df.shape)
     return df
 
@@ -315,6 +316,11 @@ if __name__ == '__main__':
 
     continuous = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
                   "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm",
+                  "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm", "alb_nm", "crp_nm", "hbac_nm", "ac_nm", "got_nm",
+                  "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
+
+    continuous_n = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
+                  "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm",
                   "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
                   "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 
@@ -332,6 +338,13 @@ if __name__ == '__main__':
     # import data
     csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
     TSR_ALL3_df = pd.read_csv(csv_path, low_memory=False)
+    #TSR_ALL3_df["bi_total"] = TSR_ALL3_df.feeding + TSR_ALL3_df.transfers + TSR_ALL3_df.bathing + TSR_ALL3_df.toilet_use + TSR_ALL3_df.grooming + TSR_ALL3_df.mobility + TSR_ALL3_df.stairs + TSR_ALL3_df.dressing + TSR_ALL3_df.bowel_control + TSR_ALL3_df.bladder_control
+    #TSR_ALL3_df["nihss_total"] = TSR_ALL3_df.nihs_1a_out + TSR_ALL3_df.nihs_1b_out + TSR_ALL3_df.nihs_1c_out + TSR_ALL3_df.nihs_2_out + TSR_ALL3_df.nihs_3_out + TSR_ALL3_df.nihs_4_out + TSR_ALL3_df.nihs_5al_out + TSR_ALL3_df.nihs_5br_out + TSR_ALL3_df.nihs_6al_out + TSR_ALL3_df.nihs_6br_out + TSR_ALL3_df.nihs_7_out + TSR_ALL3_df.nihs_8_out + TSR_ALL3_df.nihs_9_out + TSR_ALL3_df.nihs_10_out + TSR_ALL3_df.nihs_11_out
+    #TSR_ALL3_df["bi_total"].median()
+    #TSR_ALL3_df["nihss_total"].median()
+    #TSR_ALL3_df["gender_tx"].value_counts() / len(TSR_ALL3_df["gender_tx"])
+    #TSR_ALL3_df["age"].median()
+    #TSR_ALL3_df["discharged_mrs"].mean()
 
     # pre_procesing
     TSR_ALL3_df1 = ischemic_stroke_cases(TSR_ALL3_df)
@@ -340,7 +353,6 @@ if __name__ == '__main__':
     TSR_ALL3_df4 = categorical_features(TSR_ALL3_df3, nominal_features, ordinal_features, boolean)
     TSR_ALL3_df5 = continuous_features(TSR_ALL3_df4, continuous, barthel, nihss_in, nihss_out)
     TSR_ALL3_df6 = remove_high_missing_features(TSR_ALL3_df5)
-    TSR_ALL3_df6 = TSR_ALL3_df6.sort_values(by=["icase_id", "idcase_id"])
 
     # save pre_processed dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_preprocessed.csv")
@@ -348,6 +360,9 @@ if __name__ == '__main__':
 
     # delete error cases
     TSR_ALL3_score_df = delete_error_cases(TSR_ALL3_df6)
+    TSR_ALL3_score_df["bi_total"].median()
+    TSR_ALL3_score_df["nihss_total"].median()
+    TSR_ALL3_score_df["discharged_mrs"].mean()
 
     # save error cases deleted dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score.csv")
@@ -374,11 +389,18 @@ if __name__ == '__main__':
     # merge TSR_ALL3_score_cleaned_df to the original dataset
     TSR_ALL3_AMPUTATED_DF = pd.merge(TSR_ALL3_df6, TSR_ALL3_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
 
+    TSR_ALL3_AMPUTATED_DF[continuous_n] = TSR_ALL3_AMPUTATED_DF[continuous_n].fillna(9999)
+    TSR_ALL3_AMPUTATED_DF = TSR_ALL3_AMPUTATED_DF.dropna()
+
+    #TSR_ALL3_AMPUTATED_DF["bi_total"] = TSR_ALL3_AMPUTATED_DF.feeding + TSR_ALL3_AMPUTATED_DF.transfers + TSR_ALL3_AMPUTATED_DF.bathing + TSR_ALL3_AMPUTATED_DF.toilet_use + TSR_ALL3_AMPUTATED_DF.grooming + TSR_ALL3_AMPUTATED_DF.mobility + TSR_ALL3_AMPUTATED_DF.stairs + TSR_ALL3_AMPUTATED_DF.dressing + TSR_ALL3_AMPUTATED_DF.bowel_control + TSR_ALL3_AMPUTATED_DF.bladder_control
+    #TSR_ALL3_AMPUTATED_DF["nihss_total"] = TSR_ALL3_AMPUTATED_DF.nihs_1a_out + TSR_ALL3_AMPUTATED_DF.nihs_1b_out + TSR_ALL3_AMPUTATED_DF.nihs_1c_out + TSR_ALL3_AMPUTATED_DF.nihs_2_out + TSR_ALL3_AMPUTATED_DF.nihs_3_out + TSR_ALL3_AMPUTATED_DF.nihs_4_out + TSR_ALL3_AMPUTATED_DF.nihs_5al_out + TSR_ALL3_AMPUTATED_DF.nihs_5br_out + TSR_ALL3_AMPUTATED_DF.nihs_6al_out + TSR_ALL3_AMPUTATED_DF.nihs_6br_out + TSR_ALL3_AMPUTATED_DF.nihs_7_out + TSR_ALL3_AMPUTATED_DF.nihs_8_out + TSR_ALL3_AMPUTATED_DF.nihs_9_out + TSR_ALL3_AMPUTATED_DF.nihs_10_out + TSR_ALL3_AMPUTATED_DF.nihs_11_out
+    #TSR_ALL3_AMPUTATED_DF["bi_total"].median()
+    #TSR_ALL3_AMPUTATED_DF["nihss_total"].median()
+    #TSR_ALL3_AMPUTATED_DF["gender_tx"].value_counts() / len(TSR_ALL3_AMPUTATED_DF["gender_tx"])
+    #TSR_ALL3_AMPUTATED_DF["age"].median()
+    #TSR_ALL3_AMPUTATED_DF["discharged_mrs"].mean()
+
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_AMPUTATED.csv")
     TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
-
-    TSR_ALL3_AMPUTATED_DF[continuous] = TSR_ALL3_AMPUTATED_DF[continuous].fillna(9999)
-    asd = TSR_ALL3_AMPUTATED_DF.dropna()
-    asd.shape
 
 

@@ -1,9 +1,14 @@
 import pandas as pd
 import os
 
-def mRS_records_deletion(df):
+def delete_duplicated_rows(df):
     print(df.shape)
+    df = df.drop_duplicates(["icase_id", "idcase_id"], keep="first")
+    df = df.reset_index(drop=True)
+    print(df.shape)
+    return df
 
+def mRS_records_deletion(df):
     died_before_discharge = df[df["off_id"] != 3].index
     df = df.drop(df.index[died_before_discharge])
     df = df.reset_index(drop=True)
@@ -42,8 +47,9 @@ if __name__ == '__main__':
     csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL.csv")
     tsr_all_df = pd.read_csv(csv_path, low_memory=False)
 
-    tsr_all_df1 = mRS_records_deletion(tsr_all_df)
-    tsr_all_df2 = special_cases_deletion(tsr_all_df1)
+    tsr_all_df1 = delete_duplicated_rows(tsr_all_df)
+    tsr_all_df2 = mRS_records_deletion(tsr_all_df1)
+    tsr_all_df3 = special_cases_deletion(tsr_all_df2)
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3.csv")
-    tsr_all_df2.to_csv(csv_save, index=False)
+    tsr_all_df3.to_csv(csv_save, index=False)

@@ -5,25 +5,27 @@ library(ggplot2)
 library(dplyr)
 
 ##### TSR_ALL3_score.csv
+setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
 file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score.csv")
 TSR_ALL3 <- read.csv(file_path)
 
 ### the function needs to be checked 
-amiright <- function(df, var1, var2){
-  df_1 <- dplyr::select(df, var1, var2)
-  df_1$number <- 1
-  df_1 <- df_1 %>%
-    group_by(var1, var2) %>% 
-    summarise(number = sum(number))
-  lw <- loess(var2 ~ var1,data=df)
-  j <- order(df$var1)
+#amiright <- function(df, var1, var2){
+  #df_1 <- dplyr::select(df, var1, var2)
+  #df_1$number <- 1
+  #df_1 <- df_1 %>%
+  #  group_by(df_1[1], df_1[2]) %>% 
+  #  summarise(number = sum(number))
+  #lw <- loess(var2 ~ var1,data=df)
+  #j <- order(df$var1)
   
-  ggplot()+
-    geom_point(data = df_1, aes(x =var1, y = var2, size = number))+
-    geom_line(aes(x =df$var1[j], y = lw$fitted[j]),col="red", lwd=2)+
-    ylim(min(var2), max(var2))
-}
+  #plot <- ggplot()+
+  #  geom_point(data = df_1, aes(x =var1, y = var2, size = number))+
+  #  geom_line(aes(x =df$var1[j], y = lw$fitted[j]),col="red", lwd=2)+
+  #  ylim(min(var2), max(var2))
+#}
 
+#amiright(TSR_ALL3, "discharged_mrs", "bi_total")
 
 # discharged_mrs VERSUS bi_total
 TSR_ALL3_selected_1 <- TSR_ALL3[c("discharged_mrs", "bi_total")]
