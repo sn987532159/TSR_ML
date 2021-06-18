@@ -97,10 +97,8 @@ methods_TSR_ALL3 <- c(mrs_tx_1 = "polr", mrs_tx_3 = "polr", height_nm = "pmm", w
 TSR_ALL3_imp <- mice(TSR_ALL3_1, maxit = 20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
 #summary(TSR_ALL3_imp)
 
-with(TSR_ALL3_imp, lm(mrs_tx_3 ~ . -mrs_tx_3))
-
 TSR_ALL3_mice <- TSR_ALL3 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL3_imp, 5))
 
-save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_MICE5.csv")
+save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_MICE5.csv")
 write.csv(TSR_ALL3_mice, save_file, row.names=FALSE)
 

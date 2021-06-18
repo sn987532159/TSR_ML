@@ -6,7 +6,7 @@ library(dplyr)
 
 ##### TSR_ALL3_score.csv
 setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
-file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score.csv")
+file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL3_score.csv")
 TSR_ALL3 <- read.csv(file_path)
 
 ### the function needs to be checked 
@@ -85,7 +85,7 @@ ggplot()+
 
 
 ##### TSR_ALL3_score_cleaned.csv
-file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3_score_cleaned.csv")
+file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL3_score_cleaned.csv")
 TSR_ALL3 <- read.csv(file_path)
 
 # discharged_mrs VERSUS bi_total
