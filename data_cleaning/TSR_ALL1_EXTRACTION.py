@@ -10,24 +10,15 @@ def delete_duplicated_rows(df):
     return df
 
 def mRS_records_deletion(df):
-    df[df["mrs_tx_3"] == 9] = np.nan
-    df["mrs_tx_3"][(df["death_dt_3"] != "1900/1/1") & (df["death_dt_3"].notnull())] = 9
+    df[df["mrs_tx_1"] == 9] = np.nan
+    df["mrs_tx_1"][(df["death_dt_1"] != "1900/1/1") & (df["death_dt_1"].notnull())] = 9
     died_before_discharge = df[df["off_id"] != 3].index
     df = df.drop(df.index[died_before_discharge])
-    print(df.shape)
-    df = df.reset_index(drop=True)
-    died_before_1_month = df[(df["death_dt_1"] != "1900/1/1") & (df["death_dt_1"].notnull())].index
-    df = df.drop(df.index[died_before_1_month])
     print(df.shape)
 
     df = df.reset_index(drop=True)
     no_mrs_1 = df[df["mrs_tx_1"].isnull()].index
     df = df.drop(df.index[no_mrs_1])
-    print(df.shape)
-
-    df = df.reset_index(drop=True)
-    no_mrs_3 = df[df["mrs_tx_3"].isnull()].index
-    df = df.drop(df.index[no_mrs_3])
     print(df.shape)
     return df
 
@@ -55,5 +46,5 @@ if __name__ == '__main__':
     tsr_all_df2 = mRS_records_deletion(tsr_all_df1)
     tsr_all_df3 = special_cases_deletion(tsr_all_df2)
 
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3.csv")
-    tsr_all_df3.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1.csv")
+    tsr_all_df1.to_csv(csv_save, index=False)
