@@ -9,7 +9,7 @@ setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
 file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_AMPUTATED.csv")
 TSR_ALL1 <- read.csv(file_path)
 TSR_ALL1_1 <- TSR_ALL1 %>% select(-icase_id, -idcase_id)
-TSR_ALL1_1[TSR_ALL1_1 == 9999] = ""
+TSR_ALL1_1[TSR_ALL1_1 == 9999] = NA
 
 nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
                      "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", 
@@ -94,11 +94,11 @@ methods_TSR_ALL1 <- c(mrs_tx_1 = "polr", height_nm = "pmm", weight_nm = "pmm", e
                       nihs_11_in = "pmm", nihs_1a_out = "pmm", nihs_1b_out = "pmm", nihs_1c_out = "pmm", nihs_2_out = "pmm", nihs_3_out = "pmm", nihs_4_out = "pmm", nihs_5al_out = "pmm", nihs_5br_out = "pmm", nihs_6al_out= "pmm",
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
-TSR_ALL1_imp <- mice(TSR_ALL1_1, maxit = 2, m = 1, method = methods_TSR_ALL1, print = TRUE, seed = 19)
+TSR_ALL1_imp <- mice(TSR_ALL1_1, maxit =20, m = 5, method = methods_TSR_ALL1, print = TRUE, seed = 19)
 #summary(TSR_ALL1_imp)
 
-TSR_ALL1_mice <- TSR_ALL1 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL1_imp, 1))
+TSR_ALL1_mice <- TSR_ALL1 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL1_imp, 5))
 
-save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_MICE1.csv")
+save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_MICE5.csv")
 write.csv(TSR_ALL1_mice, save_file, row.names=FALSE)
 
