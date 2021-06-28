@@ -47,4 +47,4 @@ if __name__ == '__main__':
     tsr_all_df3 = special_cases_deletion(tsr_all_df2)
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1.csv")
-    tsr_all_df1.to_csv(csv_save, index=False)
+    tsr_all_df3.to_csv(csv_save, index=False)
