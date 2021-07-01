@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 def ischemic_stroke_cases(df):
     df = df[(df["icd_id"] == 1) | (df["icd_id"] == 2)]
@@ -17,7 +19,7 @@ def remove_timestamp_features(df, d, h, m):
     print(df.shape)
     return df
 
-def categorical_features(df, nom_f, ord_f, bl_f):
+def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
     # nominal_features
     df["gender_tx"][df["gender_tx"] == "M"] = 1
     df["gender_tx"][df["gender_tx"] == "F"] = 0
@@ -57,10 +59,7 @@ def categorical_features(df, nom_f, ord_f, bl_f):
 
     df["mrs_tx_1"][(df["mrs_tx_1"] != 0) & (df["mrs_tx_1"] != 1) & (df["mrs_tx_1"] != 2) & (
                 df["mrs_tx_1"] != 3) & (df["mrs_tx_1"] != 4) & (df["mrs_tx_1"] != 5) & (
-                                     df["mrs_tx_1"] != 6)] = np.nan
-    df["mrs_tx_3"][(df["mrs_tx_3"] != 0) & (df["mrs_tx_3"] != 1) & (df["mrs_tx_3"] != 2) & (
-                df["mrs_tx_3"] != 3) & (df["mrs_tx_3"] != 4) & (df["mrs_tx_3"] != 5) & (
-                                     df["mrs_tx_3"] != 6) & (df["mrs_tx_3"] != 9)] = np.nan
+                                     df["mrs_tx_1"] != 6) & (df["mrs_tx_1"] != 9)] = np.nan
     df["gcse_nm"][(df["gcse_nm"] != 1) & (df["gcse_nm"] != 2) & (df["gcse_nm"] != 3) & (
                 df["gcse_nm"] != 4)] = np.nan
     df["gcsv_nm"][(df["gcsv_nm"] != 1) & (df["gcsv_nm"] != 2) & (df["gcsv_nm"] != 3) & (
@@ -80,48 +79,24 @@ def categorical_features(df, nom_f, ord_f, bl_f):
         df[i].replace("N", 0, inplace=True)
         df[i][(df[i] != 1) & (df[i] != 0)] = np.nan
 
-    print(df.shape)
-    return df
-
-def continuous_features(df, cont, b_i, ni_in, ni_out):
-    # continuous
-    for i in df[cont]:
-        df[i][df[i] == 999.9] = np.nan
-        q1 = df[i].quantile(0.25)
-        q3 = df[i].quantile(0.75)
-        iqr = q3 - q1
-        inner_fence = 1.5 * iqr
-
-        inner_fence_low = q1 - inner_fence
-        inner_fence_upp = q3 + inner_fence
-        df[i][(df[i] < inner_fence_low) | (df[i] > inner_fence_upp)] = np.nan
-        # choose one imputation
-        # df[i] = df[i].fillna(df[i].mean())
-
-    # df[continuous] = df[continuous].fillna(9999)
-
     # barthel
     for i in df[b_i]:
         df[i] = pd.to_numeric(df[i], errors="coerce")
 
     df["feeding"][(df["feeding"] != 0) & (df["feeding"] != 5) & (df["feeding"] != 10)] = np.nan
-    df["transfers"][(df["transfers"] != 0) & (df["transfers"] != 5) & (df["transfers"] != 10) & (df["transfers"] != 15)] = np.nan
+    df["transfers"][(df["transfers"] != 0) & (df["transfers"] != 5) & (df["transfers"] != 10) & (
+                    df["transfers"] != 15)] = np.nan
     df["bathing"][(df["bathing"] != 0) & (df["bathing"] != 5)] = np.nan
     df["toilet_use"][(df["toilet_use"] != 0) & (df["toilet_use"] != 5) & (df["toilet_use"] != 10)] = np.nan
     df["grooming"][(df["grooming"] != 0) & (df["grooming"] != 5)] = np.nan
-    df["mobility"][(df["mobility"] != 0) & (df["mobility"] != 5) & (df["mobility"] != 10) & (df["mobility"] != 15)] = np.nan
+    df["mobility"][
+            (df["mobility"] != 0) & (df["mobility"] != 5) & (df["mobility"] != 10) & (df["mobility"] != 15)] = np.nan
     df["stairs"][(df["stairs"] != 0) & (df["stairs"] != 5) & (df["stairs"] != 10)] = np.nan
     df["dressing"][(df["dressing"] != 0) & (df["dressing"] != 5) & (df["dressing"] != 10)] = np.nan
-    df["bowel_control"][(df["bowel_control"] != 0) & (df["bowel_control"] != 5) & (df["bowel_control"] != 10)] = np.nan
-    df["bladder_control"][(df["bladder_control"] != 0) & (df["bladder_control"] != 5) & (df["bladder_control"] != 10)] = np.nan
-
-    # choose one imputation
-    # for i in df[barthel]:
-    #    df[i] = df[i].fillna(df[i].mode()[0])
-
-    # df[barthel] = df[barthel].fillna(9999)
-
-    ## total scores of barthel
+    df["bowel_control"][
+            (df["bowel_control"] != 0) & (df["bowel_control"] != 5) & (df["bowel_control"] != 10)] = np.nan
+    df["bladder_control"][
+            (df["bladder_control"] != 0) & (df["bladder_control"] != 5) & (df["bladder_control"] != 10)] = np.nan
 
     # nihss_in
     for i in df[ni_in]:
@@ -143,14 +118,6 @@ def continuous_features(df, cont, b_i, ni_in, ni_out):
     df["nihs_10_in"][(df["nihs_10_in"] < 0) | (df["nihs_10_in"] > 2)] = np.nan
     df["nihs_11_in"][(df["nihs_11_in"] < 0) | (df["nihs_11_in"] > 2)] = np.nan
 
-    # choose one imputation
-    # for i in df[nihss_in]:
-    #    df[i] = df[i].fillna(df[i].mode()[0])
-
-    # df[nihss_in] = df[nihss_in].fillna(9999)
-
-    ## total scores of nihss_in
-
     # nihss_out
     for i in df[ni_out]:
         df[i] = pd.to_numeric(df[i], errors="coerce")
@@ -171,13 +138,23 @@ def continuous_features(df, cont, b_i, ni_in, ni_out):
     df["nihs_10_out"][(df["nihs_10_out"] < 0) | (df["nihs_10_out"] > 2)] = np.nan
     df["nihs_11_out"][(df["nihs_11_out"] < 0) | (df["nihs_11_out"] > 2)] = np.nan
 
-    # choose one imputation
-    # for i in df[nihss_out]:
-    #    df[i] = df[i].fillna(df[i].mode()[0])
+    print(df.shape)
+    return df
 
-    # df[nihss_out] = df[nihss_out].fillna(9999)
+def continuous_features(df, cont):
+    # continuous
+    for i in df[cont]:
+        df[i][df[i] == 999.9] = np.nan
+        q1 = df[i].quantile(0.25)
+        q3 = df[i].quantile(0.75)
+        iqr = q3 - q1
+        inner_fence = 1.5 * iqr
 
-    ## total scores of nihss_out
+        inner_fence_low = q1 - inner_fence
+        inner_fence_upp = q3 + inner_fence
+        df[i][(df[i] < inner_fence_low) | (df[i] > inner_fence_upp)] = np.nan
+        df[i][df[i] < 0] = np.nan
+
     print(df.shape)
     return df
 
@@ -275,9 +252,9 @@ if __name__ == '__main__':
                           "nivtpa11_fl", "omad_fl", "dethoh_fl", "ecg_id", "mra_fl", "cta_fl", "dsa_fl", "cdr_id",
                           "cdl_id", "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id",
                           "mcdri_id", "mcdli_id", "vers_dt_1", "veihd_dt_1", "death_dt_3", "vers_dt_3", "veihd_dt_3",
-                          "det_id"]
+                          "det_id", "rfur_dt_3", "mrs_tx_3"]
 
-    date = ["rfur_dt_1", "rfur_dt_3", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
+    date = ["rfur_dt_1", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
             "nihsot_dt", "ct_dt", "mri_dt"]
 
     hour = ["onseth_nm", "ottih_nm", "flookh_nm", "fcth_nm", "nihsinh_nm", "nihsoth_nm", "cth_nm", "mrih_nm"]
@@ -290,7 +267,7 @@ if __name__ == '__main__':
                         "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", "fahiid_brsi_1",
                         "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4"]
 
-    ordinal_features = ["mrs_tx_1", "mrs_tx_3", "gcse_nm", "gcsv_nm", "gcsm_nm", "discharged_mrs"]
+    ordinal_features = ["mrs_tx_1", "gcse_nm", "gcsv_nm", "gcsm_nm", "discharged_mrs"]
 
     boolean = ["toastle_fl", "toastli_fl", "toastsce_fl", "toastsmo_fl", "toastsra_fl", "toastsdi_fl",
                "toastsmi_fl", "toastsantip_fl", "toastsau_fl", "toastshy_fl", "toastspr_fl", "toastsantit_fl",
@@ -336,43 +313,33 @@ if __name__ == '__main__':
                  "nihs_8_out", "nihs_9_out", "nihs_10_out", "nihs_11_out"]
 
     # import data
-    csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3.csv")
-    TSR_ALL3_df = pd.read_csv(csv_path, low_memory=False)
-    #TSR_ALL3_df["bi_total"] = TSR_ALL3_df.feeding + TSR_ALL3_df.transfers + TSR_ALL3_df.bathing + TSR_ALL3_df.toilet_use + TSR_ALL3_df.grooming + TSR_ALL3_df.mobility + TSR_ALL3_df.stairs + TSR_ALL3_df.dressing + TSR_ALL3_df.bowel_control + TSR_ALL3_df.bladder_control
-    #TSR_ALL3_df["nihss_total"] = TSR_ALL3_df.nihs_1a_out + TSR_ALL3_df.nihs_1b_out + TSR_ALL3_df.nihs_1c_out + TSR_ALL3_df.nihs_2_out + TSR_ALL3_df.nihs_3_out + TSR_ALL3_df.nihs_4_out + TSR_ALL3_df.nihs_5al_out + TSR_ALL3_df.nihs_5br_out + TSR_ALL3_df.nihs_6al_out + TSR_ALL3_df.nihs_6br_out + TSR_ALL3_df.nihs_7_out + TSR_ALL3_df.nihs_8_out + TSR_ALL3_df.nihs_9_out + TSR_ALL3_df.nihs_10_out + TSR_ALL3_df.nihs_11_out
-    #TSR_ALL3_df["bi_total"].median()
-    #TSR_ALL3_df["nihss_total"].median()
-    #TSR_ALL3_df["gender_tx"].value_counts() / len(TSR_ALL3_df["gender_tx"])
-    #TSR_ALL3_df["age"].median()
-    #TSR_ALL3_df["discharged_mrs"].mean()
+    csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1.csv")
+    TSR_ALL1_df = pd.read_csv(csv_path, low_memory=False)
 
     # pre_procesing
-    TSR_ALL3_df1 = ischemic_stroke_cases(TSR_ALL3_df)
-    TSR_ALL3_df2 = remove_unrelated_features(TSR_ALL3_df1, unrelated_features)
-    TSR_ALL3_df3 = remove_timestamp_features(TSR_ALL3_df2, date, hour, minute)
-    TSR_ALL3_df4 = categorical_features(TSR_ALL3_df3, nominal_features, ordinal_features, boolean)
-    TSR_ALL3_df5 = continuous_features(TSR_ALL3_df4, continuous, barthel, nihss_in, nihss_out)
-    TSR_ALL3_df6 = remove_high_missing_features(TSR_ALL3_df5)
+    TSR_ALL1_df1 = ischemic_stroke_cases(TSR_ALL1_df)
+    TSR_ALL1_df2 = remove_unrelated_features(TSR_ALL1_df1, unrelated_features)
+    TSR_ALL1_df3 = remove_timestamp_features(TSR_ALL1_df2, date, hour, minute)
+    TSR_ALL1_df4 = categorical_features(TSR_ALL1_df3, nominal_features, ordinal_features, boolean, barthel, nihss_in, nihss_out)
+    TSR_ALL1_df5 = continuous_features(TSR_ALL1_df4, continuous)
+    TSR_ALL1_df6 = remove_high_missing_features(TSR_ALL1_df5)
 
     # save pre_processed dataset
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_preprocessed.csv")
-    TSR_ALL3_df6.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_preprocessed.csv")
+    TSR_ALL1_df6.to_csv(csv_save, index=False)
 
     # delete error cases
-    TSR_ALL3_score_df = delete_error_cases(TSR_ALL3_df6)
-    TSR_ALL3_score_df["bi_total"].median()
-    TSR_ALL3_score_df["nihss_total"].median()
-    TSR_ALL3_score_df["discharged_mrs"].mean()
+    TSR_ALL1_score_df = delete_error_cases(TSR_ALL1_df6)
 
     # save error cases deleted dataset
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_score.csv")
-    TSR_ALL3_score_df.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_score.csv")
+    TSR_ALL1_score_df.to_csv(csv_save, index=False)
 
     # mRS & BI * NIHSS outlier detection
-    TSR_ALL3_score_df = TSR_ALL3_score_df.reset_index(drop=True)
-    db_outlier = outlier_detection(TSR_ALL3_score_df, "discharged_mrs", "bi_total")
-    dn_outlier = outlier_detection(TSR_ALL3_score_df, "discharged_mrs", "nihss_total")
-    #bn_outlier = outlier_detection(TSR_ALL3_score_df, "bi_total", "nihss_total")
+    TSR_ALL1_score_df = TSR_ALL1_score_df.reset_index(drop=True)
+    db_outlier = outlier_detection(TSR_ALL1_score_df, "discharged_mrs", "bi_total")
+    dn_outlier = outlier_detection(TSR_ALL1_score_df, "discharged_mrs", "nihss_total")
+    #bn_outlier = outlier_detection(TSR_ALL1_score_df, "bi_total", "nihss_total")
 
     # delete_union = len(set(db_outlier) & set(dn_outlier) & set(bn_outlier))
     # delete_intersection = len(set(db_outlier) | set(dn_outlier) | set(bn_outlier))
@@ -381,29 +348,21 @@ if __name__ == '__main__':
     delete_union_index = list(set(db_outlier) & set(dn_outlier))
     delete_intersection_index = list(set(db_outlier) | set(dn_outlier))
 
-    TSR_ALL3_score_cleaned_df = TSR_ALL3_score_df.drop(TSR_ALL3_score_df.index[delete_intersection_index])
+    TSR_ALL1_score_cleaned_df = TSR_ALL1_score_df.drop(TSR_ALL1_score_df.index[delete_intersection_index])
 
     # save outlier cases deleted dataset
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_score_cleaned.csv")
-    TSR_ALL3_score_cleaned_df.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_score_cleaned.csv")
+    TSR_ALL1_score_cleaned_df.to_csv(csv_save, index=False)
 
-    # merge TSR_ALL3_score_cleaned_df to the original dataset
-    TSR_ALL3_AMPUTATED_DF = pd.merge(TSR_ALL3_df6, TSR_ALL3_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
-    print(TSR_ALL3_AMPUTATED_DF.shape)
+    # merge TSR_ALL1_score_cleaned_df to the original dataset
+    TSR_ALL1_AMPUTATED_DF = pd.merge(TSR_ALL1_df6, TSR_ALL1_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
+    print(TSR_ALL1_AMPUTATED_DF.shape)
 
-    TSR_ALL3_AMPUTATED_DF[continuous_n] = TSR_ALL3_AMPUTATED_DF[continuous_n].fillna(9999)
-    TSR_ALL3_AMPUTATED_DF = TSR_ALL3_AMPUTATED_DF.dropna()
-    print(TSR_ALL3_AMPUTATED_DF.shape)
+    TSR_ALL1_AMPUTATED_DF[continuous_n] = TSR_ALL1_AMPUTATED_DF[continuous_n].fillna(9999)
+    TSR_ALL1_AMPUTATED_DF = TSR_ALL1_AMPUTATED_DF.dropna()
+    print(TSR_ALL1_AMPUTATED_DF.shape)
 
-    #TSR_ALL3_AMPUTATED_DF["bi_total"] = TSR_ALL3_AMPUTATED_DF.feeding + TSR_ALL3_AMPUTATED_DF.transfers + TSR_ALL3_AMPUTATED_DF.bathing + TSR_ALL3_AMPUTATED_DF.toilet_use + TSR_ALL3_AMPUTATED_DF.grooming + TSR_ALL3_AMPUTATED_DF.mobility + TSR_ALL3_AMPUTATED_DF.stairs + TSR_ALL3_AMPUTATED_DF.dressing + TSR_ALL3_AMPUTATED_DF.bowel_control + TSR_ALL3_AMPUTATED_DF.bladder_control
-    #TSR_ALL3_AMPUTATED_DF["nihss_total"] = TSR_ALL3_AMPUTATED_DF.nihs_1a_out + TSR_ALL3_AMPUTATED_DF.nihs_1b_out + TSR_ALL3_AMPUTATED_DF.nihs_1c_out + TSR_ALL3_AMPUTATED_DF.nihs_2_out + TSR_ALL3_AMPUTATED_DF.nihs_3_out + TSR_ALL3_AMPUTATED_DF.nihs_4_out + TSR_ALL3_AMPUTATED_DF.nihs_5al_out + TSR_ALL3_AMPUTATED_DF.nihs_5br_out + TSR_ALL3_AMPUTATED_DF.nihs_6al_out + TSR_ALL3_AMPUTATED_DF.nihs_6br_out + TSR_ALL3_AMPUTATED_DF.nihs_7_out + TSR_ALL3_AMPUTATED_DF.nihs_8_out + TSR_ALL3_AMPUTATED_DF.nihs_9_out + TSR_ALL3_AMPUTATED_DF.nihs_10_out + TSR_ALL3_AMPUTATED_DF.nihs_11_out
-    #TSR_ALL3_AMPUTATED_DF["bi_total"].median()
-    #TSR_ALL3_AMPUTATED_DF["nihss_total"].median()
-    #TSR_ALL3_AMPUTATED_DF["gender_tx"].value_counts() / len(TSR_ALL3_AMPUTATED_DF["gender_tx"])
-    #TSR_ALL3_AMPUTATED_DF["age"].median()
-    #TSR_ALL3_AMPUTATED_DF["discharged_mrs"].mean()
-
-    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_AMPUTATED.csv")
-    TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_AMPUTATED.csv")
+    TSR_ALL1_AMPUTATED_DF.to_csv(csv_save, index=False)
 
 
