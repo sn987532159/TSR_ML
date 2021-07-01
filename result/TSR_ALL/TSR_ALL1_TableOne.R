@@ -34,19 +34,19 @@ nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gend
                      "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", "fahiid_brsi_1", 
                      "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4")
 
-TSR_ALL1_df <- dummy_cols(TSR_ALL1, nominal_features, remove_selected_columns = TRUE)
+TSR_ALL1_df <- dummy_cols(TSR_ALL1, nominal_features, remove_selected_columns = FALSE)
 
 ### GOOD when discharged
 GOOD_when_discharged <- TSR_ALL1_df[(TSR_ALL1_df$discharged_mrs == 0) | (TSR_ALL1_df$discharged_mrs == 1) | (TSR_ALL1_df$discharged_mrs == 2), ] %>%
-  select(mrs_tx_1, stairs, toast_id_2, pro_id_1, amas_fl, dressing, mobility, toilet_use, transfers, nihs_5al_out, grooming, discharged_mrs, toastli_fl, subcortical_mca_mrir)
+  select(mrs_tx_1, stairs, toast_id, pro_id, amas_fl, dressing, mobility, toilet_use, transfers, nihs_5al_out, grooming, discharged_mrs, toastli_fl, subcortical_mca_mrir)
 GOOD_when_discharged[2:14] <- lapply(GOOD_when_discharged[2:14] , factor)
 
 GOOD_when_discharged$mrs_tx_1[(GOOD_when_discharged$mrs_tx_1==0) | (GOOD_when_discharged$mrs_tx_1==1) | (GOOD_when_discharged$mrs_tx_1==2)] = "Not changed"
 GOOD_when_discharged$mrs_tx_1[GOOD_when_discharged$mrs_tx_1!="Not changed"] = "Changed"
 label(GOOD_when_discharged$mrs_tx_1) <- "1-month mRS"
 label(GOOD_when_discharged$stairs) <- "BI_stairs"
-label(GOOD_when_discharged$toast_id_2) <- "Ischemic subtype_2"
-label(GOOD_when_discharged$pro_id_1) <- "Profession_1"
+label(GOOD_when_discharged$toast_id) <- "Ischemic subtype"
+label(GOOD_when_discharged$pro_id) <- "Profession"
 label(GOOD_when_discharged$amas_fl) <- "Aspirin before admitted"
 label(GOOD_when_discharged$dressing) <- "BI_dressing"
 label(GOOD_when_discharged$mobility) <- "BI_mobility"
@@ -76,13 +76,13 @@ label(BAD_when_discharged$stairs) <- "BI_stairs"
 label(BAD_when_discharged$bowel_control) <- "BI_bowel_control" 
 label(BAD_when_discharged$mobility) <- "BI_mobility"
 label(BAD_when_discharged$toilet_use) <- "BI_toilet_use"
-label(BAD_when_discharged$trmng_fl) <- "Inhospitalised treatment-nasogastric tube"
+label(BAD_when_discharged$trmng_fl) <- "Hospitalised treatment-nasogastric tube"
 label(BAD_when_discharged$feeding) <- "BI_feeding"
 label(BAD_when_discharged$nihs_6br_in) <- "Admitted NIHSS_6br"
 label(BAD_when_discharged$bathing) <- "BI_bathing"
 label(BAD_when_discharged$nihs_5br_in) <- "Admitted NIHSS_5br"
 label(BAD_when_discharged$nihs_5al_in) <- "Admitted NIHSS_5al"
-label(BAD_when_discharged$hospitalised_time) <- "Inhospitalised duration"
+label(BAD_when_discharged$hospitalised_time) <- "Hospitalised duration"
 label(BAD_when_discharged$nihs_6al_in) <- "Admitted NIHSS_6al"
 label(BAD_when_discharged$age) <- "Age"
 label(BAD_when_discharged$transfers) <- "BI_transfers"

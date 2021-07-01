@@ -34,13 +34,13 @@ nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gend
                      "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", "fahiid_brsi_1", 
                      "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4")
 
-TSR_ALL31_df <- dummy_cols(TSR_ALL31, nominal_features, remove_selected_columns = TRUE)
+TSR_ALL31_df <- dummy_cols(TSR_ALL31, nominal_features, remove_selected_columns = FALSE)
 
 ### GOOD when discharged
 GOOD_when_discharged <- TSR_ALL31_df[(TSR_ALL31_df$discharged_mrs == 0) | (TSR_ALL31_df$discharged_mrs == 1) | (TSR_ALL31_df$discharged_mrs == 2), ] %>%
-  select(mrs_tx_3, age, hct_nm, mrs_tx_1, stairs, fahiid_brsi_3_0, pcva_id_0, discharged_mrs, pcvaci_id_0, pcva_id_1)
-GOOD_when_discharged[4:10] <- lapply(GOOD_when_discharged[4:10] , as.factor)
-GOOD_when_discharged[2:3] <- lapply(GOOD_when_discharged[2:3] , as.float)
+  select(mrs_tx_3, age, hct_nm, mrs_tx_1, stairs, fahiid_brsi_3, pcva_id, discharged_mrs, pcvaci_id)
+GOOD_when_discharged[4:9] <- lapply(GOOD_when_discharged[4:9] , as.factor)
+GOOD_when_discharged[2:3] <- lapply(GOOD_when_discharged[2:3] , as.numeric)
 
 GOOD_when_discharged$mrs_tx_3[(GOOD_when_discharged$mrs_tx_3==0) | (GOOD_when_discharged$mrs_tx_3==1) | (GOOD_when_discharged$mrs_tx_3==2)] = "Not changed"
 GOOD_when_discharged$mrs_tx_3[GOOD_when_discharged$mrs_tx_3!="Not changed"] = "Changed"
@@ -48,12 +48,11 @@ label(GOOD_when_discharged$mrs_tx_3) <- "3-month mRS"
 label(GOOD_when_discharged$age) <- "Age"
 label(GOOD_when_discharged$mrs_tx_1) <- "1-month mRS"
 label(GOOD_when_discharged$stairs) <- "BI_stairs"
-label(GOOD_when_discharged$fahiid_brsi_3_0) <- "Siblings having ischemic stroke_0"
-label(GOOD_when_discharged$pcva_id_0) <- "Previous CVA_0"
+label(GOOD_when_discharged$fahiid_brsi_3) <- "Siblings having ischemic stroke"
+label(GOOD_when_discharged$pcva_id) <- "Previous CVA"
 label(GOOD_when_discharged$discharged_mrs) <- "Discharged mRS"
 label(GOOD_when_discharged$hct_nm) <- "Hematocrit"
-label(GOOD_when_discharged$pcvaci_id_0) <- "Previous cerebral infraction_0"
-label(GOOD_when_discharged$pcva_id_1) <- "Previous CVA_1"
+label(GOOD_when_discharged$pcvaci_id) <- "Previous cerebral infraction"
 
 table1(~ .|mrs_tx_3, data=GOOD_when_discharged, overall=F, extra.col=list("P-value"=pvalue))
 table_smd<- CreateTableOne(strata = "mrs_tx_3", data = GOOD_when_discharged, test = TRUE)
@@ -61,8 +60,8 @@ print(table_smd, smd = TRUE)
 
 ### BAD when discharged
 BAD_when_discharged <- TSR_ALL31_df[(TSR_ALL31_df$discharged_mrs != 0) & (TSR_ALL31_df$discharged_mrs != 1) & (TSR_ALL31_df$discharged_mrs != 2), ] %>%
-  select(mrs_tx_3, age, nihs_6al_out, mrs_tx_1, pro_id_1, feeding, pcva_id_0, mobility, toilet_use, transfers, discharged_mrs, bathing, bladder_control, dressing, pcva_id_1)
-BAD_when_discharged[3:15] <- lapply(BAD_when_discharged[3:15] , factor)
+  select(mrs_tx_3, age, nihs_6al_out, mrs_tx_1, pro_id, feeding, pcva_id, mobility, toilet_use, transfers, discharged_mrs, bathing, bladder_control, dressing)
+BAD_when_discharged[3:14] <- lapply(BAD_when_discharged[3:14] , factor)
 BAD_when_discharged$age <- as.numeric(BAD_when_discharged$age)
 
 BAD_when_discharged$mrs_tx_3[(BAD_when_discharged$mrs_tx_3==0) | (BAD_when_discharged$mrs_tx_3==1) | (BAD_when_discharged$mrs_tx_3==2)] = "Changed"
@@ -71,9 +70,9 @@ label(BAD_when_discharged$mrs_tx_3) <- "3-month mRS"
 label(BAD_when_discharged$age) <- "Age" 
 label(BAD_when_discharged$nihs_6al_out) <- "Discharged NIHSS_6al"
 label(BAD_when_discharged$mrs_tx_1) <- "1-month mRS" 
-label(BAD_when_discharged$pro_id_1) <- "Profession_1"
+label(BAD_when_discharged$pro_id) <- "Profession"
 label(BAD_when_discharged$feeding) <- "BI_feeding"
-label(BAD_when_discharged$pcva_id_0) <- "Previous CVA_0"
+label(BAD_when_discharged$pcva_id) <- "Previous CVA"
 label(BAD_when_discharged$mobility) <- "BI_mobility"
 label(BAD_when_discharged$toilet_use) <- "BI_toilet_use"
 label(BAD_when_discharged$transfers) <- "BI_transfers"
@@ -81,7 +80,6 @@ label(BAD_when_discharged$discharged_mrs) <- "Discharged mRS"
 label(BAD_when_discharged$bathing) <- "BI_bathing"
 label(BAD_when_discharged$bladder_control) <- "BI_bladder_control"
 label(BAD_when_discharged$dressing) <- "BI_dressing"
-label(BAD_when_discharged$pcva_id_1) <- "Previous CVA_1"
 
 table1(~ .|mrs_tx_3, data=BAD_when_discharged, overall=F, extra.col=list("P-value"=pvalue))
 table_smd<- CreateTableOne(strata = "mrs_tx_3", data = BAD_when_discharged, test = TRUE)
