@@ -7,7 +7,7 @@ library(Gmisc)
 library(dplyr)
 
 setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
-file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_AMPUTATED1.csv")
+file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_AMPUTATED.csv")
 TSR_ALL3 <- read.csv(file_path)
 TSR_ALL3_1 <- TSR_ALL3 %>% select(-icase_id, -idcase_id)
 TSR_ALL3_1[TSR_ALL3_1 == 9999] = NA
@@ -95,11 +95,11 @@ methods_TSR_ALL3 <- c(mrs_tx_1 = "polr", mrs_tx_3 = "polr", height_nm = "pmm", w
                       nihs_11_in = "pmm", nihs_1a_out = "pmm", nihs_1b_out = "pmm", nihs_1c_out = "pmm", nihs_2_out = "pmm", nihs_3_out = "pmm", nihs_4_out = "pmm", nihs_5al_out = "pmm", nihs_5br_out = "pmm", nihs_6al_out= "pmm",
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
-TSR_ALL3_imp <- mice(TSR_ALL3_1, maxit = 1, m = 1, method = methods_TSR_ALL3, print = TRUE, seed = 19, nnet.MaxNWts = 5000)
+TSR_ALL3_imp <- mice(TSR_ALL3_1, maxit = 20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
 #summary(TSR_ALL3_imp)
 
-TSR_ALL3_mice <- TSR_ALL3 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL3_imp, 1))
+TSR_ALL3_mice <- TSR_ALL3 %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL3_imp, 5))
 
-save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_MICE111.csv")
+save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_MICE5.csv")
 write.csv(TSR_ALL3_mice, save_file, row.names=FALSE)
 
