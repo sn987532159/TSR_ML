@@ -38,25 +38,25 @@ TSR_ALL1_df <- dummy_cols(TSR_ALL1, nominal_features, remove_selected_columns = 
 
 ### GOOD when discharged
 GOOD_when_discharged <- TSR_ALL1_df[(TSR_ALL1_df$discharged_mrs == 0) | (TSR_ALL1_df$discharged_mrs == 1) | (TSR_ALL1_df$discharged_mrs == 2), ] %>%
-  select(mrs_tx_1, stairs, toast_id, pro_id, amas_fl, dressing, mobility, toilet_use, transfers, nihs_5al_out, grooming, discharged_mrs, toastli_fl, subcortical_mca_mrir)
-GOOD_when_discharged[2:14] <- lapply(GOOD_when_discharged[2:14] , factor)
+  select(mrs_tx_1, discharged_mrs, fahiid_brsi_1, fahiid_brsi_4, pro_id, subcortical_mca_mrir, dressing, grooming, 
+         mobility, stairs, toilet_use, transfers, nihs_10_out)
+GOOD_when_discharged[2:13] <- lapply(GOOD_when_discharged[2:13] , factor)
 
 GOOD_when_discharged$mrs_tx_1[(GOOD_when_discharged$mrs_tx_1==0) | (GOOD_when_discharged$mrs_tx_1==1) | (GOOD_when_discharged$mrs_tx_1==2)] = "Not changed"
 GOOD_when_discharged$mrs_tx_1[GOOD_when_discharged$mrs_tx_1!="Not changed"] = "Changed"
 label(GOOD_when_discharged$mrs_tx_1) <- "1-month mRS"
-label(GOOD_when_discharged$stairs) <- "BI_stairs"
-label(GOOD_when_discharged$toast_id) <- "Ischemic subtype"
+label(GOOD_when_discharged$discharged_mrs) <- "Discharged mRS"
+label(GOOD_when_discharged$fahiid_brsi_1) <- "Siblings having hypertension"
+label(GOOD_when_discharged$fahiid_brsi_4) <- "Siblings having stroke or TIA"
 label(GOOD_when_discharged$pro_id) <- "Profession"
-label(GOOD_when_discharged$amas_fl) <- "Aspirin before admitted"
+label(GOOD_when_discharged$subcortical_mca_mrir) <- "MRI_subcortical MCA_right"
 label(GOOD_when_discharged$dressing) <- "BI_dressing"
+label(GOOD_when_discharged$grooming) <- "BI_grooming"
 label(GOOD_when_discharged$mobility) <- "BI_mobility"
+label(GOOD_when_discharged$stairs) <- "BI_stairs"
 label(GOOD_when_discharged$toilet_use) <- "BI_toilet_use"
 label(GOOD_when_discharged$transfers) <- "BI_transfers"
-label(GOOD_when_discharged$nihs_5al_out) <- "Discharged NIHSS_5al"
-label(GOOD_when_discharged$grooming) <- "BI_grooming"
-label(GOOD_when_discharged$discharged_mrs) <- "Discharged mRS"
-label(GOOD_when_discharged$toastli_fl) <- "Large artery atherosclerosis-intra"
-label(GOOD_when_discharged$subcortical_mca_mrir) <- "MRI_subcortical MCA_right"
+label(GOOD_when_discharged$nihs_10_out) <- "Discharged NIHSS_10"
                                                                               
 table1(~ .|mrs_tx_1, data=GOOD_when_discharged, overall=F, extra.col=list("P-value"=pvalue))
 table_smd<- CreateTableOne(strata = "mrs_tx_1", data = GOOD_when_discharged, test = TRUE)
@@ -64,35 +64,36 @@ print(table_smd, smd = TRUE)
 
 ### BAD when discharged
 BAD_when_discharged <- TSR_ALL1_df[(TSR_ALL1_df$discharged_mrs != 0) & (TSR_ALL1_df$discharged_mrs != 1) & (TSR_ALL1_df$discharged_mrs != 2), ] %>%
-  select(mrs_tx_1, hospitalised_time, age, nihs_6al_out, stairs, bowel_control, mobility, toilet_use, trmng_fl, feeding, nihs_6br_in, bathing, nihs_5br_in, nihs_5al_in, nihs_6al_in, transfers, bladder_control, nihs_6br_out, grooming, nihs_10_out, nihs_5br_out, discharged_mrs, dressing)
-BAD_when_discharged[4:23] <- lapply(BAD_when_discharged[4:23] , factor)
+  select(mrs_tx_1, age, hospitalised_time, discharged_mrs, offdt_id, omas_fl, trmfo_fl, trmng_fl, bathing, bladder_control, 
+         bowel_control, dressing, feeding, mobility, stairs, toilet_use, transfers, nihs_5al_out, nihs_5br_out, nihs_6al_out,
+         nihs_6br_out, nihs_10_out)
+BAD_when_discharged[4:22] <- lapply(BAD_when_discharged[4:22] , factor)
 BAD_when_discharged[2:3] <- lapply(BAD_when_discharged[2:3] , as.numeric)
 
 BAD_when_discharged$mrs_tx_1[(BAD_when_discharged$mrs_tx_1==0) | (BAD_when_discharged$mrs_tx_1==1) | (BAD_when_discharged$mrs_tx_1==2)] = "Changed"
 BAD_when_discharged$mrs_tx_1[BAD_when_discharged$mrs_tx_1!="Changed"] = "Not changed"
 label(BAD_when_discharged$mrs_tx_1) <- "1-month mRS"
-label(BAD_when_discharged$nihs_6al_out) <- "Discharged NIHSS_6al" 
-label(BAD_when_discharged$stairs) <- "BI_stairs"
-label(BAD_when_discharged$bowel_control) <- "BI_bowel_control" 
-label(BAD_when_discharged$mobility) <- "BI_mobility"
-label(BAD_when_discharged$toilet_use) <- "BI_toilet_use"
-label(BAD_when_discharged$trmng_fl) <- "Hospitalised treatment-nasogastric tube"
-label(BAD_when_discharged$feeding) <- "BI_feeding"
-label(BAD_when_discharged$nihs_6br_in) <- "Admitted NIHSS_6br"
-label(BAD_when_discharged$bathing) <- "BI_bathing"
-label(BAD_when_discharged$nihs_5br_in) <- "Admitted NIHSS_5br"
-label(BAD_when_discharged$nihs_5al_in) <- "Admitted NIHSS_5al"
+label(BAD_when_discharged$age) <- "Age" 
 label(BAD_when_discharged$hospitalised_time) <- "Hospitalised duration"
-label(BAD_when_discharged$nihs_6al_in) <- "Admitted NIHSS_6al"
-label(BAD_when_discharged$age) <- "Age"
-label(BAD_when_discharged$transfers) <- "BI_transfers"
+label(BAD_when_discharged$discharged_mrs) <- "Discharged mRS" 
+label(BAD_when_discharged$offdt_id) <- "Destination after discharged"
+label(BAD_when_discharged$omas_fl) <- "Aspirin after discharged"
+label(BAD_when_discharged$trmfo_fl) <- "Hospitalised treatment-foley"
+label(BAD_when_discharged$trmng_fl) <- "Hospitalised treatment-nasogastric tube"
+label(BAD_when_discharged$bathing) <- "BI_bathing"
 label(BAD_when_discharged$bladder_control) <- "BI_bladder_control"
-label(BAD_when_discharged$nihs_6br_out) <- "Discharged NIHSS_6br"
-label(BAD_when_discharged$grooming) <- "BI_grooming"
-label(BAD_when_discharged$nihs_10_out) <- "Discharged NIHSS_10"
-label(BAD_when_discharged$nihs_5br_out) <- "Discharged NIHSS_5br"
-label(BAD_when_discharged$discharged_mrs) <- "Discharged mRS"
+label(BAD_when_discharged$bowel_control) <- "BI_bowel_control"
 label(BAD_when_discharged$dressing) <- "BI_dressing"
+label(BAD_when_discharged$feeding) <- "BI_feeding"
+label(BAD_when_discharged$mobility) <- "BI_mobility"
+label(BAD_when_discharged$stairs) <- "BI_stairs"
+label(BAD_when_discharged$toilet_use) <- "BI_toilet_use"
+label(BAD_when_discharged$transfers) <- "BI_transfers"
+label(BAD_when_discharged$nihs_5al_out) <- "Discharged NIHSS_5al"
+label(BAD_when_discharged$nihs_5br_out) <- "Discharged NIHSS_5br"
+label(BAD_when_discharged$nihs_6al_out) <- "Discharged NIHSS_6al"
+label(BAD_when_discharged$nihs_6br_out) <- "Discharged NIHSS_6br"
+label(BAD_when_discharged$nihs_10_out) <- "Discharged NIHSS_10"
 
 table1(~ .|mrs_tx_1, data=BAD_when_discharged, overall=F, extra.col=list("P-value"=pvalue))
 table_smd<- CreateTableOne(strata = "mrs_tx_1", data = BAD_when_discharged, test = TRUE)
