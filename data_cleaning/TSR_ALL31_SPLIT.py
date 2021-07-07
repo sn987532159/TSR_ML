@@ -168,11 +168,11 @@ print("The shape of GOOD's y_train:", G_y_train.shape)
 print("The shape of GOOD's X_test:", G_X_test.shape)
 print("The shape of GOOD's y_test:", G_y_test.shape)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31G_y_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_y_TRAIN.csv")
 G_y_train = pd.DataFrame(G_y_train)
 G_y_train.to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31G_y_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_y_TEST.csv")
 G_y_test = pd.DataFrame(G_y_test)
 G_y_test.to_csv(csv_save, index=False)
 
@@ -192,7 +192,7 @@ G_X_train = pd.concat([G_X_train, pd.DataFrame(nominal_train)], axis=1)
 G_X_train = G_X_train.drop(nominal_features, axis=1)
 G_X_train.columns = column_names_G
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31G_X_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_X_TRAIN.csv")
 G_X_train.to_csv(csv_save, index=False)
 
 ## scale G_X_test
@@ -208,7 +208,7 @@ G_X_test = pd.concat([G_X_test, pd.DataFrame(nominal_test)], axis=1)
 G_X_test = G_X_test.drop(nominal_features, axis=1)
 G_X_test.columns = column_names_G
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31G_X_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_X_TEST.csv")
 G_X_test.to_csv(csv_save, index=False)
 
 ## Preprocess input data (BAD when Discharge)
@@ -234,11 +234,11 @@ print("The shape of y_train:", B_y_train.shape)
 print("The shape of X_test:", B_X_test.shape)
 print("The shape of y_test:", B_y_test.shape)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31B_y_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_y_TRAIN.csv")
 B_y_train = pd.DataFrame(B_y_train)
 B_y_train.to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31B_y_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_y_TEST.csv")
 B_y_test = pd.DataFrame(B_y_test)
 B_y_test.to_csv(csv_save, index=False)
 
@@ -258,7 +258,7 @@ B_X_train = pd.concat([B_X_train, pd.DataFrame(nominal_train)], axis=1)
 B_X_train = B_X_train.drop(nominal_features, axis=1)
 B_X_train.columns = column_names_B
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31B_X_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_X_TRAIN.csv")
 B_X_train.to_csv(csv_save, index=False)
 
 ## scale B_X_test
@@ -274,6 +274,6 @@ B_X_test = pd.concat([B_X_test, pd.DataFrame(nominal_test)], axis=1)
 B_X_test = B_X_test.drop(nominal_features, axis=1)
 B_X_test.columns = column_names_B
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL31B_X_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_X_TEST.csv")
 B_X_test.to_csv(csv_save, index=False)
 
