@@ -61,7 +61,7 @@ column_names = ["Height", "Weight", "GCS-E", "GCS-V", "GCS-M", "Systolic BP", "D
                 "Large artery atherosclerosis-intra", "Cerebral venous thrombosis", "Moyamoya Syndrome", "Radiation",
                 "Dissection", "Migraine", "Antiphospholipid Ab Syndrome", "Autoimmune disease", "Hyperfibrinogenemia",
                 "Prot C/Prot S deficiency", "Antithrombin III deficiency", "Homocystinuria", "Hypercoagulable state",
-                "Cancer", "Atrial fibrillation", "Heart failure", "Ischemic heart (CAD, old MI)", "AMI<4W",
+                "Cancer", "Atrial fibrillation", "Heart failure", "Ischemic heart (CAD or old MI)", "AMI smaller than 4W",
                 "Valvular replacement", "Endocarditis", "Myxoma", "Rheumatic heart disease", "Patent foramen ovale",
                 "Hemoglobin", "Hematocrit", "Platelet", "White blood cell", "PTT1", "PTT2", "PT(INR)", "Glucose (ER)",
                 "Blood urea nitrogen", "Creatinine", "Uric acid", "T-CHO", "TG", "HDL", "LDL", "GPT",
