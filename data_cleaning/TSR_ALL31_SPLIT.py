@@ -56,7 +56,7 @@ continuous = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "r
               "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
               "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 labels = ["mrs_tx_3", "mrs_tx_1"]
-column_names_B = ["mrs_tx_1", "Height", "Weight", "GCS-E", "GCS-V", "GCS-M", "Systolic BP", "Diastolic BP",
+column_names_B = ["1-month mRS", "Height", "Weight", "GCS-E", "GCS-V", "GCS-M", "Systolic BP", "Diastolic BP",
                 "Bleeding time", "Heart rate", "Respiratory rate", "Large artery atherosclerosis-extra",
                 "Large artery atherosclerosis-intra", "Cerebral venous thrombosis", "Moyamoya Syndrome", "Radiation",
                 "Dissection", "Migraine", "Antiphospholipid Ab Syndrome", "Autoimmune disease", "Hyperfibrinogenemia",
