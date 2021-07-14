@@ -87,7 +87,6 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
 
     return test_auroc_list, test_auroc_tuned_list, test_auroc_cc_list, CALIBRATED_selected
 
-
 if __name__ == '__main__':
     # Import datasets
     csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TRAIN.csv")
