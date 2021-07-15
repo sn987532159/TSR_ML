@@ -143,7 +143,7 @@ if __name__ == '__main__':
                                                                                                             et_selected)
 
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL3G_ET_CALIBRATED_selected.pkl")
-    joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
+    #joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, G_test_auroc_list, label="based")
@@ -178,7 +178,7 @@ if __name__ == '__main__':
                                                                                                               xgbc_selected)
 
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL3G_XGBC_CALIBRATED_selected.pkl")
-    joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
+    #joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, G_test_auroc_list, label="based")
@@ -213,7 +213,7 @@ if __name__ == '__main__':
                                                                                                             B_ET_CALIBRATED,
                                                                                                             et_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL3B_ET_CALIBRATED_selected.pkl")
-    joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
+    #joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, B_test_auroc_list, label="based")
@@ -247,7 +247,7 @@ if __name__ == '__main__':
                                                                                                               B_XGBC_CALIBRATED,
                                                                                                               xgbc_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL3B_XGBC_CALIBRATED_selected.pkl")
-    joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
+    #joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, B_test_auroc_list, label="based")

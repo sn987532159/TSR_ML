@@ -142,7 +142,7 @@ if __name__ == '__main__':
                                                                                                             G_ET_CALIBRATED,
                                                                                                             et_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL1G_ET_CALIBRATED_selected.pkl")
-    joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
+    #joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, G_test_auroc_list, label="based")
@@ -176,7 +176,7 @@ if __name__ == '__main__':
                                                                                                               G_XGBC_CALIBRATED,
                                                                                                               xgbc_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL1G_XGBC_CALIBRATED_selected.pkl")
-    joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
+    #joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, G_test_auroc_list, label="based")
@@ -211,7 +211,7 @@ if __name__ == '__main__':
                                                                                                             B_ET_CALIBRATED,
                                                                                                             et_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL1B_ET_CALIBRATED_selected.pkl")
-    joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
+    #joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, B_test_auroc_list, label="based")
@@ -245,7 +245,7 @@ if __name__ == '__main__':
                                                                                                               B_XGBC_CALIBRATED,
                                                                                                               xgbc_selected)
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "TSR_ALL1B_XGBC_CALIBRATED_selected.pkl")
-    joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
+    #joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
     plt.plot(x, B_test_auroc_list, label="based")
