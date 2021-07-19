@@ -36,7 +36,7 @@ hyperparameters_xgbcB = {"xgbclassifier__learning_rate": (0.01, 0.1, 1, 10),
                         "xgbclassifier__n_estimators": (25, 75, 150),
                         "xgbclassifier__scale_pos_weight": (0.33, 3)}
 
-pipeline = make_pipeline(TomekLinks(), XGBClassifier(random_state=19, use_label_encoder=False, eval_metric="auc", tree_method = "hist"))
+pipeline = make_pipeline(TomekLinks(), XGBClassifier(booster = "gbtree", random_state=19, use_label_encoder=False, eval_metric="auc", tree_method = "hist"))
 
 xgbcG_rscv = RandomizedSearchCV(estimator=pipeline,
                                 param_distributions=hyperparameters_xgbcG,
