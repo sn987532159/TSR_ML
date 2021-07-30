@@ -10,12 +10,12 @@ def ischemic_stroke_cases(df):
     return df
 
 def remove_unrelated_features(df, ur_f):
-    df = df.drop(ur_f, axis = 1)
+    df = df.drop(ur_f, axis=1)
     print(df.shape)
     return df
 
 def remove_timestamp_features(df, d, h, m):
-    df = df.drop(d + h + m, axis = 1)
+    df = df.drop(d + h + m, axis=1)
     print(df.shape)
     return df
 
@@ -27,18 +27,18 @@ def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
         df[i] = pd.to_numeric(df[i], errors="coerce")
 
     df["edu_id"][(df["edu_id"] != 98) & (df["edu_id"] != 1) & (df["edu_id"] != 2) & (
-                df["edu_id"] != 3) & (df["edu_id"] != 4) & (df["edu_id"] != 5) & (
-                                   df["edu_id"] != 6)] = np.nan
+            df["edu_id"] != 3) & (df["edu_id"] != 4) & (df["edu_id"] != 5) & (
+                         df["edu_id"] != 6)] = np.nan
     df["pro_id"][(df["pro_id"] != 1) & (df["pro_id"] != 2) & (df["pro_id"] != 3) & (
-                df["pro_id"] != 4) & (df["pro_id"] != 5) & (df["pro_id"] != 6) & (
-                                   df["pro_id"] != 7) & (df["pro_id"] != 8) & (df["pro_id"] != 9) & (
-                                   df["pro_id"] != 10) & (df["pro_id"] != 98) & (
-                                   df["pro_id"] != 99)] = np.nan
+            df["pro_id"] != 4) & (df["pro_id"] != 5) & (df["pro_id"] != 6) & (
+                         df["pro_id"] != 7) & (df["pro_id"] != 8) & (df["pro_id"] != 9) & (
+                         df["pro_id"] != 10) & (df["pro_id"] != 98) & (
+                         df["pro_id"] != 99)] = np.nan
     df["opc_id"][(df["opc_id"] != 1) & (df["opc_id"] != 2) & (df["opc_id"] != 3)] = np.nan
     df["toast_id"][(df["toast_id"] != 1) & (df["toast_id"] != 2) & (df["toast_id"] != 3) & (
-                df["toast_id"] != 4) & (df["toast_id"] != 5)] = np.nan
+            df["toast_id"] != 4) & (df["toast_id"] != 5)] = np.nan
     df["offdt_id"][(df["offdt_id"] != 1) & (df["offdt_id"] != 2) & (df["offdt_id"] != 3) & (
-                df["offdt_id"] != 4) & (df["offdt_id"] != 5)] = np.nan
+            df["offdt_id"] != 4) & (df["offdt_id"] != 5)] = np.nan
     df["gender_tx"][(df["gender_tx"] != 1) & (df["gender_tx"] != 0)] = np.nan
 
     for i in df.loc[:, "hd_id":"ca_id"]:
@@ -58,18 +58,18 @@ def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
         df[i] = pd.to_numeric(df[i], errors="coerce")
 
     df["mrs_tx_1"][(df["mrs_tx_1"] != 0) & (df["mrs_tx_1"] != 1) & (df["mrs_tx_1"] != 2) & (
-                df["mrs_tx_1"] != 3) & (df["mrs_tx_1"] != 4) & (df["mrs_tx_1"] != 5) & (
-                                     df["mrs_tx_1"] != 6) & (df["mrs_tx_1"] != 9)] = np.nan
+            df["mrs_tx_1"] != 3) & (df["mrs_tx_1"] != 4) & (df["mrs_tx_1"] != 5) & (
+                           df["mrs_tx_1"] != 6) & (df["mrs_tx_1"] != 9)] = np.nan
     df["gcse_nm"][(df["gcse_nm"] != 1) & (df["gcse_nm"] != 2) & (df["gcse_nm"] != 3) & (
-                df["gcse_nm"] != 4)] = np.nan
+            df["gcse_nm"] != 4)] = np.nan
     df["gcsv_nm"][(df["gcsv_nm"] != 1) & (df["gcsv_nm"] != 2) & (df["gcsv_nm"] != 3) & (
-                df["gcsv_nm"] != 4) & (df["gcsv_nm"] != 5)] = np.nan
+            df["gcsv_nm"] != 4) & (df["gcsv_nm"] != 5)] = np.nan
     df["gcsm_nm"][(df["gcsm_nm"] != 1) & (df["gcsm_nm"] != 2) & (df["gcsm_nm"] != 3) & (
-                df["gcsm_nm"] != 4) & (df["gcsm_nm"] != 5) & (df["gcsm_nm"] != 6)] = np.nan
+            df["gcsm_nm"] != 4) & (df["gcsm_nm"] != 5) & (df["gcsm_nm"] != 6)] = np.nan
     df["discharged_mrs"][
         (df["discharged_mrs"] != 0) & (df["discharged_mrs"] != 1) & (df["discharged_mrs"] != 2) & (
-                    df["discharged_mrs"] != 3) & (df["discharged_mrs"] != 4) & (
-                    df["discharged_mrs"] != 5) & (df["discharged_mrs"] != 6)] = np.nan
+                df["discharged_mrs"] != 3) & (df["discharged_mrs"] != 4) & (
+                df["discharged_mrs"] != 5) & (df["discharged_mrs"] != 6)] = np.nan
 
     # boolean
     for i in df[bl_f]:
@@ -85,18 +85,18 @@ def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
 
     df["feeding"][(df["feeding"] != 0) & (df["feeding"] != 5) & (df["feeding"] != 10)] = np.nan
     df["transfers"][(df["transfers"] != 0) & (df["transfers"] != 5) & (df["transfers"] != 10) & (
-                    df["transfers"] != 15)] = np.nan
+            df["transfers"] != 15)] = np.nan
     df["bathing"][(df["bathing"] != 0) & (df["bathing"] != 5)] = np.nan
     df["toilet_use"][(df["toilet_use"] != 0) & (df["toilet_use"] != 5) & (df["toilet_use"] != 10)] = np.nan
     df["grooming"][(df["grooming"] != 0) & (df["grooming"] != 5)] = np.nan
     df["mobility"][
-            (df["mobility"] != 0) & (df["mobility"] != 5) & (df["mobility"] != 10) & (df["mobility"] != 15)] = np.nan
+        (df["mobility"] != 0) & (df["mobility"] != 5) & (df["mobility"] != 10) & (df["mobility"] != 15)] = np.nan
     df["stairs"][(df["stairs"] != 0) & (df["stairs"] != 5) & (df["stairs"] != 10)] = np.nan
     df["dressing"][(df["dressing"] != 0) & (df["dressing"] != 5) & (df["dressing"] != 10)] = np.nan
     df["bowel_control"][
-            (df["bowel_control"] != 0) & (df["bowel_control"] != 5) & (df["bowel_control"] != 10)] = np.nan
+        (df["bowel_control"] != 0) & (df["bowel_control"] != 5) & (df["bowel_control"] != 10)] = np.nan
     df["bladder_control"][
-            (df["bladder_control"] != 0) & (df["bladder_control"] != 5) & (df["bladder_control"] != 10)] = np.nan
+        (df["bladder_control"] != 0) & (df["bladder_control"] != 5) & (df["bladder_control"] != 10)] = np.nan
 
     # nihss_in
     for i in df[ni_in]:
@@ -161,7 +161,7 @@ def continuous_features(df, cont):
 def remove_high_missing_features(df):
     missing_ratio = df.isnull().sum() / len(df) * 100
     missing_ratio_index = missing_ratio[missing_ratio > 40].index
-    df = df.drop(missing_ratio_index, axis = 1)
+    df = df.drop(missing_ratio_index, axis=1)
     df = df.sort_values(by=["icase_id", "idcase_id"])
     print(df.shape)
     return df
@@ -173,8 +173,10 @@ def delete_error_cases(df):
                "nihs_7_out", "nihs_8_out", "nihs_9_out", "nihs_10_out", "nihs_11_out", "discharged_mrs"]]
     print(df_1.shape)
 
-    df_1["bi_total"] = df_1.feeding + df_1.transfers + df_1.bathing + df_1.toilet_use + df_1.grooming + df_1.mobility + df_1.stairs + df_1.dressing + df_1.bowel_control + df_1.bladder_control
-    df_1["nihss_total"] = df_1.nihs_1a_out + df_1.nihs_1b_out + df_1.nihs_1c_out + df_1.nihs_2_out + df_1.nihs_3_out + df_1.nihs_4_out + df_1.nihs_5al_out + df_1.nihs_5br_out + df_1.nihs_6al_out + df_1.nihs_6br_out + df_1.nihs_7_out + df_1.nihs_8_out + df_1.nihs_9_out + df_1.nihs_10_out + df_1.nihs_11_out
+    df_1[
+        "bi_total"] = df_1.feeding + df_1.transfers + df_1.bathing + df_1.toilet_use + df_1.grooming + df_1.mobility + df_1.stairs + df_1.dressing + df_1.bowel_control + df_1.bladder_control
+    df_1[
+        "nihss_total"] = df_1.nihs_1a_out + df_1.nihs_1b_out + df_1.nihs_1c_out + df_1.nihs_2_out + df_1.nihs_3_out + df_1.nihs_4_out + df_1.nihs_5al_out + df_1.nihs_5br_out + df_1.nihs_6al_out + df_1.nihs_6br_out + df_1.nihs_7_out + df_1.nihs_8_out + df_1.nihs_9_out + df_1.nihs_10_out + df_1.nihs_11_out
 
     df_1["index"] = range(0, len(df_1), 1)
     df_1.set_index("index", inplace=True)
@@ -207,10 +209,12 @@ def outlier_detection(df, var1, var2):
         selected_df = df[df[var1] == i]
         selected_df_mean = selected_df[var2].mean()
         selected_df_sd = selected_df[var2].std()
-        selected_df_del_index = selected_df[(selected_df[var2] < selected_df_mean - 2 * selected_df_sd) | (selected_df[var2] > selected_df_mean + 2 * selected_df_sd)].index.values.tolist()
+        selected_df_del_index = selected_df[(selected_df[var2] < selected_df_mean - 2 * selected_df_sd) | (
+                    selected_df[var2] > selected_df_mean + 2 * selected_df_sd)].index.values.tolist()
         outlier_index = outlier_index + selected_df_del_index
     print(len(outlier_index))
     return outlier_index
+
 
 if __name__ == '__main__':
     # Grouping Features
@@ -254,7 +258,7 @@ if __name__ == '__main__':
                           "mcdri_id", "mcdli_id", "vers_dt_1", "veihd_dt_1", "death_dt_3", "vers_dt_3", "veihd_dt_3",
                           "det_id", "rfur_dt_3", "mrs_tx_3"]
 
-    date = ["rfur_dt_1", "ih_dt", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
+    date = ["rfur_dt_1", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
             "nihsot_dt", "ct_dt", "mri_dt"]
 
     hour = ["onseth_nm", "ottih_nm", "flookh_nm", "fcth_nm", "nihsinh_nm", "nihsoth_nm", "cth_nm", "mrih_nm"]
@@ -297,9 +301,9 @@ if __name__ == '__main__':
                   "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 
     continuous_n = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "rr_nm", "hb_nm",
-                  "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm",
-                  "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
-                  "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
+                    "hct_nm", "platelet_nm", "wbc_nm", "ptt1_nm", "ptt2_nm", "ptinr_nm", "er_nm", "bun_nm",
+                    "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
+                    "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 
     barthel = ["feeding", "transfers", "bathing", "toilet_use", "grooming", "mobility", "stairs", "dressing",
                "bowel_control", "bladder_control"]
@@ -320,13 +324,14 @@ if __name__ == '__main__':
     TSR_ALL1_df1 = ischemic_stroke_cases(TSR_ALL1_df)
     TSR_ALL1_df2 = remove_unrelated_features(TSR_ALL1_df1, unrelated_features)
     TSR_ALL1_df3 = remove_timestamp_features(TSR_ALL1_df2, date, hour, minute)
-    TSR_ALL1_df4 = categorical_features(TSR_ALL1_df3, nominal_features, ordinal_features, boolean, barthel, nihss_in, nihss_out)
+    TSR_ALL1_df4 = categorical_features(TSR_ALL1_df3, nominal_features, ordinal_features, boolean, barthel, nihss_in,
+                                        nihss_out)
     TSR_ALL1_df5 = continuous_features(TSR_ALL1_df4, continuous)
     TSR_ALL1_df6 = remove_high_missing_features(TSR_ALL1_df5)
 
     # save pre_processed dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_preprocessed.csv")
-    TSR_ALL1_df6.to_csv(csv_save, index=False)
+    TSR_ALL1_df5.to_csv(csv_save, index=False)
 
     # delete error cases
     TSR_ALL1_score_df = delete_error_cases(TSR_ALL1_df6)
@@ -339,7 +344,7 @@ if __name__ == '__main__':
     TSR_ALL1_score_df = TSR_ALL1_score_df.reset_index(drop=True)
     db_outlier = outlier_detection(TSR_ALL1_score_df, "discharged_mrs", "bi_total")
     dn_outlier = outlier_detection(TSR_ALL1_score_df, "discharged_mrs", "nihss_total")
-    #bn_outlier = outlier_detection(TSR_ALL1_score_df, "bi_total", "nihss_total")
+    # bn_outlier = outlier_detection(TSR_ALL1_score_df, "bi_total", "nihss_total")
 
     # delete_union = len(set(db_outlier) & set(dn_outlier) & set(bn_outlier))
     # delete_intersection = len(set(db_outlier) | set(dn_outlier) | set(bn_outlier))
@@ -358,6 +363,14 @@ if __name__ == '__main__':
     TSR_ALL1_AMPUTATED_DF = pd.merge(TSR_ALL1_df6, TSR_ALL1_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
     print(TSR_ALL1_AMPUTATED_DF.shape)
 
+    # sum(TSR_ALL1_AMPUTATED_DF["gender_tx"] == 1) / len(TSR_ALL1_AMPUTATED_DF["gender_tx"])  # male
+    # TSR_ALL1_AMPUTATED_DF["age"].mean(), TSR_ALL1_AMPUTATED_DF["age"].std()  # age
+    # TSR_ALL1_AMPUTATED_DF["discharged_mrs"].mean(), TSR_ALL1_AMPUTATED_DF["discharged_mrs"].std()  # Discharged mRS
+    # TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].mean(), TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].std() # 1-month follow-up mRS
+    # TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).std()
+    # TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_in": "nihs_11_in"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_in": "nihs_11_in"].sum(axis=1).std()
+    # TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_out": "nihs_11_out"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_out": "nihs_11_out"].sum(axis=1).std()
+
     TSR_ALL1_AMPUTATED_DF[continuous_n] = TSR_ALL1_AMPUTATED_DF[continuous_n].fillna(9999)
     TSR_ALL1_AMPUTATED_DF = TSR_ALL1_AMPUTATED_DF.dropna()
     print(TSR_ALL1_AMPUTATED_DF.shape)
@@ -365,4 +378,16 @@ if __name__ == '__main__':
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_AMPUTATED.csv")
     TSR_ALL1_AMPUTATED_DF.to_csv(csv_save, index=False)
 
+    TSR_ALL1_AMPUTATED_DF["ih_dt"] = pd.to_datetime(TSR_ALL1_AMPUTATED_DF["ih_dt"], errors='coerce')
+    TSR_ALL1_AMPUTATED_DF["ih_dt"][
+        (TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year < 2006) | (TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year > 2020)] = np.nan
 
+    TSR_ALL1_TRAIN = TSR_ALL1_AMPUTATED_DF[
+        TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013])]
+    TSR_ALL1_TEST = TSR_ALL1_AMPUTATED_DF[
+        ~TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013])]
+
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN.csv")
+    TSR_ALL1_TRAIN.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST.csv")
+    TSR_ALL1_TEST.to_csv(csv_save, index=False)
