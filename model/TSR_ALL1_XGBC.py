@@ -67,7 +67,7 @@ xgbcG_rscv = RandomizedSearchCV(estimator=pipeline,
                                 scoring="roc_auc",
                                 verbose=5,
                                 cv=5,
-                                n_iter=5,
+                                n_iter=500,
                                 random_state=19)
 
 xgbcB_rscv = RandomizedSearchCV(estimator=pipeline,
@@ -76,33 +76,33 @@ xgbcB_rscv = RandomizedSearchCV(estimator=pipeline,
                                 scoring="roc_auc",
                                 verbose=5,
                                 cv=5,
-                                n_iter=5,
+                                n_iter=500,
                                 random_state=19)
 
 #GOOD when discharged
 ### BASED XGBC
 xgbcG = xgbc.fit(G_X_train, G_y_train)
-#joblib.dump(xgbcG, "model_pickle/MICE5/TSR_ALL1G_XGBC_BASED.pkl")
+joblib.dump(xgbcG, "model_pickle/MICE1/TSR_ALL1G_XGBC_BASED.pkl")
 
 ### TUNED XGBC
 xgbcG_rsCV = xgbcG_rscv.fit(G_X_train, G_y_train)
-#joblib.dump(xgbcG_rsCV, "model_pickle/MICE5/TSR_ALL1G_XGBC_TUNED.pkl")
+joblib.dump(xgbcG_rsCV, "model_pickle/MICE1/TSR_ALL1G_XGBC_TUNED.pkl")
 
 ### CALIBRATED XGBC
 xgbcG_cccv = CalibratedClassifierCV(base_estimator=xgbcG_rsCV.best_estimator_, cv=5)
 xgbcG_ccCV = xgbcG_cccv.fit(G_X_train, G_y_train)
-#joblib.dump(xgbcG_ccCV, "model_pickle/MICE5/TSR_ALL1G_XGBC_CALIBRATED.pkl")
+joblib.dump(xgbcG_ccCV, "model_pickle/MICE1/TSR_ALL1G_XGBC_CALIBRATED.pkl")
 
 #BAD when discharged
 ### BASED XGBC
 xgbcB = xgbc.fit(B_X_train, B_y_train)
-#joblib.dump(xgbcB, "model_pickle/MICE5/TSR_ALL1B_XGBC_BASED.pkl")
+joblib.dump(xgbcB, "model_pickle/MICE1/TSR_ALL1B_XGBC_BASED.pkl")
 
 ### TUNED XGBC
 xgbcB_rsCV = xgbcB_rscv.fit(B_X_train, B_y_train)
-#joblib.dump(xgbcB_rsCV, "model_pickle/MICE5/TSR_ALL1B_XGBC_TUNED.pkl")
+joblib.dump(xgbcB_rsCV, "model_pickle/MICE1/TSR_ALL1B_XGBC_TUNED.pkl")
 
 ### CALIBRATED XGBC
 xgbcB_cccv = CalibratedClassifierCV(base_estimator=xgbcB_rsCV.best_estimator_, cv=5)
 xgbcB_ccCV = xgbcB_cccv.fit(B_X_train, B_y_train)
-#joblib.dump(xgbcB_ccCV, "model_pickle/MICE5/TSR_ALL1B_XGBC_CALIBRATED.pkl")
+joblib.dump(xgbcB_ccCV, "model_pickle/MICE1/TSR_ALL1B_XGBC_CALIBRATED.pkl")
