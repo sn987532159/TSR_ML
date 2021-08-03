@@ -7,11 +7,11 @@ from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 
 # Import datasets
-csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN_MICE1.csv")
+csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN_MICE5.csv")
 tsr_all1_df = pd.read_csv(csv_path)
 tsr_all1_df["ih_dt"] = pd.to_datetime(tsr_all1_df["ih_dt"], errors='coerce')
 
-csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST_MICE1.csv")
+csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST_MICE5.csv")
 tsr_all1_test = pd.read_csv(csv_path)
 
 tsr_all1_train = tsr_all1_df[~tsr_all1_df["ih_dt"].dt.year.isin([2012, 2013])]

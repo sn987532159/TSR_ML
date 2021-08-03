@@ -10,82 +10,82 @@ from xgboost import XGBClassifier
 from sklearn.calibration import CalibratedClassifierCV
 import matplotlib.pyplot as plt
 
-def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calibrated, model_selected):
+def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model_selected):
     # BASED
-    y_validation_pred = based.predict_proba(X_validation)
-    fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-    validation_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc, 3))
+    y_test_pred = based.predict_proba(X_test)
+    fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+    test_auroc = auc(fpr, tpr)
+    print('AUC of testing set:', test_auroc)
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', tuned.best_score_)
     print('--> Best Parameters: \n', tuned.best_params_)
 
-    y_validation_pred = tuned.predict_proba(X_validation)
-    fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-    validation_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+    y_test_pred = tuned.predict_proba(X_test)
+    fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+    test_auroc_tuned = auc(fpr, tpr)
+    print('AUC of testing set:', test_auroc_tuned)
 
     # CALIBRATED
-    y_validation_pred = calibrated.predict_proba(X_validation)
-    fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-    validation_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_cc, 3))
+    y_test_pred = calibrated.predict_proba(X_test)
+    fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+    test_auroc_cc = auc(fpr, tpr)
+    print('AUC of testing set:', test_auroc_cc)
 
     #### Selected Columns
 
     model_fi = calibrated.base_estimator._final_estimator.feature_importances_
     model_fi_df = pd.DataFrame(model_fi)
-    model_fi_df.index = X_validation.columns
+    model_fi_df.index = X_test.columns
     model_fi_df.columns = (["Value"])
     model_fi_df = model_fi_df.reset_index(drop=False)
     model_fi_df.columns = (["Feature", "Value"])
     model_fi_df = model_fi_df.sort_values(["Value"], ascending=False)
 
-    validation_auroc_list = []
-    validation_auroc_tuned_list = []
-    validation_auroc_cc_list = []
+    test_auroc_list = []
+    test_auroc_tuned_list = []
+    test_auroc_cc_list = []
 
     for i in 10, 20, 30:
         model_fi_index = model_fi_df[0:i].index
 
         X_train_selected = X_train.iloc[:, model_fi_index]
-        X_validation_selected = X_validation.iloc[:, model_fi_index]
+        X_test_selected = X_test.iloc[:, model_fi_index]
 
         # base et_selected
         BASED_selected = model_selected.fit(X_train_selected, y_train)
 
-        y_validation_pred = BASED_selected.predict_proba(X_validation_selected)
-        fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-        validation_auroc_selected = auc(fpr, tpr)
-        validation_auroc_list.append(validation_auroc_selected)
-        print('AUC of validating set:', round(validation_auroc_selected, 3))
+        y_test_pred = BASED_selected.predict_proba(X_test_selected)
+        fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+        test_auroc_selected = auc(fpr, tpr)
+        test_auroc_list.append(test_auroc_selected)
+        print('AUC of testing set:', test_auroc_selected)
 
         # tune et_selected
         rscv_selected = tuned.best_estimator_
         TUNED_selected = rscv_selected.fit(X_train_selected, y_train)
 
-        y_validation_pred = TUNED_selected.predict_proba(X_validation_selected)
-        fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-        validation_auroc_selected_tuned = auc(fpr, tpr)
-        validation_auroc_tuned_list.append(validation_auroc_selected_tuned)
-        print('AUC of validating set:', round(validation_auroc_selected_tuned, 3))
+        y_test_pred = TUNED_selected.predict_proba(X_test_selected)
+        fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+        test_auroc_selected_tuned = auc(fpr, tpr)
+        test_auroc_tuned_list.append(test_auroc_selected_tuned)
+        print('AUC of testing set:', test_auroc_selected_tuned)
 
         # calibrate et_selected
         cccv_selected = CalibratedClassifierCV(base_estimator=TUNED_selected, cv=5)
         CALIBRATED_selected = cccv_selected.fit(X_train_selected, y_train)
 
-        y_validation_pred = CALIBRATED_selected.predict_proba(X_validation_selected)
-        fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
-        validation_auroc_selected_cc = auc(fpr, tpr)
-        validation_auroc_cc_list.append(validation_auroc_selected_cc)
-        print('AUC of validating set:', round(validation_auroc_selected_cc, 3))
+        y_test_pred = CALIBRATED_selected.predict_proba(X_test_selected)
+        fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
+        test_auroc_selected_cc = auc(fpr, tpr)
+        test_auroc_cc_list.append(test_auroc_selected_cc)
+        print('AUC of testing set:', test_auroc_selected_cc)
 
-    validation_auroc_list.append(validation_auroc)
-    validation_auroc_tuned_list.append(validation_auroc_tuned)
-    validation_auroc_cc_list.append(validation_auroc_cc)
+    test_auroc_list.append(test_auroc)
+    test_auroc_tuned_list.append(test_auroc_tuned)
+    test_auroc_cc_list.append(test_auroc_cc)
 
-    return validation_auroc_list, validation_auroc_tuned_list, validation_auroc_cc_list, CALIBRATED_selected
+    return test_auroc_list, test_auroc_tuned_list, test_auroc_cc_list, CALIBRATED_selected
 
 if __name__ == '__main__':
     # Import datasets
@@ -147,10 +147,10 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL31G_ET_CALIBRATED.pkl")
     G_ET_CALIBRATED = joblib.load(pkl_path)
 
-    G_validation_auroc_list, G_validation_auroc_tuned_list, G_validation_auroc_cc_list, G_ET_CALIBRATED_selected = algorithms(G_X_train,
-                                                                                                            G_X_validation,
+    G_test_auroc_list, G_test_auroc_tuned_list, G_test_auroc_cc_list, G_ET_CALIBRATED_selected = algorithms(G_X_train,
+                                                                                                            G_X_test,
                                                                                                             G_y_train,
-                                                                                                            G_y_validation,
+                                                                                                            G_y_test,
                                                                                                             G_ET_BASED,
                                                                                                             G_ET_TUNED,
                                                                                                             G_ET_CALIBRATED,
@@ -159,14 +159,14 @@ if __name__ == '__main__':
     #joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "311"
-    plt.plot(x, G_validation_auroc_list, label="based")
-    plt.plot(x, G_validation_auroc_tuned_list, label="tuned")
-    plt.plot(x, G_validation_auroc_cc_list, label="calibrated")
+    plt.plot(x, G_test_auroc_list, label="based")
+    plt.plot(x, G_test_auroc_tuned_list, label="tuned")
+    plt.plot(x, G_test_auroc_cc_list, label="calibrated")
     plt.legend()
     for i in range(len(x)):
-        plt.annotate(round(G_validation_auroc_list[i], 3), (x[i], G_validation_auroc_list[i]))
-        plt.annotate(round(G_validation_auroc_tuned_list[i], 3), (x[i], G_validation_auroc_tuned_list[i]))
-        plt.annotate(round(G_validation_auroc_cc_list[i], 3), (x[i], G_validation_auroc_cc_list[i]))
+        plt.annotate(round(G_test_auroc_list[i], 3), (x[i], G_test_auroc_list[i]))
+        plt.annotate(round(G_test_auroc_tuned_list[i], 3), (x[i], G_test_auroc_tuned_list[i]))
+        plt.annotate(round(G_test_auroc_cc_list[i], 3), (x[i], G_test_auroc_cc_list[i]))
     plt.title('TSR_ALL31_ET_G', fontsize=15)
     # plt.savefig('PLOT/TSR_ALL31/TSR_ALL31_ET_G.png')
     plt.show()
@@ -181,10 +181,10 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL31G_XGBC_CALIBRATED.pkl")
     G_XGBC_CALIBRATED = joblib.load(pkl_path)
 
-    G_validation_auroc_list, G_validation_auroc_tuned_list, G_validation_auroc_cc_list, G_XGBC_CALIBRATED_selected = algorithms(G_X_train,
-                                                                                                              G_X_validation,
+    G_test_auroc_list, G_test_auroc_tuned_list, G_test_auroc_cc_list, G_XGBC_CALIBRATED_selected = algorithms(G_X_train,
+                                                                                                              G_X_test,
                                                                                                               G_y_train,
-                                                                                                              G_y_validation,
+                                                                                                              G_y_test,
                                                                                                               G_XGBC_BASED,
                                                                                                               G_XGBC_TUNED,
                                                                                                               G_XGBC_CALIBRATED,
@@ -193,14 +193,14 @@ if __name__ == '__main__':
     #joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "311"
-    plt.plot(x, G_validation_auroc_list, label="based")
-    plt.plot(x, G_validation_auroc_tuned_list, label="tuned")
-    plt.plot(x, G_validation_auroc_cc_list, label="calibrated")
+    plt.plot(x, G_test_auroc_list, label="based")
+    plt.plot(x, G_test_auroc_tuned_list, label="tuned")
+    plt.plot(x, G_test_auroc_cc_list, label="calibrated")
     plt.legend()
     for i in range(len(x)):
-        plt.annotate(round(G_validation_auroc_list[i], 3), (x[i], G_validation_auroc_list[i]))
-        plt.annotate(round(G_validation_auroc_tuned_list[i], 3), (x[i], G_validation_auroc_tuned_list[i]))
-        plt.annotate(round(G_validation_auroc_cc_list[i], 3), (x[i], G_validation_auroc_cc_list[i]))
+        plt.annotate(round(G_test_auroc_list[i], 3), (x[i], G_test_auroc_list[i]))
+        plt.annotate(round(G_test_auroc_tuned_list[i], 3), (x[i], G_test_auroc_tuned_list[i]))
+        plt.annotate(round(G_test_auroc_cc_list[i], 3), (x[i], G_test_auroc_cc_list[i]))
     plt.title('TSR_ALL31_XGBC_G', fontsize=15)
     # plt.savefig('PLOT/TSR_ALL31/TSR_ALL31_XGBC_G.png')
     plt.show()
@@ -215,10 +215,10 @@ if __name__ == '__main__':
 
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL31B_ET_CALIBRATED.pkl")
     B_ET_CALIBRATED = joblib.load(pkl_path)
-    B_validation_auroc_list, B_validation_auroc_tuned_list, B_validation_auroc_cc_list, B_ET_CALIBRATED_selected = algorithms(B_X_train,
-                                                                                                            B_X_validation,
+    B_test_auroc_list, B_test_auroc_tuned_list, B_test_auroc_cc_list, B_ET_CALIBRATED_selected = algorithms(B_X_train,
+                                                                                                            B_X_test,
                                                                                                             B_y_train,
-                                                                                                            B_y_validation,
+                                                                                                            B_y_test,
                                                                                                             B_ET_BASED,
                                                                                                             B_ET_TUNED,
                                                                                                             B_ET_CALIBRATED,
@@ -227,14 +227,14 @@ if __name__ == '__main__':
     #joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "311"
-    plt.plot(x, B_validation_auroc_list, label="based")
-    plt.plot(x, B_validation_auroc_tuned_list, label="tuned")
-    plt.plot(x, B_validation_auroc_cc_list, label="calibrated")
+    plt.plot(x, B_test_auroc_list, label="based")
+    plt.plot(x, B_test_auroc_tuned_list, label="tuned")
+    plt.plot(x, B_test_auroc_cc_list, label="calibrated")
     plt.legend()
     for i in range(len(x)):
-        plt.annotate(round(B_validation_auroc_list[i], 3), (x[i], B_validation_auroc_list[i]))
-        plt.annotate(round(B_validation_auroc_tuned_list[i], 3), (x[i], B_validation_auroc_tuned_list[i]))
-        plt.annotate(round(B_validation_auroc_cc_list[i], 3), (x[i], B_validation_auroc_cc_list[i]))
+        plt.annotate(round(B_test_auroc_list[i], 3), (x[i], B_test_auroc_list[i]))
+        plt.annotate(round(B_test_auroc_tuned_list[i], 3), (x[i], B_test_auroc_tuned_list[i]))
+        plt.annotate(round(B_test_auroc_cc_list[i], 3), (x[i], B_test_auroc_cc_list[i]))
     plt.title('TSR_ALL31_ET_B', fontsize=15)
     # plt.savefig('PLOT/TSR_ALL31/TSR_ALL31_ET_B.png')
     plt.show()
@@ -249,10 +249,10 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL31B_XGBC_CALIBRATED.pkl")
     B_XGBC_CALIBRATED = joblib.load(pkl_path)
 
-    B_validation_auroc_list, B_validation_auroc_tuned_list, B_validation_auroc_cc_list, B_XGBC_CALIBRATED_selected = algorithms(B_X_train,
-                                                                                                              B_X_validation,
+    B_test_auroc_list, B_test_auroc_tuned_list, B_test_auroc_cc_list, B_XGBC_CALIBRATED_selected = algorithms(B_X_train,
+                                                                                                              B_X_test,
                                                                                                               B_y_train,
-                                                                                                              B_y_validation,
+                                                                                                              B_y_test,
                                                                                                               B_XGBC_BASED,
                                                                                                               B_XGBC_TUNED,
                                                                                                               B_XGBC_CALIBRATED,
@@ -261,14 +261,14 @@ if __name__ == '__main__':
     #joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "311"
-    plt.plot(x, B_validation_auroc_list, label="based")
-    plt.plot(x, B_validation_auroc_tuned_list, label="tuned")
-    plt.plot(x, B_validation_auroc_cc_list, label="calibrated")
+    plt.plot(x, B_test_auroc_list, label="based")
+    plt.plot(x, B_test_auroc_tuned_list, label="tuned")
+    plt.plot(x, B_test_auroc_cc_list, label="calibrated")
     plt.legend()
     for i in range(len(x)):
-        plt.annotate(round(B_validation_auroc_list[i], 3), (x[i], B_validation_auroc_list[i]))
-        plt.annotate(round(B_validation_auroc_tuned_list[i], 3), (x[i], B_validation_auroc_tuned_list[i]))
-        plt.annotate(round(B_validation_auroc_cc_list[i], 3), (x[i], B_validation_auroc_cc_list[i]))
+        plt.annotate(round(B_test_auroc_list[i], 3), (x[i], B_test_auroc_list[i]))
+        plt.annotate(round(B_test_auroc_tuned_list[i], 3), (x[i], B_test_auroc_tuned_list[i]))
+        plt.annotate(round(B_test_auroc_cc_list[i], 3), (x[i], B_test_auroc_cc_list[i]))
     plt.title('TSR_ALL31_XGBC_B', fontsize=15)
     # plt.savefig('PLOT/TSR_ALL31/TSR_ALL31_XGBC_B.png')
     plt.show()

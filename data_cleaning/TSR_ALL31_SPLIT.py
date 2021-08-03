@@ -2,21 +2,30 @@ import pandas as pd
 pd.options.mode.chained_assignment = None
 import os
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 
 # Import datasets
-csv_path = os.path.join("..", "data","LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_MICE5.csv")
-tsr_all3_df = pd.read_csv(csv_path)
-tsr_all3_df.shape
+csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TRAIN_MICE1.csv")
+tsr_all31_df = pd.read_csv(csv_path)
+tsr_all31_df["ih_dt"] = pd.to_datetime(tsr_all31_df["ih_dt"], errors='coerce')
+
+csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TEST_MICE1.csv")
+tsr_all31_test = pd.read_csv(csv_path)
+
+tsr_all31_train = tsr_all31_df[~tsr_all31_df["ih_dt"].dt.year.isin([2012, 2013])]
+tsr_all31_validation = tsr_all31_df[tsr_all31_df["ih_dt"].dt.year.isin([2012, 2013])]
 
 # Convert the multiple feature and outcome into binary ones
-mRS3 = tsr_all3_df.mrs_tx_3
-mRS3[(mRS3 == 0) | (mRS3 == 1) | (mRS3 == 2)] = 1 #GOOD
-mRS3[(mRS3 == 3) | (mRS3 == 4) | (mRS3 == 5) | (mRS3 == 6) | (mRS3 == 9)] = 0 #BAD
+tsr_all31_train["mrs_tx_3"][tsr_all31_train["mrs_tx_3"].isin([0, 1, 2])] = 0 #GOOD
+tsr_all31_train["mrs_tx_3"][~tsr_all31_train["mrs_tx_3"].isin([0, 1, 2])] = 1 #BAD
+tsr_all31_validation["mrs_tx_3"][tsr_all31_validation["mrs_tx_3"].isin([0, 1, 2])] = 0 #GOOD
+tsr_all31_validation["mrs_tx_3"][~tsr_all31_validation["mrs_tx_3"].isin([0, 1, 2])] = 1 #BAD
+tsr_all31_test["mrs_tx_3"][tsr_all31_test["mrs_tx_3"].isin([0, 1, 2])] = 0 #GOOD
+tsr_all31_test["mrs_tx_3"][~tsr_all31_test["mrs_tx_3"].isin([0, 1, 2])] = 1 #BAD
 
+# Group all features and the outcome
 # Group all features and the outcome
 nominal_features = ["edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id",
                     "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id",
@@ -145,45 +154,54 @@ column_names_G = column_names_B[:]
 column_names_G.remove("Destination after discharged_4")
 
 # Machine Learning
-## Preprocess input data (GOOD when Discharge)
-## discharged mRS = GOOD (tsr_all3_df.discharged_mrs == 1)
-mrs_dis1 = tsr_all3_df[(tsr_all3_df.discharged_mrs == 1) | (tsr_all3_df.discharged_mrs == 0) | (tsr_all3_df.discharged_mrs == 2)]
+## Preprocess input data (GOOD when Discharge, discharged_mrs == 0)
+G_train = tsr_all31_train[tsr_all31_train["discharged_mrs"].isin([0,1,2])]
+G_validation = tsr_all31_validation[tsr_all31_validation["discharged_mrs"].isin([0,1,2])]
+G_test = tsr_all31_test[tsr_all31_test["discharged_mrs"].isin([0,1,2])]
 
 ## input dataset
-tsr_3G_input = mrs_dis1.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1)
-print(tsr_3G_input.shape)
-tsr_3G_input = tsr_3G_input.astype("float64")
-tsr_3G_input = np.array(tsr_3G_input.values)
+G_X_train = G_train.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1)
+print(G_X_train.shape)
+G_X_train = np.array(G_X_train.values)
+
+G_X_validation = G_validation.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1)
+print(G_X_validation.shape)
+G_X_validation = np.array(G_X_validation.values)
+
+G_X_test = G_test.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1)
+print(G_X_test.shape)
+G_X_test = np.array(G_X_test.values)
 
 ## output dataset
-tsr_3G_output = mrs_dis1.mrs_tx_3
-print(tsr_3G_output.shape)
-tsr_3G_output = tsr_3G_output.astype("float64")
-tsr_3G_output = np.array(tsr_3G_output.values)
+G_y_train = G_train.mrs_tx_3
+print(G_y_train.shape)
+G_y_train = np.array(G_y_train.values)
 
-## train_test_split
-G_X_train, G_X_test, G_y_train, G_y_test = train_test_split(tsr_3G_input, tsr_3G_output, test_size=0.3, random_state=19)
-print("The shape of GOOD's X_train:", G_X_train.shape)
-print("The shape of GOOD's y_train:", G_y_train.shape)
-print("The shape of GOOD's X_test:", G_X_test.shape)
-print("The shape of GOOD's y_test:", G_y_test.shape)
+G_y_validation = G_validation.mrs_tx_3
+print(G_y_validation.shape)
+G_y_validation = np.array(G_y_validation.values)
+
+G_y_test = G_test.mrs_tx_3
+print(G_y_test.shape)
+G_y_test = np.array(G_y_test.values)
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_y_TRAIN.csv")
-G_y_train = pd.DataFrame(G_y_train)
-G_y_train.to_csv(csv_save, index=False)
+pd.DataFrame(G_y_train).to_csv(csv_save, index=False)
+
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_y_VALIDATION.csv")
+pd.DataFrame(G_y_validation).to_csv(csv_save, index=False)
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_y_TEST.csv")
-G_y_test = pd.DataFrame(G_y_test)
-G_y_test.to_csv(csv_save, index=False)
+pd.DataFrame(G_y_test).to_csv(csv_save, index=False)
 
 ## scale G_X_train
 G_X_train = pd.DataFrame(G_X_train)
-G_X_train.columns = tsr_all3_df.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1).columns
+G_X_train.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
 
 scaler = MinMaxScaler()
 G_X_train[continuous] = scaler.fit_transform(G_X_train[continuous])
 
-encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=6)
+encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=99)
 G_X_train[ordinal_features] = encoder.fit_transform(G_X_train[ordinal_features])
 
 ohe = OneHotEncoder(sparse=False, handle_unknown = "ignore")
@@ -195,9 +213,25 @@ G_X_train.columns = column_names_G
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_X_TRAIN.csv")
 G_X_train.to_csv(csv_save, index=False)
 
+## scale G_X_validation
+G_X_validation = pd.DataFrame(G_X_validation)
+G_X_validation.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
+
+G_X_validation[continuous] = scaler.transform(G_X_validation[continuous])
+
+G_X_validation[ordinal_features] = encoder.transform(G_X_validation[ordinal_features])
+
+nominal_test = ohe.transform(G_X_validation[nominal_features])
+G_X_validation = pd.concat([G_X_validation, pd.DataFrame(nominal_test)], axis=1)
+G_X_validation = G_X_validation.drop(nominal_features, axis=1)
+G_X_validation.columns = column_names_G
+
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_X_VALIDATION.csv")
+G_X_validation.to_csv(csv_save, index=False)
+
 ## scale G_X_test
 G_X_test = pd.DataFrame(G_X_test)
-G_X_test.columns = tsr_all3_df.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1).columns
+G_X_test.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
 
 G_X_test[continuous] = scaler.transform(G_X_test[continuous])
 
@@ -211,48 +245,58 @@ G_X_test.columns = column_names_G
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31G_X_TEST.csv")
 G_X_test.to_csv(csv_save, index=False)
 
-## Preprocess input data (BAD when Discharge)
-# discharged mRS = BAD (tsr_all3_df.discharged_mrs == 0)
-mrs_dis0 = tsr_all3_df[(tsr_all3_df.discharged_mrs != 1) & (tsr_all3_df.discharged_mrs != 0) & (tsr_all3_df.discharged_mrs != 2)]
+# Machine Learning
+## Preprocess input data (BAD when Discharge, discharged_mrs == 1)
+B_train = tsr_all31_train[~tsr_all31_train["discharged_mrs"].isin([0,1,2])]
+B_validation = tsr_all31_validation[~tsr_all31_validation["discharged_mrs"].isin([0,1,2])]
+B_test = tsr_all31_test[~tsr_all31_test["discharged_mrs"].isin([0,1,2])]
 
 ## input dataset
-tsr_3B_input = mrs_dis0.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1)
-print(tsr_3B_input.shape)
-tsr_3B_input = tsr_3B_input.astype("float64")
-tsr_3B_input = np.array(tsr_3B_input.values)
+B_X_train = B_train.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1)
+print(B_X_train.shape)
+B_X_train = np.array(B_X_train.values)
+
+B_X_validation = B_validation.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1)
+print(B_X_validation.shape)
+B_X_validation = np.array(B_X_validation.values)
+
+B_X_test = B_test.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1)
+print(B_X_test.shape)
+B_X_test = np.array(B_X_test.values)
 
 ## output dataset
-tsr_3B_output = mrs_dis0.mrs_tx_3
-print(tsr_3B_output.shape)
-tsr_3B_output = tsr_3B_output.astype("float64")
-tsr_3B_output = np.array(tsr_3B_output.values)
+B_y_train = B_train.mrs_tx_3
+print(B_y_train.shape)
+B_y_train = np.array(B_y_train.values)
 
-## train_test_split
-B_X_train, B_X_test, B_y_train, B_y_test = train_test_split(tsr_3B_input, tsr_3B_output, test_size=0.3, random_state=19)
-print("The shape of X_train:", B_X_train.shape)
-print("The shape of y_train:", B_y_train.shape)
-print("The shape of X_test:", B_X_test.shape)
-print("The shape of y_test:", B_y_test.shape)
+B_y_validation = B_validation.mrs_tx_3
+print(B_y_validation.shape)
+B_y_validation = np.array(B_y_validation.values)
+
+B_y_test = B_test.mrs_tx_3
+print(B_y_test.shape)
+B_y_test = np.array(B_y_test.values)
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_y_TRAIN.csv")
-B_y_train = pd.DataFrame(B_y_train)
-B_y_train.to_csv(csv_save, index=False)
+pd.DataFrame(B_y_train).to_csv(csv_save, index=False)
+
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_y_VALIDATION.csv")
+pd.DataFrame(B_y_validation).to_csv(csv_save, index=False)
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_y_TEST.csv")
-B_y_test = pd.DataFrame(B_y_test)
-B_y_test.to_csv(csv_save, index=False)
+pd.DataFrame(B_y_test).to_csv(csv_save, index=False)
 
 ## scale B_X_train
 B_X_train = pd.DataFrame(B_X_train)
-B_X_train.columns = tsr_all3_df.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1).columns
+B_X_train.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
 
 scaler = MinMaxScaler()
 B_X_train[continuous] = scaler.fit_transform(B_X_train[continuous])
 
-encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=9)
+encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=99)
 B_X_train[ordinal_features] = encoder.fit_transform(B_X_train[ordinal_features])
 
-ohe = OneHotEncoder(sparse=False)
+ohe = OneHotEncoder(sparse=False, handle_unknown = "ignore")
 nominal_train = ohe.fit_transform(B_X_train[nominal_features])
 B_X_train = pd.concat([B_X_train, pd.DataFrame(nominal_train)], axis=1)
 B_X_train = B_X_train.drop(nominal_features, axis=1)
@@ -261,9 +305,25 @@ B_X_train.columns = column_names_B
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_X_TRAIN.csv")
 B_X_train.to_csv(csv_save, index=False)
 
+## scale B_X_validation
+B_X_validation = pd.DataFrame(B_X_validation)
+B_X_validation.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
+
+B_X_validation[continuous] = scaler.transform(B_X_validation[continuous])
+
+B_X_validation[ordinal_features] = encoder.transform(B_X_validation[ordinal_features])
+
+nominal_test = ohe.transform(B_X_validation[nominal_features])
+B_X_validation = pd.concat([B_X_validation, pd.DataFrame(nominal_test)], axis=1)
+B_X_validation = B_X_validation.drop(nominal_features, axis=1)
+B_X_validation.columns = column_names_B
+
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_X_VALIDATION.csv")
+B_X_validation.to_csv(csv_save, index=False)
+
 ## scale B_X_test
 B_X_test = pd.DataFrame(B_X_test)
-B_X_test.columns = tsr_all3_df.drop(["icase_id", "idcase_id", "mrs_tx_3"], axis=1).columns
+B_X_test.columns = tsr_all31_df.drop(["icase_id", "idcase_id", "mrs_tx_3", "ih_dt"], axis=1).columns
 
 B_X_test[continuous] = scaler.transform(B_X_test[continuous])
 
@@ -276,4 +336,3 @@ B_X_test.columns = column_names_B
 
 csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31", "TSR_ALL31B_X_TEST.csv")
 B_X_test.to_csv(csv_save, index=False)
-
