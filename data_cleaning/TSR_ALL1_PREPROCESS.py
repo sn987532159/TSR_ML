@@ -25,15 +25,6 @@ def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
     df["gender_tx"][df["gender_tx"] == "F"] = 0
     for i in df[nom_f]:
         df[i] = pd.to_numeric(df[i], errors="coerce")
-
-    df["edu_id"][(df["edu_id"] != 98) & (df["edu_id"] != 1) & (df["edu_id"] != 2) & (
-            df["edu_id"] != 3) & (df["edu_id"] != 4) & (df["edu_id"] != 5) & (
-                         df["edu_id"] != 6)] = np.nan
-    df["pro_id"][(df["pro_id"] != 1) & (df["pro_id"] != 2) & (df["pro_id"] != 3) & (
-            df["pro_id"] != 4) & (df["pro_id"] != 5) & (df["pro_id"] != 6) & (
-                         df["pro_id"] != 7) & (df["pro_id"] != 8) & (df["pro_id"] != 9) & (
-                         df["pro_id"] != 10) & (df["pro_id"] != 98) & (
-                         df["pro_id"] != 99)] = np.nan
     df["opc_id"][(df["opc_id"] != 1) & (df["opc_id"] != 2) & (df["opc_id"] != 3)] = np.nan
     df["toast_id"][(df["toast_id"] != 1) & (df["toast_id"] != 2) & (df["toast_id"] != 3) & (
             df["toast_id"] != 4) & (df["toast_id"] != 5)] = np.nan
@@ -219,7 +210,7 @@ def outlier_detection(df, var1, var2):
 if __name__ == '__main__':
     # Grouping Features
     # "icase_id", "idcase_id"
-    unrelated_features = ["icd_id", "off_id", "fstatus_id_1", "location_id_1", "torg_id_1",
+    unrelated_features = ["edu_id", "pro_id", "icd_id", "off_id", "fstatus_id_1", "location_id_1", "torg_id_1",
                           "flu_id_1", "fluorg_id_1", "fluorg_tx_1", "fluresult_tx_1", "death_dt_1", "death_id_1",
                           "deathsk_id_1", "deatho_tx_1", "veihdorg_id_1", "versorg_id_1", "torg_tx_1", "versorg_tx_1",
                           "veihdorg_tx_1", "fstatus_id_3", "location_id_3", "torg_id_3", "flu_id_3", "fluorg_id_3",
@@ -265,7 +256,7 @@ if __name__ == '__main__':
 
     minute = ["onsetm_nm", "ottim_nm", "flookm_nm", "fctm_nm", "nihsinm_nm", "nihsotm_nm", "ctm_nm", "mrim_nm"]
 
-    nominal_features = ["edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id",
+    nominal_features = ["opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id",
                         "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id",
                         "hchc_id", "ht_id", "dm_id", "pad_id", "al_id", "ca_id", "fahiid_parents_1",
                         "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", "fahiid_brsi_1",
@@ -383,11 +374,15 @@ if __name__ == '__main__':
         (TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year < 2006) | (TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year > 2020)] = np.nan
 
     TSR_ALL1_TRAIN = TSR_ALL1_AMPUTATED_DF[
-        TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013])]
+        TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011])]
+    TSR_ALL1_VALIDATION = TSR_ALL1_AMPUTATED_DF[
+        TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2012, 2013])]
     TSR_ALL1_TEST = TSR_ALL1_AMPUTATED_DF[
         ~TSR_ALL1_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013])]
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN.csv")
     TSR_ALL1_TRAIN.to_csv(csv_save, index=False)
+    csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_VALIDATION.csv")
+    TSR_ALL1_VALIDATION.to_csv(csv_save, index=False)
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST.csv")
     TSR_ALL1_TEST.to_csv(csv_save, index=False)

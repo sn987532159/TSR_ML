@@ -9,21 +9,26 @@ library(dplyr)
 setwd("C:/Users/Jacky C/PycharmProjects/tsr_ml/data_cleaning")
 file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN.csv")
 TSR_ALL1_TRAIN <- read.csv(file_path)
-TSR_ALL1_TRAIN_1 <- TSR_ALL1_TRAIN %>% select(-icase_id, -idcase_id, -ih_dt)
+TSR_ALL1_TRAIN_1 <- TSR_ALL1_TRAIN %>% select(-icase_id, -idcase_id, -ih_dt, -mrs_tx_1)
 TSR_ALL1_TRAIN_1[TSR_ALL1_TRAIN_1 == 9999] = NA
+
+file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_VALIDATION.csv")
+TSR_ALL1_VALIDATION <- read.csv(file_path)
+TSR_ALL1_VALIDATION_1 <- TSR_ALL1_VALIDATION %>% select(-icase_id, -idcase_id, -ih_dt, -mrs_tx_1)
+TSR_ALL1_VALIDATION_1[TSR_ALL1_VALIDATION_1 == 9999] = NA
 
 file_path <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST.csv")
 TSR_ALL1_TEST <- read.csv(file_path)
-TSR_ALL1_TEST_1 <- TSR_ALL1_TEST %>% select(-icase_id, -idcase_id, -ih_dt)
+TSR_ALL1_TEST_1 <- TSR_ALL1_TEST %>% select(-icase_id, -idcase_id, -ih_dt, -mrs_tx_1)
 TSR_ALL1_TEST_1[TSR_ALL1_TEST_1 == 9999] = NA
 
-nominal_features = c("edu_id", "pro_id", "opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
+nominal_features = c("opc_id", "toast_id", "offdt_id", "gender_tx", "hd_id", "pcva_id", 
                      "pcvaci_id", "pcvach_id", "po_id", "ur_id", "sm_id", "ptia_id", "hc_id", "hcht_id", 
                      "hchc_id", "ht_id", "dm_id", "pad_id", "al_id", "ca_id", "fahiid_parents_1", 
                      "fahiid_parents_2", "fahiid_parents_3", "fahiid_parents_4", "fahiid_brsi_1", 
                      "fahiid_brsi_2", "fahiid_brsi_3", "fahiid_brsi_4")
 
-ordinal_features = c("mrs_tx_1", "gcse_nm", "gcsv_nm", "gcsm_nm", "discharged_mrs")
+ordinal_features = c("gcse_nm", "gcsv_nm", "gcsm_nm", "discharged_mrs")
 
 boolean = c("toastle_fl", "toastli_fl", "toastsce_fl", "toastsmo_fl", "toastsra_fl", "toastsdi_fl", 
             "toastsmi_fl", "toastsantip_fl", "toastsau_fl", "toastshy_fl", "toastspr_fl", "toastsantit_fl",
@@ -67,20 +72,28 @@ TSR_ALL1_TRAIN_1[nominal_features] <- lapply(TSR_ALL1_TRAIN_1[nominal_features],
 TSR_ALL1_TRAIN_1[ordinal_features] <- lapply(TSR_ALL1_TRAIN_1[ordinal_features], as.factor)
 TSR_ALL1_TRAIN_1[boolean] <- lapply(TSR_ALL1_TRAIN_1[boolean], as.factor)
 TSR_ALL1_TRAIN_1[continuous] <- lapply(TSR_ALL1_TRAIN_1[continuous], as.numeric)
-TSR_ALL1_TRAIN_1[barthel] <- lapply(TSR_ALL1_TRAIN_1[barthel], as.numeric)
-TSR_ALL1_TRAIN_1[nihss_in] <- lapply(TSR_ALL1_TRAIN_1[nihss_in], as.numeric)
-TSR_ALL1_TRAIN_1[nihss_out] <- lapply(TSR_ALL1_TRAIN_1[nihss_out], as.numeric)
+TSR_ALL1_TRAIN_1[barthel] <- lapply(TSR_ALL1_TRAIN_1[barthel], as.factor)
+TSR_ALL1_TRAIN_1[nihss_in] <- lapply(TSR_ALL1_TRAIN_1[nihss_in], as.factor)
+TSR_ALL1_TRAIN_1[nihss_out] <- lapply(TSR_ALL1_TRAIN_1[nihss_out], as.factor)
+
+TSR_ALL1_VALIDATION_1[nominal_features] <- lapply(TSR_ALL1_VALIDATION_1[nominal_features], as.factor)
+TSR_ALL1_VALIDATION_1[ordinal_features] <- lapply(TSR_ALL1_VALIDATION_1[ordinal_features], as.factor)
+TSR_ALL1_VALIDATION_1[boolean] <- lapply(TSR_ALL1_VALIDATION_1[boolean], as.factor)
+TSR_ALL1_VALIDATION_1[continuous] <- lapply(TSR_ALL1_VALIDATION_1[continuous], as.numeric)
+TSR_ALL1_VALIDATION_1[barthel] <- lapply(TSR_ALL1_VALIDATION_1[barthel], as.factor)
+TSR_ALL1_VALIDATION_1[nihss_in] <- lapply(TSR_ALL1_VALIDATION_1[nihss_in], as.factor)
+TSR_ALL1_VALIDATION_1[nihss_out] <- lapply(TSR_ALL1_VALIDATION_1[nihss_out], as.factor)
 
 TSR_ALL1_TEST_1[nominal_features] <- lapply(TSR_ALL1_TEST_1[nominal_features], as.factor)
 TSR_ALL1_TEST_1[ordinal_features] <- lapply(TSR_ALL1_TEST_1[ordinal_features], as.factor)
 TSR_ALL1_TEST_1[boolean] <- lapply(TSR_ALL1_TEST_1[boolean], as.factor)
 TSR_ALL1_TEST_1[continuous] <- lapply(TSR_ALL1_TEST_1[continuous], as.numeric)
-TSR_ALL1_TEST_1[barthel] <- lapply(TSR_ALL1_TEST_1[barthel], as.numeric)
-TSR_ALL1_TEST_1[nihss_in] <- lapply(TSR_ALL1_TEST_1[nihss_in], as.numeric)
-TSR_ALL1_TEST_1[nihss_out] <- lapply(TSR_ALL1_TEST_1[nihss_out], as.numeric)
+TSR_ALL1_TEST_1[barthel] <- lapply(TSR_ALL1_TEST_1[barthel], as.factor)
+TSR_ALL1_TEST_1[nihss_in] <- lapply(TSR_ALL1_TEST_1[nihss_in], as.factor)
+TSR_ALL1_TEST_1[nihss_out] <- lapply(TSR_ALL1_TEST_1[nihss_out], as.factor)
 
 #mice imputation
-methods_TSR_ALL1 <- c(mrs_tx_1 = "polr", height_nm = "pmm", weight_nm = "pmm", edu_id = "polyreg", pro_id = "polyreg", opc_id = "polyreg", gcse_nm = "polr", gcsv_nm = "polr", gcsm_nm = "polr", sbp_nm = "pmm", dbp_nm = "pmm", bt_nm = "pmm", hr_nm = "pmm", rr_nm = "pmm",
+methods_TSR_ALL1 <- c(height_nm = "pmm", weight_nm = "pmm", opc_id = "polyreg", gcse_nm = "polr", gcsv_nm = "polr", gcsm_nm = "polr", sbp_nm = "pmm", dbp_nm = "pmm", bt_nm = "pmm", hr_nm = "pmm", rr_nm = "pmm",
                       toast_id = "polyreg", toastle_fl = "logreg",toastli_fl = "logreg",toastsce_fl = "logreg",toastsmo_fl = "logreg",toastsra_fl = "logreg",toastsdi_fl = "logreg",toastsmi_fl = "logreg",toastsantip_fl = "logreg",toastsau_fl = "logreg", 
                       toastshy_fl = "logreg",toastspr_fl = "logreg",toastsantit_fl = "logreg",toastsho_fl = "logreg",toastshys_fl = "logreg",toastsca_fl = "logreg",thda_fl = "logreg",thdh_fl = "logreg",thdi_fl = "logreg",thdam_fl = "logreg",thdv_fl = "logreg",
                       thde_fl = "logreg",thdm_fl = "logreg",thdr_fl = "logreg",thdp_fl = "logreg",hb_nm = "pmm", hct_nm = "pmm", platelet_nm = "pmm", wbc_nm = "pmm", ptt1_nm = "pmm", ptt2_nm = "pmm", ptinr_nm = "pmm", er_nm = "pmm", bun_nm = "pmm", cre_nm = "pmm",
@@ -104,11 +117,16 @@ methods_TSR_ALL1 <- c(mrs_tx_1 = "polr", height_nm = "pmm", weight_nm = "pmm", e
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
 TSR_ALL1_TRAIN_imp <- mice(TSR_ALL1_TRAIN_1, maxit =20, m = 5, method = methods_TSR_ALL1, print = TRUE, seed = 19)
-TSR_ALL1_TRAIN_mice <- TSR_ALL1_TRAIN %>% select(icase_id, idcase_id, ih_dt) %>% cbind(complete(TSR_ALL1_TRAIN_imp, 5))
+TSR_ALL1_TRAIN_mice <- TSR_ALL1_TRAIN %>% select(icase_id, idcase_id, mrs_tx_1) %>% cbind(complete(TSR_ALL1_TRAIN_imp, 5))
 save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TRAIN_MICE5.csv")
 write.csv(TSR_ALL1_TRAIN_mice, save_file, row.names=FALSE)
 
+TSR_ALL1_VALIDATION_imp<- mice.mids(TSR_ALL1_TRAIN_imp, TSR_ALL1_VALIDATION_1)
+TSR_ALL1_VALIDATION_mice <- TSR_ALL1_VALIDATION %>% select(icase_id, idcase_id, mrs_tx_1) %>% cbind(complete(TSR_ALL1_VALIDATION_imp, 5))
+save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_VALIDATION_MICE5.csv")
+write.csv(TSR_ALL1_VALIDATION_mice, save_file, row.names=FALSE)
+
 TSR_ALL1_TEST_imp<- mice.mids(TSR_ALL1_TRAIN_imp, TSR_ALL1_TEST_1)
-TSR_ALL1_TEST_mice <- TSR_ALL1_TEST %>% select(icase_id, idcase_id) %>% cbind(complete(TSR_ALL1_TEST_imp, 5))
+TSR_ALL1_TEST_mice <- TSR_ALL1_TEST %>% select(icase_id, idcase_id, mrs_tx_1) %>% cbind(complete(TSR_ALL1_TEST_imp, 5))
 save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1_TEST_MICE5.csv")
 write.csv(TSR_ALL1_TEST_mice, save_file, row.names=FALSE)
