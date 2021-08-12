@@ -103,13 +103,6 @@ if __name__ == '__main__':
     G_y_validation = pd.read_csv(csv_path)
     G_y_validation = np.ravel(G_y_validation)
 
-    csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TEST.csv")
-    G_X_test = pd.read_csv(csv_path)
-
-    csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_TEST.csv")
-    G_y_test = pd.read_csv(csv_path)
-    G_y_test = np.ravel(G_y_test)
-
     csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TRAIN.csv")
     B_X_train = pd.read_csv(csv_path)
 
@@ -124,13 +117,6 @@ if __name__ == '__main__':
     B_y_validation = pd.read_csv(csv_path)
     B_y_validation = np.ravel(B_y_validation)
 
-    csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TEST.csv")
-    B_X_test = pd.read_csv(csv_path)
-
-    csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_TEST.csv")
-    B_y_test = pd.read_csv(csv_path)
-    B_y_test = np.ravel(B_y_test)
-
     ## Based models
     et_selected = ExtraTreesClassifier(random_state=19)
     xgbc_selected = XGBClassifier(booster="gbtree", random_state=19, use_label_encoder=False, eval_metric="auc",
@@ -138,13 +124,13 @@ if __name__ == '__main__':
 
     # GOOD when discharged
     ### Extra trees
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_BASED.pkl")
     G_ET_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_TUNED.pkl")
     G_ET_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_CALIBRATED.pkl")
     G_ET_CALIBRATED = joblib.load(pkl_path)
 
     G_validation_auroc_list, G_validation_auroc_tuned_list, G_validation_auroc_cc_list, G_ET_CALIBRATED_selected = algorithms(G_X_train,
@@ -155,7 +141,7 @@ if __name__ == '__main__':
                                                                                                                               G_ET_TUNED,
                                                                                                                               G_ET_CALIBRATED,
                                                                                                                               et_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_CALIBRATED_selected.pkl")
     joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
@@ -172,13 +158,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### XGBClassifier
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_BASED.pkl")
     G_XGBC_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_TUNED.pkl")
     G_XGBC_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_CALIBRATED.pkl")
     G_XGBC_CALIBRATED = joblib.load(pkl_path)
 
     G_validation_auroc_list, G_validation_auroc_tuned_list, G_validation_auroc_cc_list, G_XGBC_CALIBRATED_selected = algorithms(G_X_train,
@@ -189,7 +175,7 @@ if __name__ == '__main__':
                                                                                                                                 G_XGBC_TUNED,
                                                                                                                                 G_XGBC_CALIBRATED,
                                                                                                                                 xgbc_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_CALIBRATED_selected.pkl")
     joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
@@ -205,15 +191,45 @@ if __name__ == '__main__':
     # plt.savefig('PLOT/TSR_ALL1/TSR_ALL1_XGBC_G.png')
     plt.show()
 
+    ### Logistic Regression
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_BASED.pkl")
+    G_LR_BASED = joblib.load(pkl_path)
+
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_TUNED.pkl")
+    G_LR_TUNED = joblib.load(pkl_path)
+
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_CALIBRATED.pkl")
+    G_LR_CALIBRATED = joblib.load(pkl_path)
+
+    # BASED
+    y_validation_pred = G_LR_BASED.predict_proba(G_X_validation)
+    fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
+    validation_auroc = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc, 3))
+
+    # TUNED
+    print('--> Tuned Parameters Best Score: ', G_LR_TUNED.best_score_)
+    print('--> Best Parameters: \n', G_LR_TUNED.best_params_)
+    y_validation_pred = G_LR_TUNED.predict_proba(G_X_validation)
+    fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
+    validation_auroc_tuned = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+
+    # CALIBRATED
+    y_validation_pred = G_LR_CALIBRATED.predict_proba(G_X_validation)
+    fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
+    validation_auroc_cc = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc_cc, 3))
+
     # BAD when discharged
     ### Extra trees
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_BASED.pkl")
     B_ET_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_TUNED.pkl")
     B_ET_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_CALIBRATED.pkl")
     B_ET_CALIBRATED = joblib.load(pkl_path)
 
     B_validation_auroc_list, B_validation_auroc_tuned_list, B_validation_auroc_cc_list, B_ET_CALIBRATED_selected = algorithms(B_X_train,
@@ -224,7 +240,7 @@ if __name__ == '__main__':
                                                                                                                               B_ET_TUNED,
                                                                                                                               B_ET_CALIBRATED,
                                                                                                                               et_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_CALIBRATED_selected.pkl")
     joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
@@ -241,13 +257,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### XGBClassifier
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_BASED.pkl")
     B_XGBC_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_TUNED.pkl")
     B_XGBC_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_CALIBRATED.pkl")
     B_XGBC_CALIBRATED = joblib.load(pkl_path)
 
     B_validation_auroc_list, B_validation_auroc_tuned_list, B_validation_auroc_cc_list, B_XGBC_CALIBRATED_selected = algorithms(B_X_train,
@@ -258,7 +274,7 @@ if __name__ == '__main__':
                                                                                                                                 B_XGBC_TUNED,
                                                                                                                                 B_XGBC_CALIBRATED,
                                                                                                                                 xgbc_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_CALIBRATED_selected.pkl")
     joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
     x = "10", "20", "30", "310"
@@ -273,3 +289,33 @@ if __name__ == '__main__':
     plt.title('TSR_ALL1_XGBC_B', fontsize=15)
     # plt.savefig('PLOT/TSR_ALL1/TSR_ALL1_XGBC_B.png')
     plt.show()
+
+    ### Logistic Regression
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_BASED.pkl")
+    B_LR_BASED = joblib.load(pkl_path)
+
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_TUNED.pkl")
+    B_LR_TUNED = joblib.load(pkl_path)
+
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_CALIBRATED.pkl")
+    B_LR_CALIBRATED = joblib.load(pkl_path)
+
+    # BASED
+    y_validation_pred = B_LR_BASED.predict_proba(B_X_validation)
+    fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
+    validation_auroc = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc, 3))
+
+    # TUNED
+    print('--> Tuned Parameters Best Score: ', B_LR_TUNED.best_score_)
+    print('--> Best Parameters: \n', B_LR_TUNED.best_params_)
+    y_validation_pred = B_LR_TUNED.predict_proba(B_X_validation)
+    fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
+    validation_auroc_tuned = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+
+    # CALIBRATED
+    y_validation_pred = B_LR_CALIBRATED.predict_proba(B_X_validation)
+    fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
+    validation_auroc_cc = auc(fpr, tpr)
+    print('AUC of validating set:', round(validation_auroc_cc, 3))

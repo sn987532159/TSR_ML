@@ -354,13 +354,13 @@ if __name__ == '__main__':
     TSR_ALL1_AMPUTATED_DF = pd.merge(TSR_ALL1_df6, TSR_ALL1_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
     print(TSR_ALL1_AMPUTATED_DF.shape)
 
-    # sum(TSR_ALL1_AMPUTATED_DF["gender_tx"] == 1) / len(TSR_ALL1_AMPUTATED_DF["gender_tx"])  # male
-    # TSR_ALL1_AMPUTATED_DF["age"].mean(), TSR_ALL1_AMPUTATED_DF["age"].std()  # age
-    # TSR_ALL1_AMPUTATED_DF["discharged_mrs"].mean(), TSR_ALL1_AMPUTATED_DF["discharged_mrs"].std()  # Discharged mRS
-    # TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].mean(), TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].std() # 1-month follow-up mRS
-    # TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).std()
-    # TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_in": "nihs_11_in"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_in": "nihs_11_in"].sum(axis=1).std()
-    # TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_out": "nihs_11_out"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_out": "nihs_11_out"].sum(axis=1).std()
+    sum(TSR_ALL1_AMPUTATED_DF["gender_tx"] == 1) / len(TSR_ALL1_AMPUTATED_DF["gender_tx"])  # male
+    TSR_ALL1_AMPUTATED_DF["age"].mean(), TSR_ALL1_AMPUTATED_DF["age"].std()  # age
+    TSR_ALL1_AMPUTATED_DF["discharged_mrs"].mean(), TSR_ALL1_AMPUTATED_DF["discharged_mrs"].std()  # Discharged mRS
+    TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].mean(), TSR_ALL1_AMPUTATED_DF["mrs_tx_1"].std() # 1-month follow-up mRS
+    TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).std()
+    TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_in": "nihs_11_in"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_in": "nihs_11_in"].sum(axis=1).std()
+    TSR_ALL1_AMPUTATED_DF.loc[:, "nihs_1a_out": "nihs_11_out"].sum(axis=1).mean(), TSR_ALL1_AMPUTATED_DF.loc[:,"nihs_1a_out": "nihs_11_out"].sum(axis=1).std()
 
     TSR_ALL1_AMPUTATED_DF[continuous_n] = TSR_ALL1_AMPUTATED_DF[continuous_n].fillna(9999)
     TSR_ALL1_AMPUTATED_DF = TSR_ALL1_AMPUTATED_DF.dropna()
