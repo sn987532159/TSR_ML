@@ -33,7 +33,6 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
     print('AUC of validating set:', round(test_auroc_cc, 3))
 
     #### Selected Columns
-
     model_fi = calibrated.base_estimator._final_estimator.feature_importances_
     model_fi_df = pd.DataFrame(model_fi)
     model_fi_df.index = X_test.columns
@@ -42,11 +41,17 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
     model_fi_df.columns = (["Feature", "Value"])
     model_fi_df = model_fi_df.sort_values(["Value"], ascending=False)
 
+    ### sigma threshold
+    model_fi_df_noZERO = model_fi_df[~model_fi_df.Value.isin([0])]
+    model_fi_df_noZERO_mean = model_fi_df_noZERO.Value.mean()
+    model_fi_df_noZERO_std = model_fi_df_noZERO.Value.std()
+    sigma_n = len(model_fi_df_noZERO[model_fi_df_noZERO.Value > model_fi_df_noZERO_mean + model_fi_df_noZERO_std])
+
     test_auroc_list = []
     test_auroc_tuned_list = []
     test_auroc_cc_list = []
 
-    for i in 10, 20, 30:
+    for i in 10, 20, 30, sigma_n:
         model_fi_index = model_fi_df[0:i].index
 
         X_train_selected = X_train.iloc[:, model_fi_index]
@@ -124,13 +129,13 @@ if __name__ == '__main__':
 
     # GOOD when discharged
     ### Extra trees
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_BASED.pkl")
     G_ET_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_TUNED.pkl")
     G_ET_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_CALIBRATED.pkl")
     G_ET_CALIBRATED = joblib.load(pkl_path)
 
     G_test_auroc_list, G_test_auroc_tuned_list, G_test_auroc_cc_list, G_ET_CALIBRATED_selected = algorithms(G_X_train,
@@ -141,10 +146,10 @@ if __name__ == '__main__':
                                                                                                             G_ET_TUNED,
                                                                                                             G_ET_CALIBRATED,
                                                                                                             et_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_ET_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_ET_CALIBRATED_selected.pkl")
     #joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "310"
+    x = "10", "20", "30", "sigma", "310"
     plt.plot(x, G_test_auroc_list, label="based")
     plt.plot(x, G_test_auroc_tuned_list, label="tuned")
     plt.plot(x, G_test_auroc_cc_list, label="calibrated")
@@ -158,13 +163,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### XGBClassifier
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_BASED.pkl")
     G_XGBC_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_TUNED.pkl")
     G_XGBC_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_CALIBRATED.pkl")
     G_XGBC_CALIBRATED = joblib.load(pkl_path)
 
     G_test_auroc_list, G_test_auroc_tuned_list, G_test_auroc_cc_list, G_XGBC_CALIBRATED_selected = algorithms(G_X_train,
@@ -175,10 +180,10 @@ if __name__ == '__main__':
                                                                                                               G_XGBC_TUNED,
                                                                                                               G_XGBC_CALIBRATED,
                                                                                                               xgbc_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_XGBC_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_XGBC_CALIBRATED_selected.pkl")
     #joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "310"
+    x = "10", "20", "30", "sigma", "310"
     plt.plot(x, G_test_auroc_list, label="based")
     plt.plot(x, G_test_auroc_tuned_list, label="tuned")
     plt.plot(x, G_test_auroc_cc_list, label="calibrated")
@@ -192,13 +197,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### Logistic Regression
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_LR_BASED.pkl")
     G_LR_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_LR_TUNED.pkl")
     G_LR_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1G_LR_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1G_LR_CALIBRATED.pkl")
     G_LR_CALIBRATED = joblib.load(pkl_path)
 
     # BASED
@@ -223,13 +228,13 @@ if __name__ == '__main__':
 
     # BAD when discharged
     ### Extra trees
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_BASED.pkl")
     B_ET_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_TUNED.pkl")
     B_ET_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_CALIBRATED.pkl")
     B_ET_CALIBRATED = joblib.load(pkl_path)
 
     B_test_auroc_list, B_test_auroc_tuned_list, B_test_auroc_cc_list, B_ET_CALIBRATED_selected = algorithms(B_X_train,
@@ -240,10 +245,10 @@ if __name__ == '__main__':
                                                                                                             B_ET_TUNED,
                                                                                                             B_ET_CALIBRATED,
                                                                                                             et_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_ET_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_ET_CALIBRATED_selected.pkl")
     #joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "310"
+    x = "10", "20", "30", "sigma", "310"
     plt.plot(x, B_test_auroc_list, label="based")
     plt.plot(x, B_test_auroc_tuned_list, label="tuned")
     plt.plot(x, B_test_auroc_cc_list, label="calibrated")
@@ -257,13 +262,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### XGBClassifier
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_BASED.pkl")
     B_XGBC_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_TUNED.pkl")
     B_XGBC_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_CALIBRATED.pkl")
     B_XGBC_CALIBRATED = joblib.load(pkl_path)
 
     B_test_auroc_list, B_test_auroc_tuned_list, B_test_auroc_cc_list, B_XGBC_CALIBRATED_selected = algorithms(B_X_train,
@@ -274,10 +279,10 @@ if __name__ == '__main__':
                                                                                                               B_XGBC_TUNED,
                                                                                                               B_XGBC_CALIBRATED,
                                                                                                               xgbc_selected)
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_XGBC_CALIBRATED_selected.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_CALIBRATED_selected.pkl")
     #joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "310"
+    x = "10", "20", "30", "sigma", "310"
     plt.plot(x, B_test_auroc_list, label="based")
     plt.plot(x, B_test_auroc_tuned_list, label="tuned")
     plt.plot(x, B_test_auroc_cc_list, label="calibrated")
@@ -291,13 +296,13 @@ if __name__ == '__main__':
     plt.show()
 
     ### Logistic Regression
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_BASED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_LR_BASED.pkl")
     B_LR_BASED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_TUNED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_LR_TUNED.pkl")
     B_LR_TUNED = joblib.load(pkl_path)
 
-    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL1B_LR_CALIBRATED.pkl")
+    pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_LR_CALIBRATED.pkl")
     B_LR_CALIBRATED = joblib.load(pkl_path)
 
     # BASED
