@@ -51,6 +51,9 @@ def categorical_features(df, nom_f, ord_f, bl_f, b_i, ni_in, ni_out):
     df["mrs_tx_1"][(df["mrs_tx_1"] != 0) & (df["mrs_tx_1"] != 1) & (df["mrs_tx_1"] != 2) & (
             df["mrs_tx_1"] != 3) & (df["mrs_tx_1"] != 4) & (df["mrs_tx_1"] != 5) & (
                            df["mrs_tx_1"] != 6) & (df["mrs_tx_1"] != 9)] = np.nan
+    df["mrs_tx_3"][(df["mrs_tx_3"] != 0) & (df["mrs_tx_3"] != 1) & (df["mrs_tx_3"] != 2) & (
+            df["mrs_tx_3"] != 3) & (df["mrs_tx_3"] != 4) & (df["mrs_tx_3"] != 5) & (
+                           df["mrs_tx_3"] != 6) & (df["mrs_tx_3"] != 9)] = np.nan
     df["gcse_nm"][(df["gcse_nm"] != 1) & (df["gcse_nm"] != 2) & (df["gcse_nm"] != 3) & (
             df["gcse_nm"] != 4)] = np.nan
     df["gcsv_nm"][(df["gcsv_nm"] != 1) & (df["gcsv_nm"] != 2) & (df["gcsv_nm"] != 3) & (
