@@ -250,10 +250,10 @@ if __name__ == '__main__':
                           "nivtpa11_fl", "omad_fl", "dethoh_fl", "ecg_id", "mra_fl", "cta_fl", "dsa_fl", "cdr_id",
                           "cdl_id", "tccsr_id", "tccsl_id", "tccsba_id", "mcdr_id", "mcdl_id", "mcdba_id",
                           "mcdri_id", "mcdli_id", "vers_dt_1", "veihd_dt_1", "death_dt_3", "vers_dt_3", "veihd_dt_3",
-                          "det_id"]
+                          "det_id", "verscich_id_1", "veihd_id_1", "verscich_id_3", "rfur_dt_1", "rfur_dt_3",
+                          "veihd_id_3", "deathsk_id_3"]
 
-    date = ["rfur_dt_1", "rfur_dt_3", "oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt",
-            "nihsot_dt", "ct_dt", "mri_dt"]
+    date = ["oh_dt", "onset_dt", "ot_dt", "flook_dt", "fct_dt", "nihsin_dt", "nihsot_dt", "ct_dt", "mri_dt"]
 
     hour = ["onseth_nm", "ottih_nm", "flookh_nm", "fcth_nm", "nihsinh_nm", "nihsoth_nm", "cth_nm", "mrih_nm"]
 
@@ -324,14 +324,14 @@ if __name__ == '__main__':
 
     # save pre_processed dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_preprocessed.csv")
-    TSR_ALL3_df6.to_csv(csv_save, index=False)
+   #TSR_ALL3_df6.to_csv(csv_save, index=False)
 
     # delete error cases
     TSR_ALL3_score_df = delete_error_cases(TSR_ALL3_df6)
 
     # save error cases deleted dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_score.csv")
-    TSR_ALL3_score_df.to_csv(csv_save, index=False)
+    #TSR_ALL3_score_df.to_csv(csv_save, index=False)
 
     # mRS & BI * NIHSS outlier detection
     TSR_ALL3_score_df = TSR_ALL3_score_df.reset_index(drop=True)
@@ -350,26 +350,18 @@ if __name__ == '__main__':
 
     # save outlier cases deleted dataset
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_score_cleaned.csv")
-    TSR_ALL3_score_cleaned_df.to_csv(csv_save, index=False)
+    #TSR_ALL3_score_cleaned_df.to_csv(csv_save, index=False)
 
     # merge TSR_ALL3_score_cleaned_df to the original dataset
     TSR_ALL3_AMPUTATED_DF = pd.merge(TSR_ALL3_df6, TSR_ALL3_score_cleaned_df.iloc[:, 0:2], on=["icase_id", "idcase_id"])
     print(TSR_ALL3_AMPUTATED_DF.shape)
-
-    # sum(TSR_ALL3_AMPUTATED_DF["gender_tx"] == 1) / len(TSR_ALL3_AMPUTATED_DF["gender_tx"])  # male
-    # TSR_ALL3_AMPUTATED_DF["age"].mean(), TSR_ALL3_AMPUTATED_DF["age"].std()  # age
-    # TSR_ALL3_AMPUTATED_DF["discharged_mrs"].mean(), TSR_ALL3_AMPUTATED_DF["discharged_mrs"].std()  # Discharged mRS
-    # TSR_ALL3_AMPUTATED_DF["mrs_tx_1"].mean(), TSR_ALL3_AMPUTATED_DF["mrs_tx_1"].std() # 1-month follow-up mRS
-    # TSR_ALL3_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).mean(), TSR_ALL3_AMPUTATED_DF.loc[:, "feeding" : "bladder_control"].sum(axis=1).std()
-    # TSR_ALL3_AMPUTATED_DF.loc[:, "nihs_1a_in": "nihs_11_in"].sum(axis=1).mean(), TSR_ALL3_AMPUTATED_DF.loc[:,"nihs_1a_in": "nihs_11_in"].sum(axis=1).std()
-    # TSR_ALL3_AMPUTATED_DF.loc[:, "nihs_1a_out": "nihs_11_out"].sum(axis=1).mean(), TSR_ALL3_AMPUTATED_DF.loc[:,"nihs_1a_out": "nihs_11_out"].sum(axis=1).std()
 
     TSR_ALL3_AMPUTATED_DF[continuous_n] = TSR_ALL3_AMPUTATED_DF[continuous_n].fillna(9999)
     TSR_ALL3_AMPUTATED_DF = TSR_ALL3_AMPUTATED_DF.dropna()
     print(TSR_ALL3_AMPUTATED_DF.shape)
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_AMPUTATED.csv")
-    TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
+    #TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
 
     TSR_ALL3_AMPUTATED_DF["ih_dt"] = pd.to_datetime(TSR_ALL3_AMPUTATED_DF["ih_dt"], errors='coerce')
     TSR_ALL3_AMPUTATED_DF["ih_dt"][
@@ -380,11 +372,11 @@ if __name__ == '__main__':
     TSR_ALL3_VALIDATION = TSR_ALL3_AMPUTATED_DF[
         TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year.isin([2012, 2013])]
     TSR_ALL3_TEST = TSR_ALL3_AMPUTATED_DF[
-        ~TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013])]
+        TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year.isin([2014, 2015, 2016, 2017, 2018, 2019, 2020])]
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TRAIN.csv")
-    TSR_ALL3_TRAIN.to_csv(csv_save, index=False)
+    #TSR_ALL3_TRAIN.to_csv(csv_save, index=False)
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_VALIDATION.csv")
-    TSR_ALL3_VALIDATION.to_csv(csv_save, index=False)
+    #TSR_ALL3_VALIDATION.to_csv(csv_save, index=False)
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TEST.csv")
-    TSR_ALL3_TEST.to_csv(csv_save, index=False)
+    #TSR_ALL3_TEST.to_csv(csv_save, index=False)

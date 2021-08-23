@@ -1,7 +1,9 @@
 install.packages("mice")
+install.packages("miceadds")
 install.packages("VIM")
 install.packages("Gmisc")
 library(mice)
+library(miceadds)
 library(VIM)
 library(Gmisc)
 library(dplyr)
@@ -117,6 +119,7 @@ methods_TSR_ALL3 <- c(height_nm = "pmm", weight_nm = "pmm", opc_id = "polyreg", 
                       nihs_6br_out = "pmm", nihs_7_out = "pmm", nihs_8_out = "pmm", nihs_9_out = "pmm", nihs_10_out = "pmm", nihs_11_out = "pmm", gender_tx = "polyreg", age = "pmm", hospitalised_time = "pmm")
 
 TSR_ALL3_TRAIN_imp <- mice(TSR_ALL3_TRAIN_1, maxit =20, m = 5, method = methods_TSR_ALL3, print = TRUE, seed = 19)
+write.mice.imputation(mi.res=TSR_ALL3_TRAIN_imp, name="TSR_ALL3_TRAIN_IMPUTATION", mids2spss=F) # save mice_imp to local and move to the specific path
 TSR_ALL3_TRAIN_mice <- TSR_ALL3_TRAIN %>% select(icase_id, idcase_id, mrs_tx_1, mrs_tx_3) %>% cbind(complete(TSR_ALL3_TRAIN_imp, 5))
 save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TRAIN_MICE5.csv")
 write.csv(TSR_ALL3_TRAIN_mice, save_file, row.names=FALSE)
@@ -131,3 +134,7 @@ TSR_ALL3_TEST_mice <- TSR_ALL3_TEST %>% select(icase_id, idcase_id, mrs_tx_1, mr
 save_file <- pathJoin("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TEST_MICE5.csv")
 write.csv(TSR_ALL3_TEST_mice, save_file, row.names=FALSE)
 
+# import mice_imp for future usage if needed
+# load("../model/TSR_ALL3_TRAIN_IMPUTATION/TSR_ALL3_TRAIN_IMPUTATION.Rdata") # this will automatically create a data called mi.res
+# mice.mids(mi.res, TSR_ALL3_VALIDATION_1)
+# mice.mids(mi.res, TSR_ALL3_TEST_1)
