@@ -357,15 +357,14 @@ if __name__ == '__main__':
     print(TSR_ALL3_AMPUTATED_DF.shape)
 
     TSR_ALL3_AMPUTATED_DF[continuous_n] = TSR_ALL3_AMPUTATED_DF[continuous_n].fillna(9999)
+    TSR_ALL3_AMPUTATED_DF["ih_dt"] = pd.to_datetime(TSR_ALL3_AMPUTATED_DF["ih_dt"], errors='coerce')
+    TSR_ALL3_AMPUTATED_DF["ih_dt"][
+        (TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year < 2006) | (TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year > 2020)] = np.nan
     TSR_ALL3_AMPUTATED_DF = TSR_ALL3_AMPUTATED_DF.dropna()
     print(TSR_ALL3_AMPUTATED_DF.shape)
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_AMPUTATED.csv")
     #TSR_ALL3_AMPUTATED_DF.to_csv(csv_save, index=False)
-
-    TSR_ALL3_AMPUTATED_DF["ih_dt"] = pd.to_datetime(TSR_ALL3_AMPUTATED_DF["ih_dt"], errors='coerce')
-    TSR_ALL3_AMPUTATED_DF["ih_dt"][
-        (TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year < 2006) | (TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year > 2020)] = np.nan
 
     TSR_ALL3_TRAIN = TSR_ALL3_AMPUTATED_DF[
         TSR_ALL3_AMPUTATED_DF["ih_dt"].dt.year.isin([2006, 2007, 2008, 2009, 2010, 2011])]

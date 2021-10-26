@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import numpy as np
 import joblib
-from sklearn.metrics import auc, roc_curve
+from sklearn.metrics import auc, roc_curve, confusion_matrix, accuracy_score, precision_score, recall_score
 from sklearn.ensemble import ExtraTreesClassifier
 from xgboost import XGBClassifier
 from sklearn.calibration import CalibratedClassifierCV
@@ -15,7 +15,7 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
     y_test_pred = based.predict_proba(X_test)
     fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
     test_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc, 3))
+    print('AUC of test set:', round(test_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', tuned.best_score_)
@@ -24,13 +24,13 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
     y_test_pred = tuned.predict_proba(X_test)
     fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
     test_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_tuned, 3))
+    print('AUC of test set:', round(test_auroc_tuned, 3))
 
     # CALIBRATED
     y_test_pred = calibrated.predict_proba(X_test)
     fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
     test_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_cc, 3))
+    print('AUC of test set:', round(test_auroc_cc, 3))
 
     #### Selected Columns
     model_fi = calibrated.base_estimator._final_estimator.feature_importances_
@@ -46,6 +46,7 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
     model_fi_df_noZERO_mean = model_fi_df_noZERO.Value.mean()
     model_fi_df_noZERO_std = model_fi_df_noZERO.Value.std()
     sigma_n = len(model_fi_df_noZERO[model_fi_df_noZERO.Value > model_fi_df_noZERO_mean + model_fi_df_noZERO_std])
+    print(sigma_n)
 
     test_auroc_list = []
     test_auroc_tuned_list = []
@@ -64,7 +65,7 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
         fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
         test_auroc_selected = auc(fpr, tpr)
         test_auroc_list.append(test_auroc_selected)
-        print('AUC of validating set:', round(test_auroc_selected, 3))
+        print('AUC of test set:', round(test_auroc_selected, 3))
 
         # tune et_selected
         rscv_selected = tuned.best_estimator_
@@ -74,7 +75,7 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
         fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
         test_auroc_selected_tuned = auc(fpr, tpr)
         test_auroc_tuned_list.append(test_auroc_selected_tuned)
-        print('AUC of validating set:', round(test_auroc_selected_tuned, 3))
+        print('AUC of test set:', round(test_auroc_selected_tuned, 3))
 
         # calibrate et_selected
         cccv_selected = CalibratedClassifierCV(base_estimator=TUNED_selected, cv=5)
@@ -84,7 +85,7 @@ def algorithms(X_train, X_test, y_train, y_test, based, tuned, calibrated, model
         fpr, tpr, thresholds = roc_curve(y_test, y_test_pred[:, 1])
         test_auroc_selected_cc = auc(fpr, tpr)
         test_auroc_cc_list.append(test_auroc_selected_cc)
-        print('AUC of validating set:', round(test_auroc_selected_cc, 3))
+        print('AUC of test set:', round(test_auroc_selected_cc, 3))
 
     test_auroc_list.append(test_auroc)
     test_auroc_tuned_list.append(test_auroc_tuned)
@@ -210,7 +211,7 @@ if __name__ == '__main__':
     y_test_pred = G_LR_BASED.predict_proba(G_X_test)
     fpr, tpr, thresholds = roc_curve(G_y_test, y_test_pred[:, 1])
     test_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc, 3))
+    print('AUC of test set:', round(test_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', G_LR_TUNED.best_score_)
@@ -218,13 +219,13 @@ if __name__ == '__main__':
     y_test_pred = G_LR_TUNED.predict_proba(G_X_test)
     fpr, tpr, thresholds = roc_curve(G_y_test, y_test_pred[:, 1])
     test_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_tuned, 3))
+    print('AUC of test set:', round(test_auroc_tuned, 3))
 
     # CALIBRATED
     y_test_pred = G_LR_CALIBRATED.predict_proba(G_X_test)
     fpr, tpr, thresholds = roc_curve(G_y_test, y_test_pred[:, 1])
     test_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_cc, 3))
+    print('AUC of test set:', round(test_auroc_cc, 3))
 
     # BAD when discharged
     ### Extra trees
@@ -309,7 +310,7 @@ if __name__ == '__main__':
     y_test_pred = B_LR_BASED.predict_proba(B_X_test)
     fpr, tpr, thresholds = roc_curve(B_y_test, y_test_pred[:, 1])
     test_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc, 3))
+    print('AUC of test set:', round(test_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', B_LR_TUNED.best_score_)
@@ -317,10 +318,10 @@ if __name__ == '__main__':
     y_test_pred = B_LR_TUNED.predict_proba(B_X_test)
     fpr, tpr, thresholds = roc_curve(B_y_test, y_test_pred[:, 1])
     test_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_tuned, 3))
+    print('AUC of test set:', round(test_auroc_tuned, 3))
 
     # CALIBRATED
     y_test_pred = B_LR_CALIBRATED.predict_proba(B_X_test)
     fpr, tpr, thresholds = roc_curve(B_y_test, y_test_pred[:, 1])
     test_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(test_auroc_cc, 3))
+    print('AUC of test set:', round(test_auroc_cc, 3))

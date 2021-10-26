@@ -24,18 +24,18 @@ def mRS_records_deletion(df):
 
 def special_cases_deletion(df):
     df = df.reset_index(drop=True)
-    other_stroke = df[(df["icd_id"] != 1) & (df["icd_id"] != 2) & (df["icd_id"] != 3) & (df["icd_id"] != 4)].index
-    df = df.drop(df.index[other_stroke])
-    print(df.shape)
-
-    df = df.reset_index(drop=True)
     smaller_than18 = df[(df["age"] >= 0) & ((df["age"] < 18))].index
     df = df.drop(df.index[smaller_than18])
     print(df.shape)
 
-    print(df[(df["icd_id"] == 1) | (df["icd_id"] == 2)].shape)
-    print(df[(df["icd_id"] == 3) | (df["icd_id"] == 4)].shape)
-    return df
+    df = df.reset_index(drop=True)
+    ischemic = df[df["icd_id"].isin([1,2])]
+    print(ischemic.shape)
+
+    df = df.reset_index(drop=True)
+    other = df[~df["icd_id"].isin([1,2])]
+    print(other.shape)
+    return ischemic
 
 
 if __name__ == '__main__':
@@ -47,4 +47,4 @@ if __name__ == '__main__':
     tsr_all_df3 = special_cases_deletion(tsr_all_df2)
 
     csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1.csv")
-    tsr_all_df3.to_csv(csv_save, index=False)
+    #tsr_all_df3.to_csv(csv_save, index=False)
