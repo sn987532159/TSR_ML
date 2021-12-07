@@ -15,7 +15,7 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
     y_validation_pred = based.predict_proba(X_validation)
     fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
     validation_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc, 3))
+    print('AUC of validation set:', round(validation_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', tuned.best_score_)
@@ -24,13 +24,13 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
     y_validation_pred = tuned.predict_proba(X_validation)
     fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
     validation_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+    print('AUC of validation set:', round(validation_auroc_tuned, 3))
 
     # CALIBRATED
     y_validation_pred = calibrated.predict_proba(X_validation)
     fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
     validation_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_cc, 3))
+    print('AUC of validation set:', round(validation_auroc_cc, 3))
 
     #### Selected Columns
     model_fi = calibrated.base_estimator._final_estimator.feature_importances_
@@ -46,12 +46,13 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
     model_fi_df_noZERO_mean = model_fi_df_noZERO.Value.mean()
     model_fi_df_noZERO_std = model_fi_df_noZERO.Value.std()
     sigma_n = len(model_fi_df_noZERO[model_fi_df_noZERO.Value > model_fi_df_noZERO_mean + model_fi_df_noZERO_std])
+    print(sigma_n)
 
     validation_auroc_list = []
     validation_auroc_tuned_list = []
     validation_auroc_cc_list = []
 
-    for i in 10, 20, 30, sigma_n:
+    for i in sigma_n, 10, 20, 30:
         model_fi_index = model_fi_df[0:i].index
 
         X_train_selected = X_train.iloc[:, model_fi_index]
@@ -64,7 +65,7 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
         fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
         validation_auroc_selected = auc(fpr, tpr)
         validation_auroc_list.append(validation_auroc_selected)
-        print('AUC of validating set:', round(validation_auroc_selected, 3))
+        print('AUC of validation set:', round(validation_auroc_selected, 3))
 
         # tune et_selected
         rscv_selected = tuned.best_estimator_
@@ -74,7 +75,7 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
         fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
         validation_auroc_selected_tuned = auc(fpr, tpr)
         validation_auroc_tuned_list.append(validation_auroc_selected_tuned)
-        print('AUC of validating set:', round(validation_auroc_selected_tuned, 3))
+        print('AUC of validation set:', round(validation_auroc_selected_tuned, 3))
 
         # calibrate et_selected
         cccv_selected = CalibratedClassifierCV(base_estimator=TUNED_selected, cv=5)
@@ -84,7 +85,7 @@ def algorithms(X_train, X_validation, y_train, y_validation, based, tuned, calib
         fpr, tpr, thresholds = roc_curve(y_validation, y_validation_pred[:, 1])
         validation_auroc_selected_cc = auc(fpr, tpr)
         validation_auroc_cc_list.append(validation_auroc_selected_cc)
-        print('AUC of validating set:', round(validation_auroc_selected_cc, 3))
+        print('AUC of validation set:', round(validation_auroc_selected_cc, 3))
 
     validation_auroc_list.append(validation_auroc)
     validation_auroc_tuned_list.append(validation_auroc_tuned)
@@ -150,7 +151,7 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL3G_ET_CALIBRATED_selected.pkl")
     joblib.dump(G_ET_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "sigma", "310"
+    x = "sigma", "10", "20", "30", "310"
     plt.plot(x, G_validation_auroc_list, label="based")
     plt.plot(x, G_validation_auroc_tuned_list, label="tuned")
     plt.plot(x, G_validation_auroc_cc_list, label="calibrated")
@@ -185,7 +186,7 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL3G_XGBC_CALIBRATED_selected.pkl")
     joblib.dump(G_XGBC_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "sigma", "310"
+    x = "sigma", "10", "20", "30", "310"
     plt.plot(x, G_validation_auroc_list, label="based")
     plt.plot(x, G_validation_auroc_tuned_list, label="tuned")
     plt.plot(x, G_validation_auroc_cc_list, label="calibrated")
@@ -212,7 +213,7 @@ if __name__ == '__main__':
     y_validation_pred = G_LR_BASED.predict_proba(G_X_validation)
     fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
     validation_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc, 3))
+    print('AUC of validation set:', round(validation_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', G_LR_TUNED.best_score_)
@@ -220,13 +221,13 @@ if __name__ == '__main__':
     y_validation_pred = G_LR_TUNED.predict_proba(G_X_validation)
     fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
     validation_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+    print('AUC of validation set:', round(validation_auroc_tuned, 3))
 
     # CALIBRATED
     y_validation_pred = G_LR_CALIBRATED.predict_proba(G_X_validation)
     fpr, tpr, thresholds = roc_curve(G_y_validation, y_validation_pred[:, 1])
     validation_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_cc, 3))
+    print('AUC of validation set:', round(validation_auroc_cc, 3))
 
     # BAD when Discharge
     ### Extra trees
@@ -250,7 +251,7 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL3B_ET_CALIBRATED_selected.pkl")
     joblib.dump(B_ET_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "sigma", "310"
+    x = "sigma", "10", "20", "30", "310"
     plt.plot(x, B_validation_auroc_list, label="based")
     plt.plot(x, B_validation_auroc_tuned_list, label="tuned")
     plt.plot(x, B_validation_auroc_cc_list, label="calibrated")
@@ -284,7 +285,7 @@ if __name__ == '__main__':
     pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL3B_XGBC_CALIBRATED_selected.pkl")
     joblib.dump(B_XGBC_CALIBRATED_selected, pkl_path)
 
-    x = "10", "20", "30", "sigma", "310"
+    x = "sigma", "10", "20", "30", "310"
     plt.plot(x, B_validation_auroc_list, label="based")
     plt.plot(x, B_validation_auroc_tuned_list, label="tuned")
     plt.plot(x, B_validation_auroc_cc_list, label="calibrated")
@@ -311,7 +312,7 @@ if __name__ == '__main__':
     y_validation_pred = B_LR_BASED.predict_proba(B_X_validation)
     fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
     validation_auroc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc, 3))
+    print('AUC of validation set:', round(validation_auroc, 3))
 
     # TUNED
     print('--> Tuned Parameters Best Score: ', B_LR_TUNED.best_score_)
@@ -319,10 +320,10 @@ if __name__ == '__main__':
     y_validation_pred = B_LR_TUNED.predict_proba(B_X_validation)
     fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
     validation_auroc_tuned = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_tuned, 3))
+    print('AUC of validation set:', round(validation_auroc_tuned, 3))
 
     # CALIBRATED
     y_validation_pred = B_LR_CALIBRATED.predict_proba(B_X_validation)
     fpr, tpr, thresholds = roc_curve(B_y_validation, y_validation_pred[:, 1])
     validation_auroc_cc = auc(fpr, tpr)
-    print('AUC of validating set:', round(validation_auroc_cc, 3))
+    print('AUC of validation set:', round(validation_auroc_cc, 3))

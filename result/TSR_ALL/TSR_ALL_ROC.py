@@ -33,7 +33,7 @@ def algorithms(X_train, X_test, y_train, y_test, tuned, calibrated):
     fpr_list_cc_list = []
     tpr_list_cc_list = []
 
-    for i in sigma_n, 10, 20, 30:
+    for i in sigma_n, 20:
         model_fi_index = model_fi_df[0:i].index
 
         X_train_selected = X_train.iloc[:, model_fi_index]
@@ -188,11 +188,9 @@ fpr_B31, tpr_B31, thresholds = roc_curve(B31_y_test, y_test_pred[:, 1])
 #plot roc curve
 fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(15, 15))
 ax[0, 0].plot(G1_fpr_list_cc_list[0], G1_tpr_list_cc_list[0], lw=1, label='XGBC-threshold_min* (AUROC = %0.3f)' % 0.678)
-ax[0, 0].plot(G1_fpr_list_cc_list[1], G1_tpr_list_cc_list[1], lw=1, label='XGBC-10 (AUROC = %0.3f)' % 0.665)
-ax[0, 0].plot(G1_fpr_list_cc_list[2], G1_tpr_list_cc_list[2], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.713)
-ax[0, 0].plot(G1_fpr_list_cc_list[3], G1_tpr_list_cc_list[3], lw=1, label='XGBC-30 (AUROC = %0.3f)' % 0.719)
-ax[0, 0].plot(G1_fpr_list_cc_list[4], G1_tpr_list_cc_list[4], lw=1, label='XGBC-ALL* (AUROC = %0.3f)' % 0.727)
-ax[0, 0].plot(fpr_G1, tpr_G1, lw=1, label='LR-ALL* (AUROC = %0.3f)' % 0.708)
+ax[0, 0].plot(G1_fpr_list_cc_list[1], G1_tpr_list_cc_list[1], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.713)
+ax[0, 0].plot(G1_fpr_list_cc_list[2], G1_tpr_list_cc_list[2], lw=1, label='XGBC-all* (AUROC = %0.3f)' % 0.727)
+ax[0, 0].plot(fpr_G1, tpr_G1, lw=1, label='LR-all* (AUROC = %0.3f)' % 0.708)
 ax[0, 0].plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
 ax[0, 0].axis(xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.05)
 ax[0, 0].set_xlabel('False Positive Rate')
@@ -201,11 +199,9 @@ ax[0, 0].set_title('ROC Curve of 1-month GOAD')
 ax[0, 0].legend(loc="lower right")
 
 ax[0, 1].plot(B1_fpr_list_cc_list[0], B1_tpr_list_cc_list[0], lw=1, label='XGBC-threshold_min* (AUROC = %0.3f)' % 0.816)
-ax[0, 1].plot(B1_fpr_list_cc_list[1], B1_tpr_list_cc_list[1], lw=1, label='XGBC-10 (AUROC = %0.3f)' % 0.822)
-ax[0, 1].plot(B1_fpr_list_cc_list[2], B1_tpr_list_cc_list[2], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.830)
-ax[0, 1].plot(B1_fpr_list_cc_list[3], B1_tpr_list_cc_list[3], lw=1, label='XGBC-30 (AUROC = %0.3f)' % 0.836)
-ax[0, 1].plot(B1_fpr_list_cc_list[4], B1_tpr_list_cc_list[4], lw=1, label='XGBC-ALL* (AUROC = %0.3f)' % 0.841)
-ax[0, 1].plot(fpr_B1, tpr_B1, lw=1, label='LR-ALL* (AUROC = %0.3f)' % 0.829)
+ax[0, 1].plot(B1_fpr_list_cc_list[1], B1_tpr_list_cc_list[1], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.830)
+ax[0, 1].plot(B1_fpr_list_cc_list[2], B1_tpr_list_cc_list[2], lw=1, label='XGBC-all* (AUROC = %0.3f)' % 0.841)
+ax[0, 1].plot(fpr_B1, tpr_B1, lw=1, label='LR-all* (AUROC = %0.3f)' % 0.829)
 ax[0, 1].plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
 ax[0, 1].axis(xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.05)
 ax[0, 1].set_xlabel('False Positive Rate')
@@ -214,11 +210,9 @@ ax[0, 1].set_title('ROC Curve of 1-month POAD')
 ax[0, 1].legend(loc="lower right")
 
 ax[1, 0].plot(G31_fpr_list_cc_list[0], G31_tpr_list_cc_list[0], lw=1, label='XGBC-threshold_min* (AUROC = %0.3f)' % 0.815)
-ax[1, 0].plot(G31_fpr_list_cc_list[1], G31_tpr_list_cc_list[1], lw=1, label='XGBC-10 (AUROC = %0.3f)' % 0.817)
-ax[1, 0].plot(G31_fpr_list_cc_list[2], G31_tpr_list_cc_list[2], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.853)
-ax[1, 0].plot(G31_fpr_list_cc_list[3], G31_tpr_list_cc_list[3], lw=1, label='XGBC-30 (AUROC = %0.3f)' % 0.859)
-ax[1, 0].plot(G31_fpr_list_cc_list[4], G31_tpr_list_cc_list[4], lw=1, label='XGBC-ALL* (AUROC = %0.3f)' % 0.857)
-ax[1, 0].plot(fpr_G31, tpr_G31, lw=1, label='LR-ALL* (AUROC = %0.3f)' % 0.825)
+ax[1, 0].plot(G31_fpr_list_cc_list[1], G31_tpr_list_cc_list[1], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.853)
+ax[1, 0].plot(G31_fpr_list_cc_list[2], G31_tpr_list_cc_list[2], lw=1, label='XGBC-all* (AUROC = %0.3f)' % 0.857)
+ax[1, 0].plot(fpr_G31, tpr_G31, lw=1, label='LR-all* (AUROC = %0.3f)' % 0.825)
 ax[1, 0].plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
 ax[1, 0].axis(xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.05)
 ax[1, 0].set_xlabel('False Positive Rate')
@@ -227,11 +221,9 @@ ax[1, 0].set_title('ROC Curve of 3-month GOAD')
 ax[1, 0].legend(loc="lower right")
 
 ax[1, 1].plot(B31_fpr_list_cc_list[0], B31_tpr_list_cc_list[0], lw=1, label='XGBC-threshold_min* (AUROC = %0.3f)' % 0.919)
-ax[1, 1].plot(B31_fpr_list_cc_list[1], B31_tpr_list_cc_list[1], lw=1, label='XGBC-10 (AUROC = %0.3f)' % 0.923)
-ax[1, 1].plot(B31_fpr_list_cc_list[2], B31_tpr_list_cc_list[2], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.929)
-ax[1, 1].plot(B31_fpr_list_cc_list[3], B31_tpr_list_cc_list[3], lw=1, label='XGBC-30 (AUROC = %0.3f)' % 0.928)
-ax[1, 1].plot(B31_fpr_list_cc_list[4], B31_tpr_list_cc_list[4], lw=1, label='XGBC-ALL* (AUROC = %0.3f)' % 0.929)
-ax[1, 1].plot(fpr_B31, tpr_B31, lw=1, label='LR-ALL* (AUROC = %0.3f)' % 0.918)
+ax[1, 1].plot(B31_fpr_list_cc_list[1], B31_tpr_list_cc_list[1], lw=1, label='XGBC-20 (AUROC = %0.3f)' % 0.929)
+ax[1, 1].plot(B31_fpr_list_cc_list[2], B31_tpr_list_cc_list[2], lw=1, label='XGBC-all* (AUROC = %0.3f)' % 0.929)
+ax[1, 1].plot(fpr_B31, tpr_B31, lw=1, label='LR-all* (AUROC = %0.3f)' % 0.918)
 ax[1, 1].plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--')
 ax[1, 1].axis(xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.05)
 ax[1, 1].set_xlabel('False Positive Rate')
