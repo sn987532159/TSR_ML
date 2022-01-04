@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import numpy as np
 import joblib
-from sklearn.metrics import roc_curve, confusion_matrix, accuracy_score, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import roc_curve, confusion_matrix, accuracy_score, precision_score, recall_score, roc_auc_score, f1_score, classification_report
 from sklearn.calibration import CalibratedClassifierCV
 
 def algorithms(X_train, X_test, y_train, y_test, tuned, calibrated):
@@ -19,10 +19,19 @@ def algorithms(X_train, X_test, y_train, y_test, tuned, calibrated):
     number = auc_list.index(max(auc_list))
     threshold_number = thresholds[number]
     print('confusion_matrix of test set:', confusion_matrix(y_test, y_test_pred[:, 1] > threshold_number))
-    print('roc_auc_score of test set:', round(roc_auc_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-    print('accuracy_score of test set:', round(accuracy_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-    print('precision_score of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-    print('recall_score of test set:', round(recall_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+    print('auc of test set:', round(roc_auc_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+    print('accuracy of test set:', round(accuracy_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+    print('specificity of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+    print('sensitivity of test set:', round(recall_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+    print('PPV of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number, average='micro'), 3))
+    print('f1_score of test set:', round(f1_score(y_test, y_test_pred[:, 1] > threshold_number, average='macro'), 3))
+    print(classification_report(y_test, y_test_pred[:, 1] > threshold_number, labels=[0, 1], target_names=["remained", "changed"], digits=3))
+    tn, fp, fn, tp = confusion_matrix(y_test, y_test_pred[:, 1] > threshold_number).ravel()
+    prev = (tp+fn)/(tp+fp+fn+tn)
+    sens = recall_score(y_test, y_test_pred[:, 1] > threshold_number)
+    spec = precision_score(y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+    print('prevalance of test set:', round(prev,3))
+    print('PPV of test set:', round(sens*prev/(sens*prev+(1-spec)*(1-prev)),3))
 
     #### Selected Columns
     model_fi = calibrated.base_estimator._final_estimator.feature_importances_
@@ -64,10 +73,19 @@ def algorithms(X_train, X_test, y_train, y_test, tuned, calibrated):
         number = auc_list.index(max(auc_list))
         threshold_number = thresholds[number]
         print('confusion_matrix of test set:', confusion_matrix(y_test, y_test_pred[:, 1] > threshold_number))
-        print('roc_auc_score of test set:', round(roc_auc_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-        print('accuracy_score of test set:', round(accuracy_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-        print('precision_score of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
-        print('recall_score of test set:', round(recall_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+        print('auc of test set:', round(roc_auc_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+        print('accuracy of test set:', round(accuracy_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+        print('specificity of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+        print('sensitivity of test set:', round(recall_score(y_test, y_test_pred[:, 1] > threshold_number), 3))
+        print('PPV of test set:', round(precision_score(y_test, y_test_pred[:, 1] > threshold_number, average='micro'), 3))
+        print('f1_score of test set:',round(f1_score(y_test, y_test_pred[:, 1] > threshold_number, average='macro'), 3))
+        print(classification_report(y_test, y_test_pred[:, 1] > threshold_number, labels=[0, 1],target_names=["remained", "changed"], digits=3))
+        tn, fp, fn, tp = confusion_matrix(y_test, y_test_pred[:, 1] > threshold_number).ravel()
+        prev = (tp + fn) / (tp + fp + fn + tn)
+        sens = recall_score(y_test, y_test_pred[:, 1] > threshold_number)
+        spec = precision_score(y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+        print('prevalance of test set:', round(prev, 3))
+        print('PPV of test set:', round(sens * prev / (sens * prev + (1 - spec) * (1 - prev)), 3))
 
     #return fpr_list_cc_list, tpr_list_cc_list
 
@@ -153,10 +171,18 @@ for i in thresholds:
 number = auc_list.index(max(auc_list))
 threshold_number = thresholds[number]
 print('confusion_matrix of test set:', confusion_matrix(G1_y_test, y_test_pred[:, 1] > threshold_number))
-print('roc_auc_score of test set:', round(roc_auc_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('accuracy_score of test set:', round(accuracy_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('precision_score of test set:', round(precision_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('recall_score of test set:', round(recall_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('auc of test set:', round(roc_auc_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('accuracy of test set:', round(accuracy_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('specificity of test set:', round(precision_score(G1_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+print('sensitivity of test set:', round(recall_score(G1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('PPV of test set:', round(precision_score(G1_y_test, y_test_pred[:, 1] > threshold_number, average='weighted'), 3))
+print('f1_score of test set:', round(f1_score(G1_y_test, y_test_pred[:, 1] > threshold_number, average='weighted'), 3))
+tn, fp, fn, tp = confusion_matrix(G1_y_test, y_test_pred[:, 1] > threshold_number).ravel()
+prev = (tp+fn)/(tp+fp+fn+tn)
+sens = recall_score(G1_y_test, y_test_pred[:, 1] > threshold_number)
+spec = precision_score(G1_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+print('prevalance of test set:', round(prev,3))
+print('PPV of test set:', round(sens*prev/(sens*prev+(1-spec)*(1-prev)),3))
 
 #B1
 pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE5", "TSR_ALL1B_XGBC_TUNED.pkl")
@@ -183,10 +209,17 @@ for i in thresholds:
 number = auc_list.index(max(auc_list))
 threshold_number = thresholds[number]
 print('confusion_matrix of test set:', confusion_matrix(B1_y_test, y_test_pred[:, 1] > threshold_number))
-print('roc_auc_score of test set:', round(roc_auc_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('accuracy_score of test set:', round(accuracy_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('precision_score of test set:', round(precision_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('recall_score of test set:', round(recall_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('auc of test set:', round(roc_auc_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('accuracy of test set:', round(accuracy_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('specificity of test set:', round(precision_score(B1_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+print('sensitivity of test set:', round(recall_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('PPV of test set:', round(precision_score(B1_y_test, y_test_pred[:, 1] > threshold_number), 3))
+tn, fp, fn, tp = confusion_matrix(B1_y_test, y_test_pred[:, 1] > threshold_number).ravel()
+prev = (tp+fn)/(tp+fp+fn+tn)
+sens = recall_score(B1_y_test, y_test_pred[:, 1] > threshold_number)
+spec = precision_score(B1_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+print('prevalance of test set:', round(prev,3))
+print('PPV of test set:', round(sens*prev/(sens*prev+(1-spec)*(1-prev)),3))
 
 #G31
 pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE4", "TSR_ALL31G_XGBC_TUNED.pkl")
@@ -213,10 +246,17 @@ for i in thresholds:
 number = auc_list.index(max(auc_list))
 threshold_number = thresholds[number]
 print('confusion_matrix of test set:', confusion_matrix(G31_y_test, y_test_pred[:, 1] > threshold_number))
-print('roc_auc_score of test set:', round(roc_auc_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('accuracy_score of test set:', round(accuracy_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('precision_score of test set:', round(precision_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('recall_score of test set:', round(recall_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('auc of test set:', round(roc_auc_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('accuracy of test set:', round(accuracy_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('specificity of test set:', round(precision_score(G31_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+print('sensitivity of test set:', round(recall_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('PPV of test set:', round(precision_score(G31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+tn, fp, fn, tp = confusion_matrix(G31_y_test, y_test_pred[:, 1] > threshold_number).ravel()
+prev = (tp+fn)/(tp+fp+fn+tn)
+sens = recall_score(G31_y_test, y_test_pred[:, 1] > threshold_number)
+spec = precision_score(G31_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+print('prevalance of test set:', round(prev,3))
+print('PPV of test set:', round(sens*prev/(sens*prev+(1-spec)*(1-prev)),3))
 
 #B31
 pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL31B_XGBC_TUNED.pkl")
@@ -243,7 +283,14 @@ for i in thresholds:
 number = auc_list.index(max(auc_list))
 threshold_number = thresholds[number]
 print('confusion_matrix of test set:', confusion_matrix(B31_y_test, y_test_pred[:, 1] > threshold_number))
-print('roc_auc_score of test set:', round(roc_auc_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('accuracy_score of test set:', round(accuracy_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('precision_score of test set:', round(precision_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
-print('recall_score of test set:', round(recall_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('auc of test set:', round(roc_auc_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('accuracy of test set:', round(accuracy_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('specificity of test set:', round(precision_score(B31_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0), 3))
+print('sensitivity of test set:', round(recall_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+print('PPV of test set:', round(precision_score(B31_y_test, y_test_pred[:, 1] > threshold_number), 3))
+tn, fp, fn, tp = confusion_matrix(B31_y_test, y_test_pred[:, 1] > threshold_number).ravel()
+prev = (tp+fn)/(tp+fp+fn+tn)
+sens = recall_score(B31_y_test, y_test_pred[:, 1] > threshold_number)
+spec = precision_score(B31_y_test, y_test_pred[:, 1] > threshold_number, pos_label=0)
+print('prevalance of test set:', round(prev,3))
+print('PPV of test set:', round(sens*prev/(sens*prev+(1-spec)*(1-prev)),3))
