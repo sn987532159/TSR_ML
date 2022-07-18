@@ -1,3 +1,4 @@
+# import
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -7,26 +8,26 @@ import numpy as np
 
 os.chdir('/data_cleansing')
 
-font_path = os.path.join("..", "kaiu.ttf")
+# font path
+font_path = os.path.join("../..", "kaiu.ttf")
 myfont = FontProperties(fname=font_path, size=14)
 sns.set(font=myfont.get_name())
-
 plt.rcParams['figure.figsize'] = (10, 5)
-plt.rc('axes', unicode_minus=False)
 
-csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_EHR", "TSR_12.csv")
-tsr_12 = pd.read_csv(csv_path, low_memory=False, encoding='unicode_escape')
-tsr_12.head()
-
-tsr_12.describe()
-
+# import dataset
+csv_path = os.path.join("../..", "data", "LINKED_DATA", "TSR_EHR", "TSR_1.csv")
+tsr_1 = pd.read_csv(csv_path, low_memory=False, encoding='unicode_escape')
+tsr_1.head()
+tsr_1.describe()
+ 
+# start cleaning feature
 # icase_id
 # idcase_id
 # fstatus_id
 
 # 追蹤日期_1
 
-rfur_dt_1 = tsr_12.loc[:, "rfur_dt_1"]
+rfur_dt_1 = tsr_1.loc[:, "rfur_dt_1"]
 rfur_dt_1 = pd.to_datetime(rfur_dt_1)
 # print(rfur_dt_1)
 # print(rfur_dt_1.value_counts() / len(rfur_dt_1))
@@ -41,7 +42,7 @@ plt.show()
 
 # 目前所在地_1
 
-location_id_1 = tsr_12.loc[:, "location_id_1"]
+location_id_1 = tsr_1.loc[:, "location_id_1"]
 # print(location_id_1)
 print(location_id_1.value_counts() / len(location_id_1))
 # print(location_id_1.describe())
@@ -55,7 +56,7 @@ plt.show()
 
 # 轉至醫院_1
 
-torg_id_1 = tsr_12.loc[:, "torg_id_1"]
+torg_id_1 = tsr_1.loc[:, "torg_id_1"]
 # print(torg_id_1)
 print(torg_id_1.value_counts() / len(torg_id_1))
 # print(torg_id_1.describe())
@@ -68,7 +69,7 @@ plt.show()
 
 # 相關醫療紀錄_1
 
-flu_id_1 = tsr_12.loc[:, "flu_id_1"]
+flu_id_1 = tsr_1.loc[:, "flu_id_1"]
 # print(flu_id_1)
 print(flu_id_1.value_counts() / len(flu_id_1))
 # print(flu_id_1.describe())
@@ -82,7 +83,7 @@ plt.show()
 
 # 門診醫院_1
 
-fluorg_id_1 = tsr_12.loc[:, "fluorg_id_1"]
+fluorg_id_1 = tsr_1.loc[:, "fluorg_id_1"]
 # print(fluorg_id_1)
 print(fluorg_id_1.value_counts() / len(fluorg_id_1))
 # print(fluorg_id_1.describe())
@@ -102,7 +103,7 @@ plt.show()
 
 # 相關醫療紀錄2_1
 
-ve_id_1 = tsr_12.loc[:, 've_id_1']
+ve_id_1 = tsr_1.loc[:, 've_id_1']
 ve_id_1[(ve_id_1 == str(0)) | (ve_id_1 == 0)] = "N"
 
 # print(ve_id_1)
@@ -117,7 +118,7 @@ plt.show()
 
 # 再中風_1
 
-vers_fl_1 = tsr_12.loc[:, 'vers_fl_1']
+vers_fl_1 = tsr_1.loc[:, 'vers_fl_1']
 # print(vers_fl_1)
 print(vers_fl_1.value_counts() / len(vers_fl_1))
 # print(vers_fl_1.describe())
@@ -130,7 +131,7 @@ plt.show()
 
 # 再中風 (CI / CH)_1
 
-verscich_id_1 = tsr_12.loc[:, 'verscich_id_1']
+verscich_id_1 = tsr_1.loc[:, 'verscich_id_1']
 verscich_id_1[verscich_id_1 == str(1)] = 1
 verscich_id_1[verscich_id_1 == str(2)] = 2
 verscich_id_1[(verscich_id_1 != 1) & (verscich_id_1 != 2)] = np.nan
@@ -138,8 +139,8 @@ verscich_id_1[(verscich_id_1 != 1) & (verscich_id_1 != 2)] = np.nan
 print(verscich_id_1.value_counts() / len(verscich_id_1))
 # print(verscich_id_1.describe())
 
-# verscich_id_1_labels = ["CI","CH"]
-sns.countplot(verscich_id_1)  # .set_xticklabels(verscich_id_1_labels)
+verscich_id_1_labels = ["CI", "CH"]
+sns.countplot(verscich_id_1).set_xticklabels(verscich_id_1_labels)
 plt.title("VERSCICH_ID_1 - Barplot")
 plt.xlabel('VERSCICH_ID_1')
 plt.ylabel('Number', rotation=0)
@@ -148,7 +149,7 @@ verscich_id_1 = verscich_id_1.fillna(999)
 
 # 再中風日期_1
 
-vers_dt_1 = tsr_12.loc[:, 'vers_dt_1']
+vers_dt_1 = tsr_1.loc[:, 'vers_dt_1']
 vers_dt_1 = pd.to_datetime(vers_dt_1, errors='coerce')
 vers_dt_1[(vers_dt_1.dt.year < 2006) | (vers_dt_1.dt.year > 2021)] = np.nan
 # print(vers_dt_1)
@@ -164,7 +165,7 @@ plt.show()
 
 # 再中風醫院_1
 
-versorg_id_1 = tsr_12.loc[:, 'versorg_id_1']
+versorg_id_1 = tsr_1.loc[:, 'versorg_id_1']
 # print(versorg_id_1)
 print(versorg_id_1.value_counts() / len(versorg_id_1))
 # print(versorg_id_1.describe())
@@ -177,7 +178,7 @@ plt.show()
 
 # Ischemic Heart Disease_1
 
-veihd_fl_1 = tsr_12.loc[:, 'veihd_fl_1']
+veihd_fl_1 = tsr_1.loc[:, 'veihd_fl_1']
 # print(veihd_fl_1)
 print(veihd_fl_1.value_counts() / len(veihd_fl_1))
 # print(veihd_fl_1.describe())
@@ -190,7 +191,7 @@ plt.show()
 
 # Types of Ischemic Heart Disease_1
 
-veihd_id_1 = tsr_12.loc[:, 'veihd_id_1']
+veihd_id_1 = tsr_1.loc[:, 'veihd_id_1']
 # print(veihd_id_1)
 print(veihd_id_1.value_counts() / len(veihd_id_1))
 # print(veihd_id_1.describe())
@@ -204,7 +205,7 @@ plt.show()
 
 # Ischemic Heart Disease日期_1
 
-veihd_dt_1 = tsr_12.loc[:, 'veihd_dt_1']
+veihd_dt_1 = tsr_1.loc[:, 'veihd_dt_1']
 veihd_dt_1 = pd.to_datetime(veihd_dt_1, errors='coerce')
 veihd_dt_1[(veihd_dt_1.dt.year < 2006) | (veihd_dt_1.dt.year > 2021)] = np.nan
 # print(veihd_dt_1)
@@ -220,7 +221,7 @@ plt.show()
 
 # Ischemic Heart Disease醫院_1
 
-veihdorg_id_1 = tsr_12.loc[:, 'veihdorg_id_1']
+veihdorg_id_1 = tsr_1.loc[:, 'veihdorg_id_1']
 # print(veihdorg_id_1)
 print(veihdorg_id_1.value_counts() / len(veihdorg_id_1))
 # print(veihdorg_id_1.describe())
@@ -231,9 +232,9 @@ plt.xlabel('VEIHDORG_ID_1')
 plt.ylabel('Number', rotation=0)
 plt.show()
 
-# mRS_1
+# mRS_1 (Outcome)
 
-mrs_tx_1 = tsr_12.loc[:, 'mrs_tx_1']
+mrs_tx_1 = tsr_1.loc[:, 'mrs_tx_1']
 mrs_tx_1 = mrs_tx_1.fillna(mrs_tx_1.mode()[0])
 # print(mrs_tx_1)
 print(mrs_tx_1.value_counts() / len(mrs_tx_1))
@@ -248,687 +249,6 @@ plt.show()
 # TORG_TX_1
 # VERSORG_TX_1
 # VEIHDORG_TX_1
-
-# 追蹤日期_3
-
-rfur_dt_3 = tsr_12.loc[:, "rfur_dt_3"]
-rfur_dt_3 = pd.to_datetime(rfur_dt_3, errors="coerce")
-# print(rfur_dt_3)
-# print(rfur_dt_3.value_counts() / len(rfur_dt_3))
-print(rfur_dt_3.describe())
-
-rfur_dt_3.value_counts().plot()
-plt.title("Date of 3-month follow-up - Lineplot")
-plt.xlabel('Date of 3-month follow-up')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 目前所在地_3
-
-location_id_3 = tsr_12.loc[:, "location_id_3"]
-# print(location_id_3)
-print(location_id_3.value_counts() / len(location_id_3))
-# print(location_id_3.describe())
-
-# location_id_3_labels = ["住家","護理之家","呼吸病房","本院住院中","轉至其他院","失聯"]
-sns.countplot(location_id_3)  # .set_xticklabels(location_id_3_labels)
-plt.title("LOCATION_ID_3 - Barplot")
-plt.xlabel('LOCATION_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 轉至醫院_3
-
-torg_id_3 = tsr_12.loc[:, "torg_id_3"]
-# print(torg_id_3)
-print(torg_id_3.value_counts() / len(torg_id_3))
-# print(torg_id_3.describe())
-
-sns.countplot(torg_id_3)
-plt.title("TORG_ID_3 - Barplot")
-plt.xlabel('TORG_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 相關醫療紀錄_3
-
-flu_id_3 = tsr_12.loc[:, "flu_id_3"]
-# print(flu_id_3)
-print(flu_id_3.value_counts() / len(flu_id_3))
-# print(flu_id_3.describe())
-
-# flu_id_3_labels = ["本院或他院門診繼續服藥","拒回診","死亡"]
-sns.countplot(flu_id_3)  # .set_xticklabels(flu_id_3_labels)
-plt.title("FLU_ID_3 - Barplot")
-plt.xlabel('FLU_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 門診醫院_3
-
-fluorg_id_3 = tsr_12.loc[:, "fluorg_id_3"]
-# print(fluorg_id_3)
-print(fluorg_id_3.value_counts() / len(fluorg_id_3))
-# print(fluorg_id_3.describe())
-
-sns.countplot(fluorg_id_3)
-plt.title("FLUORG_ID_3 - Barplot")
-plt.xlabel('FLUORG_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# FLUORG_TX_3
-# FLURESULT_TX_3
-# DEATH_DT_3
-# DEATH_ID_3
-# DEATHSK_ID_3
-# DEATHO_TX_3
-
-# 相關醫療紀錄2_3
-
-ve_id_3 = tsr_12.loc[:, 've_id_3']
-ve_id_3[(ve_id_3 == str(0)) | (ve_id_3 == 0)] = "N"
-
-# print(ve_id_3)
-print(ve_id_3.value_counts() / len(ve_id_3))
-# print(ve_id_3.describe())
-
-sns.countplot(ve_id_3)
-plt.title("VE_ID_3 - Barplot")
-plt.xlabel('VE_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風_3
-
-vers_fl_3 = tsr_12.loc[:, 'vers_fl_3']
-vers_fl_3[(vers_fl_3 != "N") & (vers_fl_3 != "Y")] = np.nan
-# print(vers_fl_3)
-print(vers_fl_3.value_counts() / len(vers_fl_3))
-# print(vers_fl_3.describe())
-
-sns.countplot(vers_fl_3)
-plt.title("VERS_FL_3 - Barplot")
-plt.xlabel('VERS_FL_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風 (CI / CH)_3
-
-verscich_id_3 = tsr_12.loc[:, 'verscich_id_3']
-verscich_id_3[verscich_id_3 == str(1)] = 1
-verscich_id_3[verscich_id_3 == str(2)] = 2
-verscich_id_3[(verscich_id_3 != 1) & (verscich_id_3 != 2)] = np.nan
-# print(verscich_id_3)
-print(verscich_id_3.value_counts() / len(verscich_id_3))
-# print(verscich_id_3.describe())
-
-# verscich_id_3_labels = ["CI","CH"]
-sns.countplot(verscich_id_3)  # .set_xticklabels(verscich_id_3_labels)
-plt.title("VERSCICH_ID_3 - Barplot")
-plt.xlabel('VERSCICH_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-verscich_id_3 = verscich_id_3.fillna(999)
-
-# 再中風日期_3
-
-vers_dt_3 = tsr_12.loc[:, 'vers_dt_3']
-vers_dt_3 = pd.to_datetime(vers_dt_3, errors='coerce')
-vers_dt_3[(vers_dt_3.dt.year < 2006) | (vers_dt_3.dt.year > 2023)] = np.nan
-# print(vers_dt_3)
-# print(vers_dt_3.value_counts() / len(vers_dt_3))
-print(vers_dt_3.describe())
-
-vers_dt_3.value_counts().plot()
-plt.title("VERS_DT_3 - Lineplot")
-plt.xlabel('VERS_DT_3')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 再中風醫院_3
-
-versorg_id_3 = tsr_12.loc[:, 'versorg_id_3']
-# print(versorg_id_3)
-print(versorg_id_3.value_counts() / len(versorg_id_3))
-# print(versorg_id_3.describe())
-
-sns.countplot(versorg_id_3)
-plt.title("VERSORG_ID_3 - Barplot")
-plt.xlabel('VERSORG_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease_3
-
-veihd_fl_3 = tsr_12.loc[:, 'veihd_fl_3']
-# print(veihd_fl_3)
-print(veihd_fl_3.value_counts() / len(veihd_fl_3))
-# print(veihd_fl_3.describe())
-
-sns.countplot(veihd_fl_3)
-plt.title("VEIHD_FL_3 - Barplot")
-plt.xlabel('VEIHD_FL_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Types of Ischemic Heart Disease_3
-
-veihd_id_3 = tsr_12.loc[:, 'veihd_id_3']
-# print(veihd_id_3)
-print(veihd_id_3.value_counts() / len(veihd_id_3))
-# print(veihd_id_3.describe())
-
-# veihd_id_3_labels = ["AMI","Angina"]
-sns.countplot(veihd_id_3)  # .set_xticklabels(veihd_id_3_labels)
-plt.title("VEIHD_ID_3 - Barplot")
-plt.xlabel('VEIHD_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease日期_3
-
-veihd_dt_3 = tsr_12.loc[:, 'veihd_dt_3']
-veihd_dt_3 = pd.to_datetime(veihd_dt_3, errors='coerce')
-veihd_dt_3[(veihd_dt_3.dt.year < 2006) | (veihd_dt_3.dt.year > 2023)] = np.nan
-# print(veihd_dt_3)
-# print(veihd_dt_3.value_counts() / len(veihd_dt_3))
-print(veihd_dt_3.describe())
-
-veihd_dt_3.value_counts().plot()
-plt.title("VEIHD_DT_3 - Lineplot")
-plt.xlabel('VEIHD_DT_3')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# Ischemic Heart Disease醫院_3
-
-veihdorg_id_3 = tsr_12.loc[:, 'veihdorg_id_3']
-# print(veihdorg_id_3)
-print(veihdorg_id_3.value_counts() / len(veihdorg_id_3))
-# print(veihdorg_id_3.describe())
-
-sns.countplot(veihdorg_id_3)
-plt.title("VEIHDORG_ID_3 - Barplot")
-plt.xlabel('VEIHDORG_ID_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# mRS_3
-
-mrs_tx_3 = tsr_12.loc[:, 'mrs_tx_3']
-mrs_tx_3 = mrs_tx_3.fillna(mrs_tx_3.mode()[0])
-# print(mrs_tx_3)
-print(mrs_tx_3.value_counts() / len(mrs_tx_3))
-# print(mrs_tx_3.describe())
-
-sns.countplot(mrs_tx_3)
-plt.title("MRS_TX_3 - Barplot")
-plt.xlabel('MRS_TX_3')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# TORG_TX_3
-# VERSORG_TX_3
-# VEIHDORG_TX_3
-
-
-# 追蹤日期_6
-
-rfur_dt_6 = tsr_12.loc[:, "rfur_dt_6"]
-rfur_dt_6 = pd.to_datetime(rfur_dt_6, errors="coerce")
-# print(rfur_dt_6)
-# print(rfur_dt_6.value_counts() / len(rfur_dt_6))
-print(rfur_dt_6.describe())
-
-rfur_dt_6.value_counts().plot()
-plt.title("Date of 3-month follow-up - Lineplot")
-plt.xlabel('Date of 3-month follow-up')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 目前所在地_6
-
-location_id_6 = tsr_12.loc[:, "location_id_6"]
-# print(location_id_6)
-print(location_id_6.value_counts() / len(location_id_6))
-# print(location_id_6.describe())
-
-# location_id_6_labels = ["住家","護理之家","呼吸病房","本院住院中","轉至其他院","失聯"]
-sns.countplot(location_id_6)  # .set_xticklabels(location_id_6_labels)
-plt.title("LOCATION_ID_6 - Barplot")
-plt.xlabel('LOCATION_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 轉至醫院_6
-
-torg_id_6 = tsr_12.loc[:, "torg_id_6"]
-# print(torg_id_6)
-print(torg_id_6.value_counts() / len(torg_id_6))
-# print(torg_id_6.describe())
-
-sns.countplot(torg_id_6)
-plt.title("TORG_ID_6 - Barplot")
-plt.xlabel('TORG_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 相關醫療紀錄_6
-
-flu_id_6 = tsr_12.loc[:, "flu_id_6"]
-# print(flu_id_6)
-print(flu_id_6.value_counts() / len(flu_id_6))
-# print(flu_id_6.describe())
-
-# flu_id_6_labels = ["本院或他院門診繼續服藥","拒回診","死亡"]
-sns.countplot(flu_id_6)  # .set_xticklabels(flu_id_6_labels)
-plt.title("FLU_ID_6 - Barplot")
-plt.xlabel('FLU_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 門診醫院_6
-
-fluorg_id_6 = tsr_12.loc[:, "fluorg_id_6"]
-# print(fluorg_id_6)
-print(fluorg_id_6.value_counts() / len(fluorg_id_6))
-# print(fluorg_id_6.describe())
-
-sns.countplot(fluorg_id_6)
-plt.title("FLUORG_ID_6 - Barplot")
-plt.xlabel('FLUORG_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# FLUORG_TX_6
-# FLURESULT_TX_6
-# DEATH_DT_6
-# DEATH_ID_6
-# DEATHSK_ID_6
-# DEATHO_TX_6
-
-# 相關醫療紀錄2_6
-
-ve_id_6 = tsr_12.loc[:, 've_id_6']
-ve_id_6[(ve_id_6 == str(0)) | (ve_id_6 == 0)] = "N"
-
-# print(ve_id_6)
-print(ve_id_6.value_counts() / len(ve_id_6))
-# print(ve_id_6.describe())
-
-sns.countplot(ve_id_6)
-plt.title("VE_ID_6 - Barplot")
-plt.xlabel('VE_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風_6
-
-vers_fl_6 = tsr_12.loc[:, 'vers_fl_6']
-vers_fl_6[(vers_fl_6 != "N") & (vers_fl_6 != "Y")] = np.nan
-# print(vers_fl_6)
-print(vers_fl_6.value_counts() / len(vers_fl_6))
-# print(vers_fl_6.describe())
-
-sns.countplot(vers_fl_6)
-plt.title("VERS_FL_6 - Barplot")
-plt.xlabel('VERS_FL_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風 (CI / CH)_6
-
-verscich_id_6 = tsr_12.loc[:, 'verscich_id_6']
-verscich_id_6[verscich_id_6 == str(1)] = 1
-verscich_id_6[verscich_id_6 == str(2)] = 2
-verscich_id_6[(verscich_id_6 != 1) & (verscich_id_6 != 2)] = np.nan
-# print(verscich_id_6)
-print(verscich_id_6.value_counts() / len(verscich_id_6))
-# print(verscich_id_6.describe())
-
-# verscich_id_6_labels = ["CI","CH"]
-sns.countplot(verscich_id_6)  # .set_xticklabels(verscich_id_6_labels)
-plt.title("VERSCICH_ID_6 - Barplot")
-plt.xlabel('VERSCICH_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-verscich_id_6 = verscich_id_6.fillna(999)
-
-# 再中風日期_6
-
-vers_dt_6 = tsr_12.loc[:, 'vers_dt_6']
-vers_dt_6 = pd.to_datetime(vers_dt_6, errors='coerce')
-vers_dt_6[(vers_dt_6.dt.year < 2006) | (vers_dt_6.dt.year > 2023)] = np.nan
-# print(vers_dt_6)
-# print(vers_dt_6.value_counts() / len(vers_dt_6))
-print(vers_dt_6.describe())
-
-vers_dt_6.value_counts().plot()
-plt.title("VERS_DT_6 - Lineplot")
-plt.xlabel('VERS_DT_6')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 再中風醫院_6
-
-versorg_id_6 = tsr_12.loc[:, 'versorg_id_6']
-# print(versorg_id_6)
-print(versorg_id_6.value_counts() / len(versorg_id_6))
-# print(versorg_id_6.describe())
-
-sns.countplot(versorg_id_6)
-plt.title("VERSORG_ID_6 - Barplot")
-plt.xlabel('VERSORG_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease_6
-
-veihd_fl_6 = tsr_12.loc[:, 'veihd_fl_6']
-# print(veihd_fl_6)
-print(veihd_fl_6.value_counts() / len(veihd_fl_6))
-# print(veihd_fl_6.describe())
-
-sns.countplot(veihd_fl_6)
-plt.title("VEIHD_FL_6 - Barplot")
-plt.xlabel('VEIHD_FL_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Types of Ischemic Heart Disease_6
-
-veihd_id_6 = tsr_12.loc[:, 'veihd_id_6']
-# print(veihd_id_6)
-print(veihd_id_6.value_counts() / len(veihd_id_6))
-# print(veihd_id_6.describe())
-
-# veihd_id_6_labels = ["AMI","Angina"]
-sns.countplot(veihd_id_6)  # .set_xticklabels(veihd_id_6_labels)
-plt.title("VEIHD_ID_6 - Barplot")
-plt.xlabel('VEIHD_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease日期_6
-
-veihd_dt_6 = tsr_12.loc[:, 'veihd_dt_6']
-veihd_dt_6 = pd.to_datetime(veihd_dt_6, errors='coerce')
-veihd_dt_6[(veihd_dt_6.dt.year < 2006) | (veihd_dt_6.dt.year > 2023)] = np.nan
-# print(veihd_dt_6)
-# print(veihd_dt_6.value_counts() / len(veihd_dt_6))
-print(veihd_dt_6.describe())
-
-veihd_dt_6.value_counts().plot()
-plt.title("VEIHD_DT_6 - Lineplot")
-plt.xlabel('VEIHD_DT_6')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# Ischemic Heart Disease醫院_6
-
-veihdorg_id_6 = tsr_12.loc[:, 'veihdorg_id_6']
-# print(veihdorg_id_6)
-print(veihdorg_id_6.value_counts() / len(veihdorg_id_6))
-# print(veihdorg_id_6.describe())
-
-sns.countplot(veihdorg_id_6)
-plt.title("VEIHDORG_ID_6 - Barplot")
-plt.xlabel('VEIHDORG_ID_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# mRS_6
-
-mrs_tx_6 = tsr_12.loc[:, 'mrs_tx_6']
-mrs_tx_6 = mrs_tx_6.fillna(mrs_tx_6.mode()[0])
-# print(mrs_tx_6)
-print(mrs_tx_6.value_counts() / len(mrs_tx_6))
-# print(mrs_tx_6.describe())
-
-sns.countplot(mrs_tx_6)
-plt.title("MRS_TX_6 - Barplot")
-plt.xlabel('MRS_TX_6')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# TORG_TX_6
-# VERSORG_TX_6
-# VEIHDORG_TX_6
-
-# 追蹤日期_12
-
-rfur_dt_12 = tsr_12.loc[:, "rfur_dt_12"]
-rfur_dt_12 = pd.to_datetime(rfur_dt_12, errors="coerce")
-# print(rfur_dt_12)
-# print(rfur_dt_12.value_counts() / len(rfur_dt_12))
-print(rfur_dt_12.describe())
-
-rfur_dt_12.value_counts().plot()
-plt.title("Date of 3-month follow-up - Lineplot")
-plt.xlabel('Date of 3-month follow-up')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 目前所在地_12
-
-location_id_12 = tsr_12.loc[:, "location_id_12"]
-# print(location_id_12)
-print(location_id_12.value_counts() / len(location_id_12))
-# print(location_id_12.describe())
-
-# location_id_12_labels = ["住家","護理之家","呼吸病房","本院住院中","轉至其他院","失聯"]
-sns.countplot(location_id_12)  # .set_xticklabels(location_id_12_labels)
-plt.title("LOCATION_ID_12 - Barplot")
-plt.xlabel('LOCATION_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 轉至醫院_12
-
-torg_id_12 = tsr_12.loc[:, "torg_id_12"]
-# print(torg_id_12)
-print(torg_id_12.value_counts() / len(torg_id_12))
-# print(torg_id_12.describe())
-
-sns.countplot(torg_id_12)
-plt.title("TORG_ID_12 - Barplot")
-plt.xlabel('TORG_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 相關醫療紀錄_12
-
-flu_id_12 = tsr_12.loc[:, "flu_id_12"]
-# print(flu_id_12)
-print(flu_id_12.value_counts() / len(flu_id_12))
-# print(flu_id_12.describe())
-
-# flu_id_12_labels = ["本院或他院門診繼續服藥","拒回診","死亡"]
-sns.countplot(flu_id_12)  # .set_xticklabels(flu_id_12_labels)
-plt.title("FLU_ID_12 - Barplot")
-plt.xlabel('FLU_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 門診醫院_12
-
-fluorg_id_12 = tsr_12.loc[:, "fluorg_id_12"]
-# print(fluorg_id_12)
-print(fluorg_id_12.value_counts() / len(fluorg_id_12))
-# print(fluorg_id_12.describe())
-
-sns.countplot(fluorg_id_12)
-plt.title("FLUORG_ID_12 - Barplot")
-plt.xlabel('FLUORG_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# FLUORG_TX_12
-# FLURESULT_TX_12
-# DEATH_DT_12
-# DEATH_ID_12
-# DEATHSK_ID_12
-# DEATHO_TX_12
-
-# 相關醫療紀錄2_12
-
-ve_id_12 = tsr_12.loc[:, 've_id_12']
-ve_id_12[(ve_id_12 == str(0)) | (ve_id_12 == 0)] = "N"
-
-# print(ve_id_12)
-print(ve_id_12.value_counts() / len(ve_id_12))
-# print(ve_id_12.describe())
-
-sns.countplot(ve_id_12)
-plt.title("VE_ID_12 - Barplot")
-plt.xlabel('VE_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風_12
-
-vers_fl_12 = tsr_12.loc[:, 'vers_fl_12']
-vers_fl_12[(vers_fl_12 != "N") & (vers_fl_12 != "Y")] = np.nan
-# print(vers_fl_12)
-print(vers_fl_12.value_counts() / len(vers_fl_12))
-# print(vers_fl_12.describe())
-
-sns.countplot(vers_fl_12)
-plt.title("VERS_FL_12 - Barplot")
-plt.xlabel('VERS_FL_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# 再中風 (CI / CH)_12
-
-verscich_id_12 = tsr_12.loc[:, 'verscich_id_12']
-verscich_id_12[verscich_id_12 == str(1)] = 1
-verscich_id_12[verscich_id_12 == str(2)] = 2
-verscich_id_12[(verscich_id_12 != 1) & (verscich_id_12 != 2)] = np.nan
-# print(verscich_id_12)
-print(verscich_id_12.value_counts() / len(verscich_id_12))
-# print(verscich_id_12.describe())
-
-# verscich_id_12_labels = ["CI","CH"]
-sns.countplot(verscich_id_12)  # .set_xticklabels(verscich_id_12_labels)
-plt.title("VERSCICH_ID_12 - Barplot")
-plt.xlabel('VERSCICH_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-verscich_id_12 = verscich_id_12.fillna(999)
-
-# 再中風日期_12
-
-vers_dt_12 = tsr_12.loc[:, 'vers_dt_12']
-vers_dt_12 = pd.to_datetime(vers_dt_12, errors='coerce')
-vers_dt_12[(vers_dt_12.dt.year < 2006) | (vers_dt_12.dt.year > 2023)] = np.nan
-# print(vers_dt_12)
-# print(vers_dt_12.value_counts() / len(vers_dt_12))
-print(vers_dt_12.describe())
-
-vers_dt_12.value_counts().plot()
-plt.title("VERS_DT_12 - Lineplot")
-plt.xlabel('VERS_DT_12')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# 再中風醫院_12
-
-versorg_id_12 = tsr_12.loc[:, 'versorg_id_12']
-# print(versorg_id_12)
-print(versorg_id_12.value_counts() / len(versorg_id_12))
-# print(versorg_id_12.describe())
-
-sns.countplot(versorg_id_12)
-plt.title("VERSORG_ID_12 - Barplot")
-plt.xlabel('VERSORG_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease_12
-
-veihd_fl_12 = tsr_12.loc[:, 'veihd_fl_12']
-# print(veihd_fl_12)
-print(veihd_fl_12.value_counts() / len(veihd_fl_12))
-# print(veihd_fl_12.describe())
-
-sns.countplot(veihd_fl_12)
-plt.title("VEIHD_FL_12 - Barplot")
-plt.xlabel('VEIHD_FL_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Types of Ischemic Heart Disease_12
-
-veihd_id_12 = tsr_12.loc[:, 'veihd_id_12']
-# print(veihd_id_12)
-print(veihd_id_12.value_counts() / len(veihd_id_12))
-# print(veihd_id_12.describe())
-
-# veihd_id_12_labels = ["AMI","Angina"]
-sns.countplot(veihd_id_12)  # .set_xticklabels(veihd_id_12_labels)
-plt.title("VEIHD_ID_12 - Barplot")
-plt.xlabel('VEIHD_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# Ischemic Heart Disease日期_12
-
-veihd_dt_12 = tsr_12.loc[:, 'veihd_dt_12']
-veihd_dt_12 = pd.to_datetime(veihd_dt_12, errors='coerce')
-veihd_dt_12[(veihd_dt_12.dt.year < 2006) | (veihd_dt_12.dt.year > 2023)] = np.nan
-# print(veihd_dt_12)
-# print(veihd_dt_12.value_counts() / len(veihd_dt_12))
-print(veihd_dt_12.describe())
-
-veihd_dt_12.value_counts().plot()
-plt.title("VEIHD_DT_12 - Lineplot")
-plt.xlabel('VEIHD_DT_12')
-plt.ylabel('Number', rotation=0)
-plt.xticks()
-plt.show()
-
-# Ischemic Heart Disease醫院_12
-
-veihdorg_id_12 = tsr_12.loc[:, 'veihdorg_id_12']
-# print(veihdorg_id_12)
-print(veihdorg_id_12.value_counts() / len(veihdorg_id_12))
-# print(veihdorg_id_12.describe())
-
-sns.countplot(veihdorg_id_12)
-plt.title("VEIHDORG_ID_12 - Barplot")
-plt.xlabel('VEIHDORG_ID_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# mRS_12 (Outcome)
-
-mrs_tx_12 = tsr_12.loc[:, 'mrs_tx_12']
-mrs_tx_12[(mrs_tx_12 != 0) & (mrs_tx_12 != 1) & (mrs_tx_12 != 2) & (mrs_tx_12 != 3) & (mrs_tx_12 != 4) & (
-        mrs_tx_12 != 5)] = np.nan
-mrs_tx_12 = mrs_tx_12.fillna(mrs_tx_12.mode()[0])
-# print(mrs_tx_12)
-print(mrs_tx_12.value_counts() / len(mrs_tx_12))
-# print(mrs_tx_12.describe())
-
-sns.countplot(mrs_tx_12)
-plt.title("MRS_TX_12 - Barplot")
-plt.xlabel('MRS_TX_12')
-plt.ylabel('Number', rotation=0)
-plt.show()
-
-# TORG_TX_12
-# VERSORG_TX_12
-# VEIHDORG_TX_12
 # index
 # icase_id
 # idcase_id
@@ -941,7 +261,7 @@ plt.show()
 
 # 身高
 
-height_nm = tsr_12.loc[:, "height_nm"]
+height_nm = tsr_1.loc[:, "height_nm"]
 
 q1 = height_nm.quantile(0.25)
 q3 = height_nm.quantile(0.75)
@@ -974,8 +294,7 @@ plt.show()
 
 # 體重
 
-weight_nm = tsr_12.loc[:, "weight_nm"]
-weight_nm = pd.to_numeric(weight_nm, errors="coerce")
+weight_nm = tsr_1.loc[:, "weight_nm"]
 
 q1 = weight_nm.quantile(0.25)
 q3 = weight_nm.quantile(0.75)
@@ -993,7 +312,6 @@ weight_nm = weight_nm.fillna(round(weight_nm.mean(), 3))
 print(weight_nm.describe())
 
 fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
-
 weight_nm.plot.box(ax=ax1)
 ax1.set_title("Weight - Boxplot")
 ax1.set_xlabel('Weight')
@@ -1008,8 +326,7 @@ plt.show()
 
 # 教育程度
 
-edu_id = tsr_12.loc[:, "edu_id"]
-edu_id = pd.to_numeric(edu_id, errors = 'coerce')
+edu_id = tsr_1.loc[:, "edu_id"]
 edu_id[(edu_id != 1) & (edu_id != 2) & (edu_id != 3) & (edu_id != 4) & (edu_id != 5) & (edu_id != 6) & (edu_id != 7)] = np.nan
 edu_id = edu_id.fillna((edu_id.mode()[0]))
 # print(edu_id)
@@ -1022,12 +339,10 @@ plt.title("edu_idcation Level - Barplot")
 plt.xlabel('edu_idcation Level')
 plt.ylabel('Number', rotation=0)
 plt.show()
-# edu_id =edu_id.fillna(999)
 
 # 職業
 
-pro_id = tsr_12.loc[:, "pro_id"]
-pro_id = pd.to_numeric(pro_id, errors = 'coerce')
+pro_id = tsr_1.loc[:, "pro_id"]
 pro_id[(pro_id != 1) & (pro_id != 2) & (pro_id != 3) & (pro_id != 4) & (pro_id != 5) & (pro_id != 6) & (pro_id != 7) & (pro_id != 8) & (pro_id != 9) & (pro_id != 10) & (pro_id != 11) & (pro_id != 12)] = np.nan
 pro_id = pro_id.fillna((pro_id.mode()[0]))
 # print(pro_id)
@@ -1035,20 +350,18 @@ print(pro_id.value_counts() / len(pro_id))
 # print(pro_id.describe())
 
 pro_id_labels = ["無", "軍", "公", "教", "工", "農", "商", "服務業", "學生", "退休", "不詳", "其他"]
-
 sns.countplot(pro_id).set_xticklabels(pro_id_labels)
 plt.title("Occupation - Barplot")
 plt.xlabel('Occupation')
 plt.ylabel('Number', rotation=0)
 plt.show()
-# pro_id =pro_id.fillna(999)
 
 # proot_tx
 # casememo_tx
 
 # 入院方式
 
-opc_id = tsr_12.loc[:, "opc_id"]
+opc_id = tsr_1.loc[:, "opc_id"]
 opc_id = pd.to_numeric(opc_id, errors="coerce")
 opc_id[(opc_id != 1) & (opc_id != 2) & (opc_id != 3)] = np.nan
 opc_id = opc_id.fillna((opc_id.mode()[0]))
@@ -1065,7 +378,7 @@ plt.show()
 
 # 不住院
 
-ih_fl = tsr_12.loc[:, "ih_fl"]
+ih_fl = tsr_1.loc[:, "ih_fl"]
 ih_fl[(ih_fl != "1") & (ih_fl != np.nan)] = 0
 ih_fl = ih_fl.fillna((ih_fl.mode()[0]))
 # print(ih_fl)
@@ -1081,7 +394,7 @@ plt.show()
 
 # 住院日期
 
-ih_dt = tsr_12.loc[:, "ih_dt"]
+ih_dt = tsr_1.loc[:, "ih_dt"]
 ih_dt = pd.to_datetime(ih_dt, errors='coerce')
 ih_dt = ih_dt.fillna((ih_dt.mode()[0]))
 # print(ih_dt)
@@ -1097,7 +410,7 @@ plt.show()
 
 # 離院日期
 
-oh_dt = tsr_12.loc[:, "oh_dt"]
+oh_dt = tsr_1.loc[:, "oh_dt"]
 oh_dt = pd.to_datetime(oh_dt, errors='coerce')
 oh_dt = oh_dt.fillna((oh_dt.mode()[0]))
 oh_dt[(oh_dt.dt.year < 2006) | (oh_dt.dt.year > 2021) | (oh_dt < ih_dt)] = np.nan
@@ -1140,7 +453,7 @@ plt.show()
 
 # 發病日期
 
-onset_time = tsr_12.loc[:, ["onset_dt", "onseth_nm", "onsetm_nm"]]
+onset_time = tsr_1.loc[:, ["onset_dt", "onseth_nm", "onsetm_nm"]]
 onset_time.onset_dt = pd.to_datetime(onset_time.onset_dt, errors="coerce", format="%Y-%m-%d")
 onset_time.onset_dt[(onset_time.onset_dt.dt.year < 2006) | (onset_time.onset_dt.dt.year > 2021)] = np.nan
 
@@ -1170,7 +483,7 @@ plt.show()
 
 # 發病時間-時
 
-onseth_nm = tsr_12.loc[:, "onseth_nm"]
+onseth_nm = tsr_1.loc[:, "onseth_nm"]
 onseth_nm = pd.to_numeric(onseth_nm, errors='coerce')
 onseth_nm[(onseth_nm < 0) | (onseth_nm > 24)] = np.nan
 onseth_nm[onseth_nm == 24] = 0
@@ -1181,7 +494,7 @@ print(onseth_nm.describe())
 
 # 發病時間-分
 
-onsetm_nm = tsr_12.loc[:, "onsetm_nm"]
+onsetm_nm = tsr_1.loc[:, "onsetm_nm"]
 onsetm_nm = pd.to_numeric(onsetm_nm, errors='coerce')
 onsetm_nm[(onsetm_nm < 0) | (onsetm_nm > 60)] = np.nan
 onsetm_nm[onsetm_nm == 60] = 0
@@ -1192,7 +505,7 @@ print(onsetm_nm.describe())
 
 # 不確定發病時間
 
-onset_fl = tsr_12.loc[:, "onset_fl"]
+onset_fl = tsr_1.loc[:, "onset_fl"]
 onset_fl[(onset_fl != "N") & (onset_fl != "Y")] = np.nan
 onset_fl = onset_fl.fillna((onset_fl.mode()[0]))
 # print(onset_fl)
@@ -1207,7 +520,7 @@ plt.show()
 
 # 門診/急診日期
 
-ot_time = tsr_12.loc[:, ["ot_dt", "ottih_nm", "ottim_nm"]]
+ot_time = tsr_1.loc[:, ["ot_dt", "ottih_nm", "ottim_nm"]]
 ot_time.ot_dt = pd.to_datetime(ot_time.ot_dt, errors="coerce", format="%Y-%m-%d")
 ot_time.ot_dt[(ot_time.ot_dt.dt.year < 2006) | (ot_time.ot_dt.dt.year > 2021)] = np.nan
 
@@ -1238,7 +551,7 @@ plt.show()
 
 # 門診/急診時間-時
 
-ottih_nm = tsr_12.loc[:, "ottih_nm"]
+ottih_nm = tsr_1.loc[:, "ottih_nm"]
 ottih_nm = pd.to_numeric(ottih_nm, errors='coerce')
 ottih_nm[(ottih_nm < 0) | (ottih_nm > 24)] = np.nan
 ottih_nm[ottih_nm == 24] = 0
@@ -1249,7 +562,7 @@ print(ottih_nm.describe())
 
 # 門診/急診時間-秒
 
-ottim_nm = tsr_12.loc[:, "ottim_nm"]
+ottim_nm = tsr_1.loc[:, "ottim_nm"]
 ottim_nm = pd.to_numeric(ottim_nm, errors='coerce')
 ottim_nm[(ottim_nm < 0) | (ottim_nm > 60)] = np.nan
 ottim_nm[ottim_nm == 60] = 0
@@ -1260,7 +573,7 @@ print(ottim_nm.describe())
 
 # 不確定門/急診時間
 
-ot_fl = tsr_12.loc[:, "ot_fl"]
+ot_fl = tsr_1.loc[:, "ot_fl"]
 ot_fl[(ot_fl != "N") & (ot_fl != "Y")] = np.nan
 ot_fl = ot_fl.fillna(ot_fl.mode()[0])
 # print(ot_fl)
@@ -1275,7 +588,7 @@ plt.show()
 
 # 第一次醫師檢視日期
 
-flook_time = tsr_12.loc[:, ["flook_dt", "flookh_nm", "flookm_nm"]]
+flook_time = tsr_1.loc[:, ["flook_dt", "flookh_nm", "flookm_nm"]]
 flook_time.flook_dt = pd.to_datetime(flook_time.flook_dt, errors="coerce", format="%Y-%m-%d")
 flook_time.flook_dt[(flook_time.flook_dt.dt.year < 2006) | (flook_time.flook_dt.dt.year > 2021)] = np.nan
 
@@ -1306,7 +619,7 @@ plt.show()
 
 # 第一次醫師檢視時間-時
 
-flookh_nm = tsr_12.loc[:, "flookh_nm"]
+flookh_nm = tsr_1.loc[:, "flookh_nm"]
 flookh_nm = pd.to_numeric(flookh_nm, errors='coerce')
 flookh_nm[(flookh_nm < 0) | (flookh_nm > 24)] = np.nan
 flookh_nm[flookh_nm == 24] = 0
@@ -1317,7 +630,7 @@ print(flookh_nm.describe())
 
 # 第一次醫師檢視時間-分
 
-flookm_nm = tsr_12.loc[:, "flookm_nm"]
+flookm_nm = tsr_1.loc[:, "flookm_nm"]
 flookm_nm = pd.to_numeric(flookm_nm, errors='coerce')
 flookm_nm[(flookm_nm < 0) | (flookm_nm > 60)] = np.nan
 flookm_nm[flookm_nm == 60] = 0
@@ -1328,7 +641,7 @@ print(flookm_nm.describe())
 
 # 不確定第一次醫師檢視時間
 
-flook_fl = tsr_12.loc[:, "flook_fl"]
+flook_fl = tsr_1.loc[:, "flook_fl"]
 flook_fl[(flook_fl != "N") & (flook_fl != "Y")] = np.nan
 flook_fl = flook_fl.fillna(flook_fl.mode()[0])
 # print(flook_fl)
@@ -1343,7 +656,7 @@ plt.show()
 
 # 1st CT 日期
 
-fct_time = tsr_12.loc[:, ["fct_dt", "fcth_nm", "fctm_nm"]]
+fct_time = tsr_1.loc[:, ["fct_dt", "fcth_nm", "fctm_nm"]]
 fct_time.fct_dt = pd.to_datetime(fct_time.fct_dt, errors="coerce", format="%Y-%m-%d")
 fct_time.fct_dt[(fct_time.fct_dt.dt.year < 2006) | (fct_time.fct_dt.dt.year > 2021)] = np.nan
 
@@ -1374,7 +687,7 @@ plt.show()
 
 # 1st CT 時間-時
 
-fcth_nm = tsr_12.loc[:, "fcth_nm"]
+fcth_nm = tsr_1.loc[:, "fcth_nm"]
 fcth_nm = pd.to_numeric(fcth_nm, errors='coerce')
 fcth_nm[(fcth_nm < 0) | (fcth_nm > 24)] = np.nan
 fcth_nm[fcth_nm == 24] = 0
@@ -1385,7 +698,7 @@ print(fcth_nm.describe())
 
 # 1st CT 時間-分
 
-fctm_nm = tsr_12.loc[:, "fctm_nm"]
+fctm_nm = tsr_1.loc[:, "fctm_nm"]
 fctm_nm = pd.to_numeric(fctm_nm, errors='coerce')
 fctm_nm[(fctm_nm < 0) | (fctm_nm > 60)] = np.nan
 fctm_nm[fctm_nm == 60] = 0
@@ -1396,7 +709,7 @@ print(fctm_nm.describe())
 
 # 1st CT 外片
 
-fctoh_fl = tsr_12.loc[:, "fctoh_fl"]
+fctoh_fl = tsr_1.loc[:, "fctoh_fl"]
 fctoh_fl[(fctoh_fl != "N") & (fctoh_fl != "Y")] = np.nan
 fctoh_fl = fctoh_fl.fillna(fctoh_fl.mode()[0])
 # print(fctoh_fl)
@@ -1414,9 +727,7 @@ plt.show()
 
 # IV-tPA
 
-ivtpath_id = tsr_12.loc[:, "ivtpath_id"]
-ivtpath_id = pd.to_numeric(ivtpath_id, errors='coerce')
-ivtpath_id[(ivtpath_id != 1) & (ivtpath_id != 2)] = np.nan
+ivtpath_id = tsr_1.loc[:, "ivtpath_id"]
 ivtpath_id = ivtpath_id.fillna(ivtpath_id.mode()[0])
 # print(ivtpath_id)
 print(ivtpath_id.value_counts() / len(ivtpath_id))
@@ -1431,7 +742,7 @@ plt.show()
 
 # IV-tPA 日期
 
-ivtpa_time = tsr_12.loc[:, ["ivtpa_dt", "ivtpah_nm", "ivtpam_nm"]]
+ivtpa_time = tsr_1.loc[:, ["ivtpa_dt", "ivtpah_nm", "ivtpam_nm"]]
 ivtpa_time.ivtpa_dt = pd.to_datetime(ivtpa_time.ivtpa_dt, errors="coerce", format="%Y-%m-%d")
 ivtpa_time.ivtpa_dt[(ivtpa_time.ivtpa_dt.dt.year < 2006) | (ivtpa_time.ivtpa_dt.dt.year > 2021)] = np.nan
 
@@ -1462,7 +773,7 @@ plt.show()
 
 # IV-tPA 時間-時
 
-ivtpah_nm = tsr_12.loc[:, "ivtpah_nm"]
+ivtpah_nm = tsr_1.loc[:, "ivtpah_nm"]
 ivtpah_nm = pd.to_numeric(ivtpah_nm, errors='coerce')
 ivtpah_nm[(ivtpah_nm < 0) | (ivtpah_nm > 24)] = np.nan
 ivtpah_nm[ivtpah_nm == 24] = 0
@@ -1473,7 +784,7 @@ print(ivtpah_nm.describe())
 
 # IV-tPA 時間-分
 
-ivtpam_nm = tsr_12.loc[:, "ivtpam_nm"]
+ivtpam_nm = tsr_1.loc[:, "ivtpam_nm"]
 ivtpam_nm = pd.to_numeric(ivtpam_nm, errors='coerce')
 ivtpam_nm[(ivtpam_nm < 0) | (ivtpam_nm > 60)] = np.nan
 ivtpam_nm[ivtpam_nm == 60] = 0
@@ -1484,7 +795,7 @@ print(ivtpam_nm.describe())
 
 # Start IV-tPA mg
 
-ivtpamg_nm = tsr_12.loc[:, "ivtpamg_nm"]
+ivtpamg_nm = tsr_1.loc[:, "ivtpamg_nm"]
 ivtpamg_nm = pd.to_numeric(ivtpamg_nm, errors='coerce')
 
 q1 = ivtpamg_nm.quantile(0.25)
@@ -1521,7 +832,7 @@ plt.show()
 
 # 未打IV-tPA 原因
 
-nivtpa_id = tsr_12.loc[:, "nivtpa_id"]
+nivtpa_id = tsr_1.loc[:, "nivtpa_id"]
 nivtpa_id = pd.to_numeric(nivtpa_id, errors="coerce")
 nivtpa_id[(nivtpa_id != 1) & (nivtpa_id != 2) & (nivtpa_id != 3)] = np.nan
 nivtpa_id = nivtpa_id.fillna(0)
@@ -1548,7 +859,7 @@ nivtpa_id = nivtpa_id.fillna(999)
 
 # 輸注本藥前，急性缺血性腦中風的症狀已迅速改善或症狀輕微。（如NIHSS<6分）
 
-nivtpa1_fl = tsr_12.loc[:, "nivtpa1_fl"]
+nivtpa1_fl = tsr_1.loc[:, "nivtpa1_fl"]
 nivtpa1_fl[nivtpa1_fl == str(0)] = int(0)
 nivtpa1_fl[nivtpa1_fl == str(1)] = int(1)
 nivtpa1_fl[nivtpa1_fl == int(0)] = "N"
@@ -1567,7 +878,7 @@ nivtpa1_fl = nivtpa1_fl.fillna(999)
 
 # 臨床或影像判定為嚴重之中風（如NIHSS>25）
 
-nivtpa2_fl = tsr_12.loc[:, "nivtpa2_fl"]
+nivtpa2_fl = tsr_1.loc[:, "nivtpa2_fl"]
 nivtpa2_fl[nivtpa2_fl == str(0)] = int(0)
 nivtpa2_fl[nivtpa2_fl == str(1)] = int(1)
 nivtpa2_fl[nivtpa2_fl == int(0)] = "N"
@@ -1585,7 +896,7 @@ nivtpa2_fl = nivtpa2_fl.fillna(999)
 
 # 年齡在18歲以下，或80歲以上
 
-nivtpa3_fl = tsr_12.loc[:, "nivtpa3_fl"]
+nivtpa3_fl = tsr_1.loc[:, "nivtpa3_fl"]
 nivtpa3_fl[nivtpa3_fl == str(0)] = int(0)
 nivtpa3_fl[nivtpa3_fl == str(1)] = int(1)
 nivtpa3_fl[nivtpa3_fl == int(0)] = "N"
@@ -1603,7 +914,7 @@ nivtpa3_fl = nivtpa3_fl.fillna(999)
 
 # 過去曾中風且合併糖尿病
 
-nivtpa4_fl = tsr_12.loc[:, "nivtpa4_fl"]
+nivtpa4_fl = tsr_1.loc[:, "nivtpa4_fl"]
 nivtpa4_fl[nivtpa4_fl == str(0)] = int(0)
 nivtpa4_fl[nivtpa4_fl == str(1)] = int(1)
 nivtpa4_fl[nivtpa4_fl == int(0)] = "N"
@@ -1621,7 +932,7 @@ nivtpa4_fl = nivtpa4_fl.fillna(999)
 
 # 最近3個月內有中風病史或有嚴重性頭部創傷
 
-nivtpa5_fl = tsr_12.loc[:, "nivtpa5_fl"]
+nivtpa5_fl = tsr_1.loc[:, "nivtpa5_fl"]
 nivtpa5_fl[nivtpa5_fl == str(0)] = int(0)
 nivtpa5_fl[nivtpa5_fl == str(1)] = int(1)
 nivtpa5_fl[nivtpa5_fl == int(0)] = "N"
@@ -1639,7 +950,7 @@ nivtpa5_fl = nivtpa5_fl.fillna(999)
 
 # 中風發作時併發癲癇
 
-nivtpa6_fl = tsr_12.loc[:, "nivtpa6_fl"]
+nivtpa6_fl = tsr_1.loc[:, "nivtpa6_fl"]
 nivtpa6_fl[nivtpa6_fl == str(0)] = int(0)
 nivtpa6_fl[nivtpa6_fl == str(1)] = int(1)
 nivtpa6_fl[nivtpa6_fl == int(0)] = "N"
@@ -1657,7 +968,7 @@ nivtpa6_fl = nivtpa6_fl.fillna(999)
 
 # 病人正接受口服抗凝血劑，如warfarin sodium（INR>1.3）
 
-nivtpa7_fl = tsr_12.loc[:, "nivtpa7_fl"]
+nivtpa7_fl = tsr_1.loc[:, "nivtpa7_fl"]
 nivtpa7_fl[nivtpa7_fl == str(0)] = int(0)
 nivtpa7_fl[nivtpa7_fl == str(1)] = int(1)
 nivtpa7_fl[nivtpa7_fl == int(0)] = "N"
@@ -1675,7 +986,7 @@ nivtpa7_fl = nivtpa7_fl.fillna(999)
 
 # 最近3個月內曾患胃腸道潰瘍
 
-nivtpa8_fl = tsr_12.loc[:, "nivtpa8_fl"]
+nivtpa8_fl = tsr_1.loc[:, "nivtpa8_fl"]
 nivtpa8_fl[nivtpa8_fl == str(0)] = int(0)
 nivtpa8_fl[nivtpa8_fl == str(1)] = int(1)
 nivtpa8_fl[nivtpa8_fl == int(0)] = "N"
@@ -1693,7 +1004,7 @@ nivtpa8_fl = nivtpa8_fl.fillna(999)
 
 # 家屬拒絕
 
-nivtpa9_fl = tsr_12.loc[:, "nivtpa9_fl"]
+nivtpa9_fl = tsr_1.loc[:, "nivtpa9_fl"]
 nivtpa9_fl[nivtpa9_fl == str(0)] = int(0)
 nivtpa9_fl[nivtpa9_fl == str(1)] = int(1)
 nivtpa9_fl[nivtpa9_fl == int(0)] = "N"
@@ -1711,7 +1022,7 @@ nivtpa9_fl = nivtpa9_fl.fillna(999)
 
 # 輸注本藥前，缺血性腦中風發作的時間已超過3小時
 
-nivtpa10_fl = tsr_12.loc[:, "nivtpa10_fl"]
+nivtpa10_fl = tsr_1.loc[:, "nivtpa10_fl"]
 nivtpa10_fl[nivtpa10_fl == str(0)] = int(0)
 nivtpa10_fl[nivtpa10_fl == str(1)] = int(1)
 nivtpa10_fl[nivtpa10_fl == int(0)] = "N"
@@ -1729,7 +1040,7 @@ nivtpa10_fl = nivtpa10_fl.fillna(999)
 
 # 收縮壓 > 185mmhg或舒張壓 > 110mmhg
 
-nivtpa11_fl = tsr_12.loc[:, "nivtpa11_fl"]
+nivtpa11_fl = tsr_1.loc[:, "nivtpa11_fl"]
 nivtpa11_fl[nivtpa11_fl == str(0)] = int(0)
 nivtpa11_fl[nivtpa11_fl == str(1)] = int(1)
 nivtpa11_fl[nivtpa11_fl == int(0)] = "N"
@@ -1748,7 +1059,7 @@ nivtpa11_fl = nivtpa11_fl.fillna(999)
 
 # 不符合施打條件其他(未打IV-tPA 原因)
 
-nivtpa99_fl = tsr_12.loc[:, "nivtpa99_fl"]
+nivtpa99_fl = tsr_1.loc[:, "nivtpa99_fl"]
 nivtpa99_fl[nivtpa99_fl == str(0)] = int(0)
 nivtpa99_fl[nivtpa99_fl == str(1)] = int(1)
 nivtpa99_fl[nivtpa99_fl == int(0)] = "N"
@@ -1769,7 +1080,7 @@ nivtpa99_fl = nivtpa99_fl.fillna(999)
 
 # GCS-E (eye opening)
 
-gcse_nm = tsr_12.loc[:, "gcse_nm"]
+gcse_nm = tsr_1.loc[:, "gcse_nm"]
 gcse_nm = pd.to_numeric(gcse_nm, errors="coerce")
 gcse_nm[(gcse_nm != 1) & (gcse_nm != 2) & (gcse_nm != 3) & (gcse_nm != 4)] = np.nan
 gcse_nm = gcse_nm.fillna(gcse_nm.mode()[0])
@@ -1785,7 +1096,7 @@ plt.show()
 
 # GCS-V (verbal response)
 
-gcsv_nm = tsr_12.loc[:, "gcsv_nm"]
+gcsv_nm = tsr_1.loc[:, "gcsv_nm"]
 gcsv_nm = pd.to_numeric(gcsv_nm, errors="coerce")
 gcsv_nm[(gcsv_nm != 1) & (gcsv_nm != 2) & (gcsv_nm != 3) & (gcsv_nm != 4) & (gcsv_nm != 5)] = np.nan
 gcsv_nm = gcsv_nm.fillna(gcsv_nm.mode()[0])
@@ -1801,7 +1112,7 @@ plt.show()
 
 # GCS-M (motor response)
 
-gcsm_nm = tsr_12.loc[:, "gcsm_nm"]
+gcsm_nm = tsr_1.loc[:, "gcsm_nm"]
 gcsm_nm = pd.to_numeric(gcsm_nm, errors="coerce")
 gcsm_nm[(gcsm_nm != 1) & (gcsm_nm != 2) & (gcsm_nm != 3) & (gcsm_nm != 4) & (gcsm_nm != 5) & (gcsm_nm != 6)] = np.nan
 gcsm_nm = gcsm_nm.fillna(gcsm_nm.mode()[0])
@@ -1817,7 +1128,7 @@ plt.show()
 
 # SBP
 
-sbp_nm = tsr_12.loc[:, "sbp_nm"]
+sbp_nm = tsr_1.loc[:, "sbp_nm"]
 
 q1 = sbp_nm.quantile(0.25)
 q3 = sbp_nm.quantile(0.75)
@@ -1850,7 +1161,7 @@ plt.show()
 
 # DBP
 
-dbp_nm = tsr_12.loc[:, "dbp_nm"]
+dbp_nm = tsr_1.loc[:, "dbp_nm"]
 
 q1 = dbp_nm.quantile(0.25)
 q3 = dbp_nm.quantile(0.75)
@@ -1883,7 +1194,7 @@ plt.show()
 
 # BT (bleeding time)
 
-bt_nm = tsr_12.loc[:, "bt_nm"]
+bt_nm = tsr_1.loc[:, "bt_nm"]
 
 q1 = bt_nm.quantile(0.25)
 q3 = bt_nm.quantile(0.75)
@@ -1916,7 +1227,7 @@ plt.show()
 
 # Heart Rate
 
-hr_nm = tsr_12.loc[:, "hr_nm"]
+hr_nm = tsr_1.loc[:, "hr_nm"]
 
 q1 = hr_nm.quantile(0.25)
 q3 = hr_nm.quantile(0.75)
@@ -1949,7 +1260,7 @@ plt.show()
 
 # Respiratory Rate
 
-rr_nm = tsr_12.loc[:, "rr_nm"]
+rr_nm = tsr_1.loc[:, "rr_nm"]
 
 q1 = rr_nm.quantile(0.25)
 q3 = rr_nm.quantile(0.75)
@@ -1982,7 +1293,7 @@ plt.show()
 
 # Final Stroke Diagnosis
 
-icd_id = tsr_12.loc[:, "icd_id"]
+icd_id = tsr_1.loc[:, "icd_id"]
 icd_id[(icd_id != 1) & (icd_id != 2) & (icd_id != 3) & (icd_id != 4) & (icd_id != 99)] = np.nan
 icd_id = icd_id.fillna(icd_id.mode()[0])
 # print(icd_id)
@@ -2000,7 +1311,7 @@ plt.show()
 
 # Final Stroke Diagnosis (TIA Subtypes)
 
-icdtia_id = tsr_12.loc[:, "icdtia_id"]
+icdtia_id = tsr_1.loc[:, "icdtia_id"]
 icdtia_id[(icdtia_id != 1) & (icdtia_id != 2)] = np.nan
 icdtia_id = icdtia_id.fillna(icdtia_id.mode()[0])
 # print(icdtia_id)
@@ -2018,7 +1329,7 @@ plt.show()
 
 # Ischemic Subtype(TOAST 分類)
 
-toast_id = tsr_12.loc[:, "toast_id"]
+toast_id = tsr_1.loc[:, "toast_id"]
 toast_id = pd.to_numeric(toast_id, errors="coerce")
 toast_id[(toast_id != 1) & (toast_id != 2) & (toast_id != 3) & (toast_id != 4) & (toast_id != 5)] = np.nan
 # print(toast_id)
@@ -2048,7 +1359,7 @@ toast_id = toast_id.fillna(999)
 
 # Large Artery Atherosclerosis (Extra)
 
-toastle_fl = tsr_12.loc[:, "toastle_fl"]
+toastle_fl = tsr_1.loc[:, "toastle_fl"]
 toastle_fl[toastle_fl == str(0)] = int(0)
 toastle_fl[toastle_fl == str(1)] = int(1)
 toastle_fl[toastle_fl == int(0)] = "N"
@@ -2066,7 +1377,7 @@ plt.show()
 
 # Large Artery Atherosclerosis (Intra)
 
-toastli_fl = tsr_12.loc[:, "toastli_fl"]
+toastli_fl = tsr_1.loc[:, "toastli_fl"]
 toastli_fl[toastli_fl == str(0)] = int(0)
 toastli_fl[toastli_fl == str(1)] = int(1)
 toastli_fl[toastli_fl == int(0)] = "N"
@@ -2084,7 +1395,7 @@ plt.show()
 
 # Specific Etiology (Cerebral Venous Thrombosis)
 
-toastsce_fl = tsr_12.loc[:, "toastsce_fl"]
+toastsce_fl = tsr_1.loc[:, "toastsce_fl"]
 toastsce_fl[toastsce_fl == str(0)] = int(0)
 toastsce_fl[toastsce_fl == str(1)] = int(1)
 toastsce_fl[toastsce_fl == int(0)] = "N"
@@ -2102,7 +1413,7 @@ plt.show()
 
 # Specific Etiology (Moyamoya Syndrome)
 
-toastsmo_fl = tsr_12.loc[:, "toastsmo_fl"]
+toastsmo_fl = tsr_1.loc[:, "toastsmo_fl"]
 toastsmo_fl[toastsmo_fl == str(0)] = int(0)
 toastsmo_fl[toastsmo_fl == str(1)] = int(1)
 toastsmo_fl[toastsmo_fl == int(0)] = "N"
@@ -2120,7 +1431,7 @@ plt.show()
 
 # Specific Etiology (Radiation)
 
-toastsra_fl = tsr_12.loc[:, "toastsra_fl"]
+toastsra_fl = tsr_1.loc[:, "toastsra_fl"]
 toastsra_fl[toastsra_fl == str(0)] = int(0)
 toastsra_fl[toastsra_fl == str(1)] = int(1)
 toastsra_fl[toastsra_fl == int(0)] = "N"
@@ -2138,7 +1449,7 @@ plt.show()
 
 # Specific Etiology (Dissection)
 
-toastsdi_fl = tsr_12.loc[:, "toastsdi_fl"]
+toastsdi_fl = tsr_1.loc[:, "toastsdi_fl"]
 toastsdi_fl[toastsdi_fl == str(0)] = int(0)
 toastsdi_fl[toastsdi_fl == str(1)] = int(1)
 toastsdi_fl[toastsdi_fl == int(0)] = "N"
@@ -2156,7 +1467,7 @@ plt.show()
 
 # Specific Etiology (Migraine)
 
-toastsmi_fl = tsr_12.loc[:, "toastsmi_fl"]
+toastsmi_fl = tsr_1.loc[:, "toastsmi_fl"]
 toastsmi_fl[toastsmi_fl == str(0)] = int(0)
 toastsmi_fl[toastsmi_fl == int(0)] = "N"
 toastsmi_fl = toastsmi_fl.fillna("Y")
@@ -2172,7 +1483,7 @@ plt.show()
 
 # Specific Etiology (Antiphospholipid Ab Synd)
 
-toastsantip_fl = tsr_12.loc[:, "toastsantip_fl"]
+toastsantip_fl = tsr_1.loc[:, "toastsantip_fl"]
 toastsantip_fl[toastsantip_fl == str(0)] = int(0)
 toastsantip_fl[toastsantip_fl == str(1)] = int(1)
 toastsantip_fl[toastsantip_fl == int(0)] = "N"
@@ -2190,7 +1501,7 @@ plt.show()
 
 # Specific Etiology (Autoimmune Disease)
 
-toastsau_fl = tsr_12.loc[:, "toastsau_fl"]
+toastsau_fl = tsr_1.loc[:, "toastsau_fl"]
 toastsau_fl[toastsau_fl == str(0)] = int(0)
 toastsau_fl[toastsau_fl == str(1)] = int(1)
 toastsau_fl[toastsau_fl == int(0)] = "N"
@@ -2208,7 +1519,7 @@ plt.show()
 
 # Specific Etiology (Hyperfibrinogenemia)
 
-toastshy_fl = tsr_12.loc[:, "toastshy_fl"]
+toastshy_fl = tsr_1.loc[:, "toastshy_fl"]
 toastshy_fl[toastshy_fl == str(0)] = int(0)
 toastshy_fl[toastshy_fl == int(0)] = "N"
 toastshy_fl = toastshy_fl.fillna("Y")
@@ -2224,7 +1535,7 @@ plt.show()
 
 # Specific Etiology (Prot C/Prot S Deficiency)
 
-toastspr_fl = tsr_12.loc[:, "toastspr_fl"]
+toastspr_fl = tsr_1.loc[:, "toastspr_fl"]
 toastspr_fl[toastspr_fl == str(0)] = int(0)
 toastspr_fl[toastspr_fl == str(1)] = int(1)
 toastspr_fl[toastspr_fl == int(0)] = "N"
@@ -2242,7 +1553,7 @@ plt.show()
 
 # Specific Etiology (Antithrombin III Deficiency)
 
-toastsantit_fl = tsr_12.loc[:, "toastsantit_fl"]
+toastsantit_fl = tsr_1.loc[:, "toastsantit_fl"]
 toastsantit_fl[toastsantit_fl == str(0)] = int(0)
 toastsantit_fl[toastsantit_fl == str(1)] = int(1)
 toastsantit_fl[toastsantit_fl == int(0)] = "N"
@@ -2260,7 +1571,7 @@ plt.show()
 
 # Specific Etiology (Homocystinuria)
 
-toastsho_fl = tsr_12.loc[:, "toastsho_fl"]
+toastsho_fl = tsr_1.loc[:, "toastsho_fl"]
 toastsho_fl[toastsho_fl == str(0)] = int(0)
 toastsho_fl[toastsho_fl == str(1)] = int(1)
 toastsho_fl[toastsho_fl == int(0)] = "N"
@@ -2278,7 +1589,7 @@ plt.show()
 
 # Specific Etiology (Hypercoagulable State)
 
-toastshys_fl = tsr_12.loc[:, "toastshys_fl"]
+toastshys_fl = tsr_1.loc[:, "toastshys_fl"]
 toastshys_fl[toastshys_fl == str(0)] = int(0)
 toastshys_fl[toastshys_fl == str(1)] = int(1)
 toastshys_fl[toastshys_fl == int(0)] = "N"
@@ -2296,7 +1607,7 @@ plt.show()
 
 # Specific Etiology (Cancer)
 
-toastsca_fl = tsr_12.loc[:, "toastsca_fl"]
+toastsca_fl = tsr_1.loc[:, "toastsca_fl"]
 toastsca_fl[toastsca_fl == str(0)] = int(0)
 toastsca_fl[toastsca_fl == str(1)] = int(1)
 toastsca_fl[toastsca_fl == int(0)] = "N"
@@ -2316,7 +1627,7 @@ plt.show()
 
 # Specific Etiology (Others)
 
-toastso_fl = tsr_12.loc[:, "toastso_fl"]
+toastso_fl = tsr_1.loc[:, "toastso_fl"]
 toastso_fl[toastso_fl == str(0)] = int(0)
 toastso_fl[toastso_fl == str(1)] = int(1)
 toastso_fl[toastso_fl == int(0)] = "N"
@@ -2337,7 +1648,7 @@ plt.show()
 
 # Undetermined Etiology
 
-toastu_id = tsr_12.loc[:, "toastu_id"]
+toastu_id = tsr_1.loc[:, "toastu_id"]
 toastu_id[(toastu_id != 1) & (toastu_id != 2) & (toastu_id != 3)] = np.nan
 toastu_id = toastu_id.fillna(toastu_id.mode()[0])
 # print(toastu_id)
@@ -2353,7 +1664,7 @@ plt.show()
 
 # Cause of ICH ???
 
-cich_id = tsr_12.loc[:, "cich_id"]
+cich_id = tsr_1.loc[:, "cich_id"]
 cich_id[(cich_id != 0) & (cich_id != 1) & (cich_id != 2)] = np.nan
 # print(cich_id)
 print(cich_id.value_counts() / len(cich_id))
@@ -2370,7 +1681,7 @@ cich_id = cich_id.fillna(999)
 
 # Cause of SAH (蜘蛛膜下腔出血(Subarachnoid hemorrhage, SAH))
 
-csah_id = tsr_12.loc[:, "csah_id"]
+csah_id = tsr_1.loc[:, "csah_id"]
 csah_id[(csah_id != 1) & (csah_id != 2) & (csah_id != 3) & (csah_id != 4) & (csah_id != 99)] = np.nan
 # csah_id = csah_id.fillna(csah_id.mode()[0])
 # print(csah_id)
@@ -2389,7 +1700,7 @@ csah_id = csah_id.fillna(999)
 
 # Type of Heart Disease (NONE)
 
-thd_id = tsr_12.loc[:, "thd_id"]
+thd_id = tsr_1.loc[:, "thd_id"]
 thd_id[thd_id == str(0)] = int(0)
 thd_id[thd_id == str(1)] = int(1)
 thd_id[thd_id == int(0)] = "N"
@@ -2407,7 +1718,7 @@ plt.show()
 
 # Type of Heart Disease (Atrial Fibrillation)
 
-thda_fl = tsr_12.loc[:, "thda_fl"]
+thda_fl = tsr_1.loc[:, "thda_fl"]
 thda_fl[thda_fl == str(0)] = int(0)
 thda_fl[thda_fl == str(1)] = int(1)
 thda_fl[thda_fl == int(0)] = "N"
@@ -2426,7 +1737,7 @@ plt.show()
 
 # Type of Heart Disease (Heart Failure)
 
-thdh_fl = tsr_12.loc[:, "thdh_fl"]
+thdh_fl = tsr_1.loc[:, "thdh_fl"]
 thdh_fl[thdh_fl == str(0)] = int(0)
 thdh_fl[thdh_fl == str(1)] = int(1)
 thdh_fl[thdh_fl == int(0)] = "N"
@@ -2445,7 +1756,7 @@ plt.show()
 
 # Type of Heart Disease (Ischemic Heart - CAD, old MI)
 
-thdi_fl = tsr_12.loc[:, "thdi_fl"]
+thdi_fl = tsr_1.loc[:, "thdi_fl"]
 thdi_fl[thdi_fl == str(0)] = int(0)
 thdi_fl[thdi_fl == str(1)] = int(1)
 thdi_fl[thdi_fl == int(0)] = "N"
@@ -2464,7 +1775,7 @@ plt.show()
 
 # Type of Heart Disease (Heart Disease - AMI<4W)
 
-thdam_fl = tsr_12.loc[:, "thdam_fl"]
+thdam_fl = tsr_1.loc[:, "thdam_fl"]
 thdam_fl[thdam_fl == str(0)] = int(0)
 thdam_fl[thdam_fl == str(1)] = int(1)
 thdam_fl[thdam_fl == int(0)] = "N"
@@ -2483,7 +1794,7 @@ plt.show()
 
 # Type of Heart Disease (Valvular Replacement)
 
-thdv_fl = tsr_12.loc[:, "thdv_fl"]
+thdv_fl = tsr_1.loc[:, "thdv_fl"]
 thdv_fl[thdv_fl == str(0)] = int(0)
 thdv_fl[thdv_fl == str(1)] = int(1)
 thdv_fl[thdv_fl == int(0)] = "N"
@@ -2502,7 +1813,7 @@ plt.show()
 
 # Type of Heart Disease (Endocarditis)
 
-thde_fl = tsr_12.loc[:, "thde_fl"]
+thde_fl = tsr_1.loc[:, "thde_fl"]
 thde_fl[thde_fl == str(0)] = int(0)
 thde_fl[thde_fl == str(1)] = int(1)
 thde_fl[thde_fl == int(0)] = "N"
@@ -2521,7 +1832,7 @@ plt.show()
 
 # Type of Heart Disease (Myxoma)
 
-thdm_fl = tsr_12.loc[:, "thdm_fl"]
+thdm_fl = tsr_1.loc[:, "thdm_fl"]
 thdm_fl[thdm_fl == str(0)] = int(0)
 thdm_fl[thdm_fl == str(1)] = int(1)
 thdm_fl[thdm_fl == int(0)] = "N"
@@ -2540,7 +1851,7 @@ plt.show()
 
 # Type of Heart Disease (RHD)
 
-thdr_fl = tsr_12.loc[:, "thdr_fl"]
+thdr_fl = tsr_1.loc[:, "thdr_fl"]
 thdr_fl[thdr_fl == str(0)] = int(0)
 thdr_fl[thdr_fl == str(1)] = int(1)
 thdr_fl[thdr_fl == int(0)] = "N"
@@ -2559,7 +1870,7 @@ plt.show()
 
 # Type of Heart Disease (Patent Foramen Ovale)
 
-thdp_fl = tsr_12.loc[:, "thdp_fl"]
+thdp_fl = tsr_1.loc[:, "thdp_fl"]
 thdp_fl[thdp_fl == str(0)] = int(0)
 thdp_fl[thdp_fl == str(1)] = int(1)
 thdp_fl[thdp_fl == int(0)] = "N"
@@ -2579,7 +1890,7 @@ plt.show()
 
 # Type of Heart Disease (Others)
 
-thdoo_fl = tsr_12.loc[:, "thdoo_fl"]
+thdoo_fl = tsr_1.loc[:, "thdoo_fl"]
 thdoo_fl[thdoo_fl == str(0)] = int(0)
 thdoo_fl[thdoo_fl == str(1)] = int(1)
 thdoo_fl[thdoo_fl == int(0)] = "N"
@@ -2601,7 +1912,7 @@ plt.show()
 
 # Hospitalised (None)
 
-trm_id = tsr_12.loc[:, "trm_id"]
+trm_id = tsr_1.loc[:, "trm_id"]
 trm_id[trm_id == str(0)] = int(0)
 trm_id[trm_id == str(1)] = int(1)
 trm_id[trm_id == int(0)] = "N"
@@ -2620,7 +1931,7 @@ plt.show()
 
 # Hospitalised (Antithrombotic Drugs Dtart Within 48h)
 
-trman_fl = tsr_12.loc[:, "trman_fl"]
+trman_fl = tsr_1.loc[:, "trman_fl"]
 trman_fl[(trman_fl != "N") & (trman_fl != "Y")] = np.nan
 trman_fl[trm_id == "Y"] = "N"
 trman_fl = trman_fl.fillna(trman_fl.mode()[0])
@@ -2636,7 +1947,7 @@ plt.show()
 
 # Hospitalised (Aspirin)
 
-trmas_fl = tsr_12.loc[:, "trmas_fl"]
+trmas_fl = tsr_1.loc[:, "trmas_fl"]
 trmas_fl[trm_id == "Y"] = "N"
 trmas_fl = trmas_fl.fillna(trmas_fl.mode()[0])
 # print(trmas_fl)
@@ -2651,7 +1962,7 @@ plt.show()
 
 # Hospitalised (Ticlopidine)
 
-trmti_fl = tsr_12.loc[:, "trmti_fl"]
+trmti_fl = tsr_1.loc[:, "trmti_fl"]
 trmti_fl[trm_id == "Y"] = "N"
 trmti_fl = trmti_fl.fillna(trmti_fl.mode()[0])
 # print(trmti_fl)
@@ -2666,7 +1977,7 @@ plt.show()
 
 # Hospitalised (Heparin)
 
-trmhe_fl = tsr_12.loc[:, "trmhe_fl"]
+trmhe_fl = tsr_1.loc[:, "trmhe_fl"]
 trmhe_fl[trm_id == "Y"] = "N"
 trmhe_fl = trmhe_fl.fillna(trmhe_fl.mode()[0])
 # print(trmhe_fl)
@@ -2681,7 +1992,7 @@ plt.show()
 
 # Hospitalised (Warfarin)
 
-trmwa_fl = tsr_12.loc[:, "trmwa_fl"]
+trmwa_fl = tsr_1.loc[:, "trmwa_fl"]
 trmwa_fl[trm_id == "Y"] = "N"
 trmwa_fl = trmwa_fl.fillna(trmwa_fl.mode()[0])
 # print(trmwa_fl)
@@ -2696,7 +2007,7 @@ plt.show()
 
 # Hospitalised (IA Thrombolysis)
 
-trmia_fl = tsr_12.loc[:, "trmia_fl"]
+trmia_fl = tsr_1.loc[:, "trmia_fl"]
 trmia_fl[trm_id == "Y"] = "N"
 trmia_fl = trmia_fl.fillna(trmia_fl.mode()[0])
 # print(trmia_fl)
@@ -2711,7 +2022,7 @@ plt.show()
 
 # Hospitalised (Foley)
 
-trmfo_fl = tsr_12.loc[:, "trmfo_fl"]
+trmfo_fl = tsr_1.loc[:, "trmfo_fl"]
 trmfo_fl[trm_id == "Y"] = "N"
 trmfo_fl = trmfo_fl.fillna(trmfo_fl.mode()[0])
 # print(trmfo_fl)
@@ -2726,7 +2037,7 @@ plt.show()
 
 # Hospitalised (Transarterial - Embolization)
 
-trmta_fl = tsr_12.loc[:, "trmta_fl"]
+trmta_fl = tsr_1.loc[:, "trmta_fl"]
 trmta_fl[trm_id == "Y"] = "N"
 trmta_fl = trmta_fl.fillna(trmta_fl.mode()[0])
 # print(trmta_fl)
@@ -2741,7 +2052,7 @@ plt.show()
 
 # Hospitalised (Sign DNR)
 
-trmsd_fl = tsr_12.loc[:, "trmsd_fl"]
+trmsd_fl = tsr_1.loc[:, "trmsd_fl"]
 trmsd_fl[trm_id == "Y"] = "N"
 trmsd_fl = trmsd_fl.fillna(trmsd_fl.mode()[0])
 # print(trmsd_fl)
@@ -2756,7 +2067,7 @@ plt.show()
 
 # Hospitalised (Rehab)
 
-trmre_fl = tsr_12.loc[:, "trmre_fl"]
+trmre_fl = tsr_1.loc[:, "trmre_fl"]
 trmre_fl[trm_id == "Y"] = "N"
 trmre_fl = trmre_fl.fillna(trmre_fl.mode()[0])
 # print(trmre_fl)
@@ -2771,7 +2082,7 @@ plt.show()
 
 # Hospitalised (Endovascular Treatment)
 
-trmen_fl = tsr_12.loc[:, "trmen_fl"]
+trmen_fl = tsr_1.loc[:, "trmen_fl"]
 trmen_fl[(trmen_fl != "N") & (trmen_fl != "Y")] = np.nan
 trmen_fl[trm_id == "Y"] = "N"
 trmen_fl = trmen_fl.fillna(trmen_fl.mode()[0])
@@ -2787,7 +2098,7 @@ plt.show()
 
 # Hospitalised (Endovascular Treatment Options)
 
-trmen_id = tsr_12.loc[:, "trmen_id"]
+trmen_id = tsr_1.loc[:, "trmen_id"]
 trmen_id[trmen_id == str(1)] = int(1)
 trmen_id[trmen_id == str(2)] = int(2)
 trmen_id[trmen_id == str(3)] = int(3)
@@ -2798,8 +2109,8 @@ trmen_id[trmen_fl == "N"] = np.nan
 print(trmen_id.value_counts() / len(trmen_id))
 # print(trmen_id.describe())
 
-# trmen_id_labels = ["Aneurysm","AVM","Stenting"]
-sns.countplot(trmen_id)  # .set_xticklabels(trmen_id_labels)
+trmen_id_labels = ["Aneurysm", "AVM", "Stenting"]
+sns.countplot(trmen_id).set_xticklabels(trmen_id_labels)
 plt.title("Hospitalised (Endovascular Treatment Options) - Barplot")
 plt.xlabel('Hospitalised (Endovascular Treatment Options)')
 plt.ylabel('Number', rotation=0)
@@ -2808,7 +2119,7 @@ trmen_id = trmen_id.fillna(999)
 
 # Hospitalised (Aggrenox)
 
-trmag_fl = tsr_12.loc[:, "trmag_fl"]
+trmag_fl = tsr_1.loc[:, "trmag_fl"]
 trmag_fl[trm_id == "Y"] = "N"
 trmag_fl = trmag_fl.fillna(trmag_fl.mode()[0])
 # print(trmag_fl)
@@ -2823,7 +2134,7 @@ plt.show()
 
 # Hospitalised (Clopidogrel)
 
-trmcl_fl = tsr_12.loc[:, "trmcl_fl"]
+trmcl_fl = tsr_1.loc[:, "trmcl_fl"]
 trmcl_fl[trm_id == "Y"] = "N"
 trmcl_fl = trmcl_fl.fillna(trmcl_fl.mode()[0])
 # print(trmcl_fl)
@@ -2838,7 +2149,7 @@ plt.show()
 
 # Hospitalised (Pletaal)
 
-trmpl_fl = tsr_12.loc[:, "trmpl_fl"]
+trmpl_fl = tsr_1.loc[:, "trmpl_fl"]
 trmpl_fl[trm_id == "Y"] = "N"
 trmpl_fl = trmpl_fl.fillna(trmpl_fl.mode()[0])
 # print(trmpl_fl)
@@ -2853,7 +2164,7 @@ plt.show()
 
 # Hospitalised (LMW Heparin)
 
-trmlm_fl = tsr_12.loc[:, "trmlm_fl"]
+trmlm_fl = tsr_1.loc[:, "trmlm_fl"]
 trmlm_fl[trm_id == "Y"] = "N"
 trmlm_fl = trmlm_fl.fillna(trmlm_fl.mode()[0])
 # print(trmlm_fl)
@@ -2868,7 +2179,7 @@ plt.show()
 
 # Hospitalised (IV t-PA)
 
-trmiv_fl = tsr_12.loc[:, "trmiv_fl"]
+trmiv_fl = tsr_1.loc[:, "trmiv_fl"]
 trmiv_fl[trm_id == "Y"] = "N"
 trmiv_fl = trmiv_fl.fillna(trmiv_fl.mode()[0])
 # print(trmiv_fl)
@@ -2883,7 +2194,7 @@ plt.show()
 
 # Hospitalised (Ventilator)
 
-trmve_fl = tsr_12.loc[:, "trmve_fl"]
+trmve_fl = tsr_1.loc[:, "trmve_fl"]
 trmve_fl[trm_id == "Y"] = "N"
 trmve_fl = trmve_fl.fillna(trmve_fl.mode()[0])
 # print(trmve_fl)
@@ -2898,7 +2209,7 @@ plt.show()
 
 # Hospitalised (Nasogastric Tube)
 
-trmng_fl = tsr_12.loc[:, "trmng_fl"]
+trmng_fl = tsr_1.loc[:, "trmng_fl"]
 trmng_fl[trm_id == "Y"] = "N"
 trmng_fl = trmng_fl.fillna(trmng_fl.mode()[0])
 # print(trmng_fl)
@@ -2913,7 +2224,7 @@ plt.show()
 
 # Hospitalised (Dysphagia Screen)
 
-trmdy_fl = tsr_12.loc[:, "trmdy_fl"]
+trmdy_fl = tsr_1.loc[:, "trmdy_fl"]
 trmdy_fl[trm_id == "Y"] = "N"
 trmdy_fl = trmdy_fl.fillna(trmdy_fl.mode()[0])
 # print(trmdy_fl)
@@ -2928,7 +2239,7 @@ plt.show()
 
 # Hospitalised (Admission to ICU)
 
-trmicu_fl = tsr_12.loc[:, "trmicu_fl"]
+trmicu_fl = tsr_1.loc[:, "trmicu_fl"]
 trmicu_fl[trm_id == "Y"] = "N"
 trmicu_fl = trmicu_fl.fillna(trmicu_fl.mode()[0])
 # print(trmicu_fl)
@@ -2943,7 +2254,7 @@ plt.show()
 
 # Hospitalised (Smoking Cessation Counseling)
 
-trmsm_fl = tsr_12.loc[:, "trmsm_fl"]
+trmsm_fl = tsr_1.loc[:, "trmsm_fl"]
 trmsm_fl[trm_id == "Y"] = "N"
 trmsm_fl = trmsm_fl.fillna(trmsm_fl.mode()[0])
 # print(trmsm_fl)
@@ -2958,7 +2269,7 @@ plt.show()
 
 # Hospitalised (Education About Stroke)
 
-trmed_fl = tsr_12.loc[:, "trmed_fl"]
+trmed_fl = tsr_1.loc[:, "trmed_fl"]
 trmed_fl[trm_id == "Y"] = "N"
 trmed_fl = trmed_fl.fillna(trmed_fl.mode()[0])
 # print(trmed_fl)
@@ -2973,7 +2284,7 @@ plt.show()
 
 # Hospitalised (Operation for)
 
-trmop_fl = tsr_12.loc[:, "trmop_fl"]
+trmop_fl = tsr_1.loc[:, "trmop_fl"]
 trmop_fl[(trmop_fl != "N") & (trmop_fl != "Y")] = np.nan
 trmop_fl[trm_id == "Y"] = "N"
 trmop_fl = trmop_fl.fillna(trmop_fl.mode()[0])
@@ -2989,7 +2300,7 @@ plt.show()
 
 # Hospitalised (Operation for Options)
 
-trmop_id = tsr_12.loc[:, "trmop_id"]
+trmop_id = tsr_1.loc[:, "trmop_id"]
 trmop_id = pd.to_numeric(trmop_id, errors="coerce")
 trmop_id = trmop_id.fillna(trmop_id.mode()[0])
 trmop_id[trmop_fl == "N"] = np.nan
@@ -2997,8 +2308,7 @@ trmop_id[trmop_fl == "N"] = np.nan
 print(trmop_id.value_counts() / len(trmop_id))
 # print(trmop_id.describe())
 
-# trmop_id_labels = ["Infracion","ICH","Carotid Stenosis \n (eg:Endarterectomy)","Aneurysm","AVM"]
-trmop_id_labels = ["Infracion", "ICH", "Aneurysm"]
+trmop_id_labels = ["Infracion", "ICH", "Carotid Stenosis \n (eg:Endarterectomy)", "Aneurysm", "AVM"]
 sns.countplot(trmop_id).set_xticklabels(trmop_id_labels)
 plt.title("Hospitalised (Operation for Options) - Barplot")
 plt.xlabel('Hospitalised (Operation for Options)')
@@ -3008,7 +2318,7 @@ trmop_id = trmop_id.fillna(999)
 
 # Hospitalised (Others)
 
-trmot_fl = tsr_12.loc[:, "trmot_fl"]
+trmot_fl = tsr_1.loc[:, "trmot_fl"]
 trmot_fl[(trmot_fl != "N") & (trmot_fl != "Y")] = np.nan
 trmot_fl[trm_id == "Y"] = "N"
 trmot_fl = trmot_fl.fillna(trmot_fl.mode()[0])
@@ -3026,7 +2336,7 @@ plt.show()
 
 # Discharged (None)
 
-om_fl = tsr_12.loc[:, "om_fl"]
+om_fl = tsr_1.loc[:, "om_fl"]
 om_fl = om_fl.fillna(om_fl.mode()[0])
 # print(om_fl)
 print(om_fl.value_counts() / len(om_fl))
@@ -3040,7 +2350,7 @@ plt.show()
 
 # Discharged (Aspirin)
 
-omas_fl = tsr_12.loc[:, "omas_fl"]
+omas_fl = tsr_1.loc[:, "omas_fl"]
 omas_fl[om_fl == "Y"] = "N"
 omas_fl = omas_fl.fillna(omas_fl.mode()[0])
 # print(omas_fl)
@@ -3055,7 +2365,7 @@ plt.show()
 
 # Discharged (Aggrenox)
 
-omag_fl = tsr_12.loc[:, "omag_fl"]
+omag_fl = tsr_1.loc[:, "omag_fl"]
 omag_fl[om_fl == "Y"] = "N"
 omag_fl = omag_fl.fillna(omag_fl.mode()[0])
 # print(omag_fl)
@@ -3070,7 +2380,7 @@ plt.show()
 
 # Discharged (Ticlopidine)
 
-omti_fl = tsr_12.loc[:, "omti_fl"]
+omti_fl = tsr_1.loc[:, "omti_fl"]
 omti_fl[om_fl == "Y"] = "N"
 omti_fl = omti_fl.fillna(omti_fl.mode()[0])
 # print(omti_fl)
@@ -3085,7 +2395,7 @@ plt.show()
 
 # Discharged (Clopidogrel)
 
-omcl_fl = tsr_12.loc[:, "omcl_fl"]
+omcl_fl = tsr_1.loc[:, "omcl_fl"]
 omcl_fl[(omcl_fl != "N") & (omcl_fl != "Y")] = np.nan
 omcl_fl[trm_id == "Y"] = "N"
 omcl_fl = omcl_fl.fillna(omcl_fl.mode()[0])
@@ -3101,7 +2411,7 @@ plt.show()
 
 # Discharged (Pletaal)
 
-ompl_fl = tsr_12.loc[:, "ompl_fl"]
+ompl_fl = tsr_1.loc[:, "ompl_fl"]
 ompl_fl[om_fl == "Y"] = "N"
 ompl_fl = ompl_fl.fillna(ompl_fl.mode()[0])
 # print(ompl_fl)
@@ -3116,7 +2426,7 @@ plt.show()
 
 # Discharged (Anti H/T Drug)
 
-omanh_fl = tsr_12.loc[:, "omanh_fl"]
+omanh_fl = tsr_1.loc[:, "omanh_fl"]
 omanh_fl[(omanh_fl != "Y") & (omanh_fl != "N")] = np.nan
 omanh_fl[om_fl == "Y"] = "N"
 omanh_fl = omanh_fl.fillna(omanh_fl.mode()[0])
@@ -3132,7 +2442,7 @@ plt.show()
 
 # Discharged (Warfarin)
 
-omwa_fl = tsr_12.loc[:, "omwa_fl"]
+omwa_fl = tsr_1.loc[:, "omwa_fl"]
 omwa_fl[(omwa_fl != "N") & (omwa_fl != "Y")] = np.nan
 omwa_fl[om_fl == "Y"] = "N"
 omwa_fl = omwa_fl.fillna(omwa_fl.mode()[0])
@@ -3150,7 +2460,7 @@ plt.show()
 
 # Discharged (Anti DM Drug)
 
-omand_fl = tsr_12.loc[:, "omand_fl"]
+omand_fl = tsr_1.loc[:, "omand_fl"]
 omand_fl[om_fl == "Y"] = "N"
 omand_fl = omand_fl.fillna(omand_fl.mode()[0])
 # print(omand_fl)
@@ -3165,7 +2475,7 @@ plt.show()
 
 # Discharged (Anti DM Drug - Oral)
 
-omora_fl = tsr_12.loc[:, "omora_fl"]
+omora_fl = tsr_1.loc[:, "omora_fl"]
 omora_fl[(omora_fl != "Y") & (omora_fl != "N")] = np.nan
 omora_fl[om_fl == "Y"] = "N"
 omora_fl = omora_fl.fillna(omora_fl.mode()[0])
@@ -3181,7 +2491,7 @@ plt.show()
 
 # Discharged (Anti DM Drug - Insulin)
 
-omins_fl = tsr_12.loc[:, "omins_fl"]
+omins_fl = tsr_1.loc[:, "omins_fl"]
 omins_fl[(omins_fl != "Y") & (omins_fl != "N")] = np.nan
 omins_fl[om_fl == "Y"] = "N"
 omins_fl = omins_fl.fillna(omins_fl.mode()[0])
@@ -3197,7 +2507,7 @@ plt.show()
 
 # Discharged (Lipid Lower Drug)
 
-omli_fl = tsr_12.loc[:, "omli_fl"]
+omli_fl = tsr_1.loc[:, "omli_fl"]
 omli_fl[(omli_fl != "Y") & (omli_fl != "N")] = np.nan
 omli_fl[om_fl == "Y"] = "N"
 omli_fl = omli_fl.fillna(omli_fl.mode()[0])
@@ -3213,7 +2523,7 @@ plt.show()
 
 # Discharged (Lipid Lower Drug - Statin)
 
-omst_fl = tsr_12.loc[:, "omst_fl"]
+omst_fl = tsr_1.loc[:, "omst_fl"]
 omst_fl[om_fl == "Y"] = "N"
 omst_fl = omst_fl.fillna(omst_fl.mode()[0])
 # print(omst_fl)
@@ -3228,7 +2538,7 @@ plt.show()
 
 # Discharged (Lipid Lower Drug - Non-Statin)
 
-omns_fl = tsr_12.loc[:, "omns_fl"]
+omns_fl = tsr_1.loc[:, "omns_fl"]
 omns_fl[(omns_fl != "N") & (omns_fl != "Y")] = np.nan
 omns_fl[om_fl == "Y"] = "N"
 omns_fl = omns_fl.fillna(omns_fl.mode()[0])
@@ -3244,7 +2554,7 @@ plt.show()
 
 # Discharged (Others)
 
-omliot_fl = tsr_12.loc[:, "omliot_fl"]
+omliot_fl = tsr_1.loc[:, "omliot_fl"]
 omliot_fl[(omliot_fl != "N") & (omliot_fl != "Y")] = np.nan
 omliot_fl[om_fl == "Y"] = "N"
 omliot_fl = omliot_fl.fillna(omliot_fl.mode()[0])
@@ -3262,7 +2572,7 @@ plt.show()
 
 # Discharged (Others2)
 
-omliot2_fl = tsr_12.loc[:, "omliot2_fl"]
+omliot2_fl = tsr_1.loc[:, "omliot2_fl"]
 omliot2_fl[(omliot2_fl != "N") & (omliot2_fl != "Y")] = np.nan
 omliot2_fl[om_fl == "Y"] = "N"
 omliot2_fl = omliot2_fl.fillna(omliot2_fl.mode()[0])
@@ -3280,7 +2590,7 @@ plt.show()
 
 # Discharged (有相關原因未使用抗血栓藥物)
 
-omad_fl = tsr_12.loc[:, "omad_fl"]
+omad_fl = tsr_1.loc[:, "omad_fl"]
 omad_fl[(omad_fl != "N") & (omad_fl != "Y")] = np.nan
 omad_fl[om_fl == "Y"] = "N"
 omad_fl = omad_fl.fillna(omad_fl.mode()[0])
@@ -3296,7 +2606,7 @@ plt.show()
 
 # Discharged (有相關原因未使用抗血栓藥物 Options)
 
-omad_id = tsr_12.loc[:, "omad_id"]
+omad_id = tsr_1.loc[:, "omad_id"]
 omad_id = pd.to_numeric(omad_id, errors="coerce")
 omad_id[(omad_id != 1) & (omad_id != 2) & (omad_id != 3) & (omad_id != 4) & (omad_id != 5) & (omad_id != 6)] = np.nan
 omad_id = omad_id.fillna(omad_id.mode()[0])
@@ -3330,7 +2640,7 @@ omad_id = omad_id.fillna(999)
 
 # Before Admitted (None)
 
-am_fl = tsr_12.loc[:, "am_fl"]
+am_fl = tsr_1.loc[:, "am_fl"]
 am_fl = am_fl.fillna(am_fl.mode()[0])
 # print(am_fl)
 print(am_fl.value_counts() / len(am_fl))
@@ -3344,7 +2654,7 @@ plt.show()
 
 # Before Admitted (Aspirin)
 
-amas_fl = tsr_12.loc[:, "amas_fl"]
+amas_fl = tsr_1.loc[:, "amas_fl"]
 amas_fl[(amas_fl != "Y") & (amas_fl != "N")] = np.nan
 amas_fl[am_fl == "Y"] = "N"
 amas_fl = amas_fl.fillna(amas_fl.mode()[0])
@@ -3360,7 +2670,7 @@ plt.show()
 
 # Before Admitted (Aggrenox)
 
-amag_fl = tsr_12.loc[:, "amag_fl"]
+amag_fl = tsr_1.loc[:, "amag_fl"]
 amag_fl[amag_fl == '0'] = "N"
 amag_fl[am_fl == "Y"] = "N"
 amag_fl = amag_fl.fillna(amag_fl.mode()[0])
@@ -3376,7 +2686,7 @@ plt.show()
 
 # Before Admitted (Ticlopidine)
 
-amti_fl = tsr_12.loc[:, "amti_fl"]
+amti_fl = tsr_1.loc[:, "amti_fl"]
 amti_fl[am_fl == "Y"] = "N"
 amti_fl[(amti_fl != "Y") & (amti_fl != "N")] = np.nan
 amti_fl = amti_fl.fillna(amti_fl.mode()[0])
@@ -3392,7 +2702,7 @@ plt.show()
 
 # Before Admitted (Clopidogrel)
 
-amcl_fl = tsr_12.loc[:, "amcl_fl"]
+amcl_fl = tsr_1.loc[:, "amcl_fl"]
 amcl_fl[amcl_fl == "0"] = "N"
 amcl_fl[am_fl == "Y"] = "N"
 amcl_fl[(amcl_fl != "Y") & (amcl_fl != "N")] = np.nan
@@ -3409,7 +2719,7 @@ plt.show()
 
 # Before Admitted (Pletaal)
 
-ampl_fl = tsr_12.loc[:, "ampl_fl"]
+ampl_fl = tsr_1.loc[:, "ampl_fl"]
 ampl_fl[(ampl_fl != "Y") & (ampl_fl != "N")] = np.nan
 ampl_fl[am_fl == "Y"] = "N"
 ampl_fl = ampl_fl.fillna(ampl_fl.mode()[0])
@@ -3425,7 +2735,7 @@ plt.show()
 
 # Before Admitted (Anti H/T Drug)
 
-amanh_fl = tsr_12.loc[:, "amanh_fl"]
+amanh_fl = tsr_1.loc[:, "amanh_fl"]
 amanh_fl[(amanh_fl != "Y") & (amanh_fl != "N")] = np.nan
 amanh_fl[am_fl == "Y"] = "N"
 amanh_fl = amanh_fl.fillna(amanh_fl.mode()[0])
@@ -3441,7 +2751,7 @@ plt.show()
 
 # Before Admitted (Wafirin)
 
-amwa_fl = tsr_12.loc[:, "amwa_fl"]
+amwa_fl = tsr_1.loc[:, "amwa_fl"]
 amwa_fl[am_fl == "Y"] = "N"
 amwa_fl = amwa_fl.fillna(amwa_fl.mode()[0])
 # print(amwa_fl)
@@ -3456,7 +2766,7 @@ plt.show()
 
 # Before Admitted (Anti DM Drug)
 
-amand_fl = tsr_12.loc[:, "amand_fl"]
+amand_fl = tsr_1.loc[:, "amand_fl"]
 amand_fl[am_fl == "Y"] = "N"
 amand_fl = amand_fl.fillna(amand_fl.mode()[0])
 # print(amand_fl)
@@ -3471,7 +2781,7 @@ plt.show()
 
 # Before Admitted (Lipid Lowering Drug)
 
-amli_fl = tsr_12.loc[:, "amli_fl"]
+amli_fl = tsr_1.loc[:, "amli_fl"]
 amli_fl[am_fl == "Y"] = "N"
 amli_fl = amli_fl.fillna(amli_fl.mode()[0])
 # print(amli_fl)
@@ -3486,7 +2796,7 @@ plt.show()
 
 # Before Admitted (Others)
 
-amliot_fl = tsr_12.loc[:, "amliot_fl"]
+amliot_fl = tsr_1.loc[:, "amliot_fl"]
 amliot_fl[am_fl == "Y"] = "N"
 amliot_fl = amliot_fl.fillna(amliot_fl.mode()[0])
 # print(amliot_fl)
@@ -3503,7 +2813,7 @@ plt.show()
 
 # Before Admitted (Others2)
 
-amliot2_fl = tsr_12.loc[:, "amliot2_fl"]
+amliot2_fl = tsr_1.loc[:, "amliot2_fl"]
 amliot2_fl[amliot2_fl == str(0)] = "N"
 amliot2_fl[am_fl == "Y"] = "N"
 amliot2_fl = amliot2_fl.fillna(amliot2_fl.mode()[0])
@@ -3521,7 +2831,7 @@ plt.show()
 
 # Complication (None)
 
-com_id = tsr_12.loc[:, "com_id"]
+com_id = tsr_1.loc[:, "com_id"]
 com_id[com_id == '0'] = "N"
 com_id = com_id.fillna(com_id.mode()[0])
 # print(com_id)
@@ -3536,7 +2846,7 @@ plt.show()
 
 # Complication (Pneumonia)
 
-compn_fl = tsr_12.loc[:, "compn_fl"]
+compn_fl = tsr_1.loc[:, "compn_fl"]
 compn_fl[compn_fl == str(0)] = "N"
 compn_fl[com_id == "Y"] = "N"
 compn_fl = compn_fl.fillna(compn_fl.mode()[0])
@@ -3552,7 +2862,7 @@ plt.show()
 
 # Complication (Urinary Tract Infection)
 
-comut_fl = tsr_12.loc[:, "comut_fl"]
+comut_fl = tsr_1.loc[:, "comut_fl"]
 comut_fl[com_id == "Y"] = "N"
 comut_fl = comut_fl.fillna(comut_fl.mode()[0])
 # print(comut_fl)
@@ -3567,7 +2877,7 @@ plt.show()
 
 # Complication (UGI Bleeding)
 
-comug_fl = tsr_12.loc[:, "comug_fl"]
+comug_fl = tsr_1.loc[:, "comug_fl"]
 comug_fl[com_id == "Y"] = "N"
 comug_fl = comug_fl.fillna(comug_fl.mode()[0])
 # print(comug_fl)
@@ -3582,7 +2892,7 @@ plt.show()
 
 # Complication (Pressure Sore)
 
-compr_fl = tsr_12.loc[:, "compr_fl"]
+compr_fl = tsr_1.loc[:, "compr_fl"]
 compr_fl[com_id == "Y"] = "N"
 compr_fl = compr_fl.fillna(compr_fl.mode()[0])
 # print(compr_fl)
@@ -3597,7 +2907,7 @@ plt.show()
 
 # Complication (Pulmonary Edema)
 
-compu_fl = tsr_12.loc[:, "compu_fl"]
+compu_fl = tsr_1.loc[:, "compu_fl"]
 compu_fl[compu_fl == str(0)] = "N"
 compu_fl[com_id == "Y"] = "N"
 compu_fl = compu_fl.fillna(compu_fl.mode()[0])
@@ -3613,7 +2923,7 @@ plt.show()
 
 # Complication (Acute Coronary Syndrome)
 
-comac_fl = tsr_12.loc[:, "comac_fl"]
+comac_fl = tsr_1.loc[:, "comac_fl"]
 comac_fl[com_id == "Y"] = "N"
 comac_fl = comac_fl.fillna(comac_fl.mode()[0])
 # print(comac_fl)
@@ -3628,7 +2938,7 @@ plt.show()
 
 # Complication (Seizure)
 
-comse_fl = tsr_12.loc[:, "comse_fl"]
+comse_fl = tsr_1.loc[:, "comse_fl"]
 comse_fl[(comse_fl != "Y") & (comse_fl != "N")] = np.nan
 comse_fl[com_id == "Y"] = "N"
 comse_fl = comse_fl.fillna(comse_fl.mode()[0])
@@ -3644,7 +2954,7 @@ plt.show()
 
 # Complication (Deep Vein Thrombosis)
 
-comde_fl = tsr_12.loc[:, "comde_fl"]
+comde_fl = tsr_1.loc[:, "comde_fl"]
 comde_fl[(comde_fl != "N") & (comde_fl != "Y")] = np.nan
 comde_fl[com_id == "Y"] = "N"
 comde_fl = comde_fl.fillna(comde_fl.mode()[0])
@@ -3661,7 +2971,7 @@ plt.show()
 
 # Complication (Others)
 
-como_fl = tsr_12.loc[:, "como_fl"]
+como_fl = tsr_1.loc[:, "como_fl"]
 como_fl[(como_fl != "N") & (como_fl != "Y")] = np.nan
 como_fl[com_id == "Y"] = "N"
 como_fl = como_fl.fillna(como_fl.mode()[0])
@@ -3679,7 +2989,7 @@ plt.show()
 
 # Deterioration (None)
 
-det_id = tsr_12.loc[:, "det_id"]
+det_id = tsr_1.loc[:, "det_id"]
 det_id[det_id == '0'] = "N"
 det_id[(det_id != "N") & (det_id != "Y")] = np.nan
 det_id = det_id.fillna(det_id.mode()[0])
@@ -3695,7 +3005,7 @@ plt.show()
 
 # Deterioration (Stroke-in-evolution - NIHSS≧2)
 
-detst_fl = tsr_12.loc[:, "detst_fl"]
+detst_fl = tsr_1.loc[:, "detst_fl"]
 detst_fl[det_id == "Y"] = "N"
 detst_fl = detst_fl.fillna(detst_fl.mode()[0])
 # print(detst_fl)
@@ -3710,7 +3020,7 @@ plt.show()
 
 # Deterioration (Herniation)
 
-dethe_fl = tsr_12.loc[:, "dethe_fl"]
+dethe_fl = tsr_1.loc[:, "dethe_fl"]
 dethe_fl[dethe_fl == str(0)] = "N"
 dethe_fl[det_id == "Y"] = "N"
 dethe_fl = dethe_fl.fillna(dethe_fl.mode()[0])
@@ -3726,7 +3036,7 @@ plt.show()
 
 # Deterioration (Hemorrhagic Infarct)
 
-detho_fl = tsr_12.loc[:, "detho_fl"]
+detho_fl = tsr_1.loc[:, "detho_fl"]
 detho_fl[det_id == "Y"] = "N"
 detho_fl = detho_fl.fillna(detho_fl.mode()[0])
 # print(detho_fl)
@@ -3741,7 +3051,7 @@ plt.show()
 
 # Deterioration (Hemorrhagic Infarct 36hrs)
 
-dethoh_fl = tsr_12.loc[:, "dethoh_fl"]
+dethoh_fl = tsr_1.loc[:, "dethoh_fl"]
 dethoh_fl[(dethoh_fl != "N") & (dethoh_fl != "Y")] = np.nan
 dethoh_fl[det_id == "Y"] = "N"
 dethoh_fl = dethoh_fl.fillna(dethoh_fl.mode()[0])
@@ -3757,7 +3067,7 @@ plt.show()
 
 # Deterioration (Hematoma Enlargement - ICH)
 
-detha_fl = tsr_12.loc[:, "detha_fl"]
+detha_fl = tsr_1.loc[:, "detha_fl"]
 detha_fl[(detha_fl != "N") & (detha_fl != "Y")] = np.nan
 detha_fl[det_id == "Y"] = "N"
 detha_fl = detha_fl.fillna(detha_fl.mode()[0])
@@ -3773,7 +3083,7 @@ plt.show()
 
 # Deterioration (Vasospasm - SAH)
 
-detva_fl = tsr_12.loc[:, "detva_fl"]
+detva_fl = tsr_1.loc[:, "detva_fl"]
 detva_fl[det_id == "Y"] = "N"
 detva_fl = detva_fl.fillna(detva_fl.mode()[0])
 # print(detva_fl)
@@ -3788,7 +3098,7 @@ plt.show()
 
 # Deterioration (Re-bleeding - SAH)
 
-detre_fl = tsr_12.loc[:, "detre_fl"]
+detre_fl = tsr_1.loc[:, "detre_fl"]
 detre_fl[(detre_fl != "N") & (detre_fl != "Y")] = np.nan
 detre_fl[det_id == "Y"] = "N"
 detre_fl = detre_fl.fillna(detre_fl.mode()[0])
@@ -3804,7 +3114,7 @@ plt.show()
 
 # Deterioration (Medical Problems)
 
-detme_fl = tsr_12.loc[:, "detme_fl"]
+detme_fl = tsr_1.loc[:, "detme_fl"]
 detme_fl[(detme_fl != "N") & (detme_fl != "Y")] = np.nan
 detme_fl[det_id == "Y"] = "N"
 detme_fl = detme_fl.fillna(detme_fl.mode()[0])
@@ -3820,7 +3130,7 @@ plt.show()
 
 # Deterioration (Others)
 
-deto_fl = tsr_12.loc[:, "deto_fl"]
+deto_fl = tsr_1.loc[:, "deto_fl"]
 deto_fl[deto_fl == str(0)] = "N"
 deto_fl[deto_fl == str(1)] = "Y"
 deto_fl[(deto_fl != "N") & (deto_fl != "Y")] = np.nan
@@ -3840,7 +3150,7 @@ plt.show()
 
 # CT日期
 
-ct_time = tsr_12.loc[:, ["ct_dt", "cth_nm", "ctm_nm"]]
+ct_time = tsr_1.loc[:, ["ct_dt", "cth_nm", "ctm_nm"]]
 ct_time.ct_dt = pd.to_datetime(ct_time.ct_dt, errors="coerce", format="%Y-%m-%d")
 ct_time.ct_dt[(ct_time.ct_dt.dt.year < 2006) | (ct_time.ct_dt.dt.year > 2021)] = np.nan
 
@@ -3871,7 +3181,7 @@ plt.show()
 
 # CT時間 - 時
 
-cth_nm = tsr_12.loc[:, "cth_nm"]
+cth_nm = tsr_1.loc[:, "cth_nm"]
 cth_nm = pd.to_numeric(cth_nm, errors="coerce")
 cth_nm[(cth_nm < 0) | (cth_nm > 24)] = np.nan
 cth_nm[cth_nm == 24] = 0
@@ -3882,7 +3192,7 @@ print(cth_nm.describe())
 
 # CT時間 - 分
 
-ctm_nm = tsr_12.loc[:, "ctm_nm"]
+ctm_nm = tsr_1.loc[:, "ctm_nm"]
 ctm_nm = pd.to_numeric(ctm_nm, errors="coerce")
 ctm_nm[(ctm_nm < 0) | (ctm_nm > 60)] = np.nan
 ctm_nm[ctm_nm == 60] = 0
@@ -3893,7 +3203,7 @@ print(ctm_nm.describe())
 
 # CT no Findings
 
-ct_fl = tsr_12.loc[:, "ct_fl"]
+ct_fl = tsr_1.loc[:, "ct_fl"]
 ct_fl[(ct_fl != "N") & (ct_fl != "Y")] = np.nan
 ct_fl = ct_fl.fillna(ct_fl.mode()[0])
 # print(ct_fl)
@@ -3910,7 +3220,7 @@ plt.show()
 
 # MRI日期
 
-mri_time = tsr_12.loc[:, ["mri_dt", "mrih_nm", "mrim_nm"]]
+mri_time = tsr_1.loc[:, ["mri_dt", "mrih_nm", "mrim_nm"]]
 mri_time.mri_dt = pd.to_datetime(mri_time.mri_dt, errors="coerce", format="%Y-%m-%d")
 mri_time.mri_dt[(mri_time.mri_dt.dt.year < 2006) | (mri_time.mri_dt.dt.year > 2021)] = np.nan
 
@@ -3941,7 +3251,7 @@ plt.show()
 
 # MRI時間 - 時
 
-mrih_nm = tsr_12.loc[:, "mrih_nm"]
+mrih_nm = tsr_1.loc[:, "mrih_nm"]
 mrih_nm = pd.to_numeric(mrih_nm, errors="coerce")
 mrih_nm[(mrih_nm < 0) | (mrih_nm > 24)] = np.nan
 mrih_nm[mrih_nm == 24] = 0
@@ -3952,7 +3262,7 @@ print(mrih_nm.describe())
 
 # MRI時間 - 分
 
-mrim_nm = tsr_12.loc[:, "mrim_nm"]
+mrim_nm = tsr_1.loc[:, "mrim_nm"]
 mrim_nm = pd.to_numeric(mrim_nm, errors="coerce")
 mrim_nm[(mrim_nm < 0) | (mrim_nm > 60)] = np.nan
 mrim_nm[mrim_nm == 60] = 0
@@ -3963,7 +3273,7 @@ print(mrim_nm.describe())
 
 # MRI no Findings
 
-mri_fl = tsr_12.loc[:, "mri_fl"]
+mri_fl = tsr_1.loc[:, "mri_fl"]
 mri_fl[(mri_fl != "N") & (mri_fl != "Y")] = np.nan
 mri_fl = mri_fl.fillna(mri_fl.mode()[0])
 # print(mri_fl)
@@ -3982,7 +3292,7 @@ plt.show()
 
 # Carotid Duplex
 
-cd_id = tsr_12.loc[:, "cd_id"]
+cd_id = tsr_1.loc[:, "cd_id"]
 cd_id = pd.to_numeric(cd_id, errors="coerce")
 cd_id[(cd_id != 0) & (cd_id != 1) & (cd_id != 2)] = np.nan
 cd_id = cd_id.fillna(cd_id.mode()[0])
@@ -3999,7 +3309,7 @@ plt.show()
 
 # Carotid Atherosclerosis (R ICA)
 
-cdr_id = tsr_12.loc[:, "cdr_id"]
+cdr_id = tsr_1.loc[:, "cdr_id"]
 cdr_id = pd.to_numeric(cdr_id, errors="coerce")
 cdr_id[(cdr_id != 1) & (cdr_id != 2) & (cdr_id != 3) & (cdr_id != 4)] = np.nan
 cdr_id = cdr_id.fillna(cdr_id.mode()[0])
@@ -4016,7 +3326,7 @@ plt.show()
 
 # Carotid Atherosclerosis (L ICA)
 
-cdl_id = tsr_12.loc[:, "cdl_id"]
+cdl_id = tsr_1.loc[:, "cdl_id"]
 cdl_id = pd.to_numeric(cdl_id, errors="coerce")
 cdl_id[(cdl_id != 1) & (cdl_id != 2) & (cdl_id != 3) & (cdl_id != 4)] = np.nan
 cdl_id = cdl_id.fillna(cdl_id.mode()[0])
@@ -4033,7 +3343,7 @@ plt.show()
 
 # TCCS
 
-tccs_id = tsr_12.loc[:, "tccs_id"]
+tccs_id = tsr_1.loc[:, "tccs_id"]
 tccs_id = pd.to_numeric(tccs_id, errors="coerce")
 tccs_id[(tccs_id != 1) & (tccs_id != 0)] = np.nan
 tccs_id = tccs_id.fillna(tccs_id.mode()[0])
@@ -4050,7 +3360,7 @@ plt.show()
 
 # TCCS (R MCA)
 
-tccsr_id = tsr_12.loc[:, "tccsr_id"]
+tccsr_id = tsr_1.loc[:, "tccsr_id"]
 tccsr_id = pd.to_numeric(tccsr_id, errors="coerce")
 tccsr_id[(tccsr_id != 1) & (tccsr_id != 2) & (tccsr_id != 3)] = np.nan
 tccsr_id = tccsr_id.fillna(tccsr_id.mode()[0])
@@ -4058,8 +3368,7 @@ tccsr_id = tccsr_id.fillna(tccsr_id.mode()[0])
 print(tccsr_id.value_counts() / len(tccsr_id))
 # print(tccsr_id.describe())
 
-# tccsr_id_labels = ["0-49%","50-99%","100%"]
-tccsr_id_labels = ["0-49%", "50-99%"]
+tccsr_id_labels = ["0-49%", "50-99%", "100%"]
 sns.countplot(tccsr_id).set_xticklabels(tccsr_id_labels)
 plt.title("TCCS (R MCA) - Barplot")
 plt.xlabel('TCCS (R MCA)')
@@ -4068,26 +3377,24 @@ plt.show()
 
 # TCCS (L MCA)
 
-tccsl_id = tsr_12.loc[:, "tccsl_id"]
+tccsl_id = tsr_1.loc[:, "tccsl_id"]
 tccsl_id = pd.to_numeric(tccsl_id, errors="coerce")
 tccsl_id[(tccsl_id != 1) & (tccsl_id != 2) & (tccsl_id != 3)] = np.nan
-# tccsl_id = tccsl_id.fillna(tccsl_id.mode()[0])
+tccsl_id = tccsl_id.fillna(tccsl_id.mode()[0])
 # print(tccsl_id)
 print(tccsl_id.value_counts() / len(tccsl_id))
 # print(tccsl_id.describe())
 
-# tccsl_id_labels = ["0-49%","50-99%","100%"]
-tccsl_id_labels = ["0-49%", "50-99%"]
+tccsl_id_labels = ["0-49%", "50-99%", "100%"]
 sns.countplot(tccsl_id).set_xticklabels(tccsl_id_labels)
 plt.title("TCCS (L MCA) - Barplot")
 plt.xlabel('TCCS (L MCA)')
 plt.ylabel('Number', rotation=0)
 plt.show()
-tccsl_id = tccsl_id.fillna(999)
 
 # TCCS (BA)
 
-tccsba_id = tsr_12.loc[:, "tccsba_id"]
+tccsba_id = tsr_1.loc[:, "tccsba_id"]
 tccsba_id = pd.to_numeric(tccsba_id, errors="coerce")
 tccsba_id[(tccsba_id != 1) & (tccsba_id != 2) & (tccsba_id != 3)] = np.nan
 tccsba_id = tccsba_id.fillna(tccsba_id.mode()[0])
@@ -4104,7 +3411,7 @@ plt.show()
 
 # MRA
 
-mra_fl = tsr_12.loc[:, "mra_fl"]
+mra_fl = tsr_1.loc[:, "mra_fl"]
 mra_fl[mra_fl == str(0)] = "N"
 mra_fl[mra_fl == str(1)] = "Y"
 mra_fl[(mra_fl != "N") & (mra_fl != "Y")] = np.nan
@@ -4121,7 +3428,7 @@ plt.show()
 
 # CTA
 
-cta_fl = tsr_12.loc[:, "cta_fl"]
+cta_fl = tsr_1.loc[:, "cta_fl"]
 cta_fl[cta_fl == str(0)] = "N"
 cta_fl[cta_fl == str(1)] = "Y"
 cta_fl[(cta_fl != "N") & (cta_fl != "Y")] = np.nan
@@ -4138,7 +3445,7 @@ plt.show()
 
 # DSA
 
-dsa_fl = tsr_12.loc[:, "dsa_fl"]
+dsa_fl = tsr_1.loc[:, "dsa_fl"]
 dsa_fl[dsa_fl == str(0)] = "N"
 dsa_fl[dsa_fl == str(1)] = "Y"
 dsa_fl[(dsa_fl != "N") & (dsa_fl != "Y")] = np.nan
@@ -4155,7 +3462,7 @@ plt.show()
 
 # Undone MRI, CTA and DSA
 
-mcd_id = tsr_12.loc[:, "mcd_id"]
+mcd_id = tsr_1.loc[:, "mcd_id"]
 mcd_id[mcd_id == str(0)] = 0
 mcd_id[mcd_id == str(1)] = 1
 mcd_id[mcd_id == 0] = "N"
@@ -4174,7 +3481,7 @@ plt.show()
 
 # MRI, CTA and DSA (R MCA)
 
-mcdr_id = tsr_12.loc[:, "mcdr_id"]
+mcdr_id = tsr_1.loc[:, "mcdr_id"]
 mcdr_id = pd.to_numeric(mcdr_id, errors="coerce")
 mcdr_id[(mcdr_id != 1) & (mcdr_id != 2) & (mcdr_id != 3)] = np.nan
 mcdr_id = mcdr_id.fillna(mcdr_id.mode()[0])
@@ -4191,7 +3498,7 @@ plt.show()
 
 # MRI, CTA and DSA (L MCA)
 
-mcdl_id = tsr_12.loc[:, "mcdl_id"]
+mcdl_id = tsr_1.loc[:, "mcdl_id"]
 mcdl_id = pd.to_numeric(mcdl_id, errors="coerce")
 mcdl_id[(mcdl_id != 1) & (mcdl_id != 2) & (mcdl_id != 3)] = np.nan
 mcdl_id = mcdl_id.fillna(mcdl_id.mode()[0])
@@ -4208,7 +3515,7 @@ plt.show()
 
 # MRI, CTA and DSA (VA or BA)
 
-mcdba_id = tsr_12.loc[:, "mcdba_id"]
+mcdba_id = tsr_1.loc[:, "mcdba_id"]
 mcdba_id = pd.to_numeric(mcdba_id, errors="coerce")
 mcdba_id[(mcdba_id != 1) & (mcdba_id != 2) & (mcdba_id != 3)] = np.nan
 mcdba_id = mcdba_id.fillna(mcdba_id.mode()[0])
@@ -4225,7 +3532,7 @@ plt.show()
 
 # MRI, CTA and DSA (R ICA)
 
-mcdri_id = tsr_12.loc[:, "mcdri_id"]
+mcdri_id = tsr_1.loc[:, "mcdri_id"]
 mcdri_id = pd.to_numeric(mcdri_id, errors="coerce")
 mcdri_id[(mcdri_id != 1) & (mcdri_id != 2) & (mcdri_id != 3)] = np.nan
 mcdri_id = mcdri_id.fillna(mcdri_id.mode()[0])
@@ -4242,7 +3549,7 @@ plt.show()
 
 # MRI, CTA and DSA (L ICA)
 
-mcdli_id = tsr_12.loc[:, "mcdli_id"]
+mcdli_id = tsr_1.loc[:, "mcdli_id"]
 mcdli_id = pd.to_numeric(mcdli_id, errors="coerce")
 mcdli_id[(mcdli_id != 1) & (mcdli_id != 2) & (mcdli_id != 3)] = np.nan
 mcdli_id = mcdli_id.fillna(mcdli_id.mode()[0])
@@ -4259,7 +3566,7 @@ plt.show()
 
 # NIHSS 最初進院日期
 
-nihsin_time = tsr_12.loc[:, ["nihsin_dt", "nihsinh_nm", "nihsinm_nm"]]
+nihsin_time = tsr_1.loc[:, ["nihsin_dt", "nihsinh_nm", "nihsinm_nm"]]
 nihsin_time.nihsin_dt = pd.to_datetime(nihsin_time.nihsin_dt, errors="coerce", format="%Y-%m-%d")
 nihsin_time.nihsin_dt[(nihsin_time.nihsin_dt.dt.year < 2006) | (nihsin_time.nihsin_dt.dt.year > 2021)] = np.nan
 
@@ -4290,7 +3597,7 @@ plt.show()
 
 # NIHSS 最初進院時間 - 時
 
-nihsinh_nm = tsr_12.loc[:, "nihsinh_nm"]
+nihsinh_nm = tsr_1.loc[:, "nihsinh_nm"]
 nihsinh_nm = pd.to_numeric(nihsinh_nm, errors='coerce')
 nihsinh_nm[(nihsinh_nm < 0) | (nihsinh_nm > 24)] = np.nan
 nihsinh_nm[nihsinh_nm == 24] = 0
@@ -4301,7 +3608,7 @@ print(nihsinh_nm.describe())
 
 # NIHSS 最初進院時間 - 分
 
-nihsinm_nm = tsr_12.loc[:, "nihsinm_nm"]
+nihsinm_nm = tsr_1.loc[:, "nihsinm_nm"]
 nihsinm_nm = pd.to_numeric(nihsinm_nm, errors='coerce')
 nihsinm_nm[(nihsinm_nm < 0) | (nihsinm_nm > 60)] = np.nan
 nihsinm_nm[nihsinm_nm == 60] = 0
@@ -4312,7 +3619,7 @@ print(nihsinm_nm.describe())
 
 # NIHSS 離院日期
 
-nihsot_dt = tsr_12.loc[:, "nihsot_dt"]
+nihsot_dt = tsr_1.loc[:, "nihsot_dt"]
 nihsot_dt = pd.to_datetime(nihsot_dt, errors='coerce')
 nihsot_dt[(nihsot_dt.dt.year < 2005) | (nihsot_dt.dt.year > 2021) | (nihsot_dt < nihsin_time.nihsin_dt)] = np.nan
 # print(nihsot_dt)
@@ -4356,7 +3663,7 @@ plt.show()
 
 # NIHSS 離院時間 - 時
 
-nihsoth_nm = tsr_12.loc[:, "nihsoth_nm"]
+nihsoth_nm = tsr_1.loc[:, "nihsoth_nm"]
 nihsoth_nm = pd.to_numeric(nihsoth_nm, errors='coerce')
 nihsoth_nm[(nihsoth_nm < 0) | (nihsoth_nm > 24)] = np.nan
 nihsoth_nm[nihsoth_nm == 24] = 0
@@ -4367,7 +3674,7 @@ print(nihsoth_nm.describe())
 
 # NIHSS 離院時間 - 分
 
-nihsotm_nm = tsr_12.loc[:, "nihsotm_nm"]
+nihsotm_nm = tsr_1.loc[:, "nihsotm_nm"]
 nihsotm_nm = pd.to_numeric(nihsotm_nm, errors='coerce')
 nihsotm_nm[(nihsotm_nm < 0) | (nihsotm_nm > 60)] = np.nan
 nihsotm_nm[nihsotm_nm == 60] = 0
@@ -4378,7 +3685,7 @@ print(nihsotm_nm.describe())
 
 # ECG
 
-ecg_id = tsr_12.loc[:, "ecg_id"]
+ecg_id = tsr_1.loc[:, "ecg_id"]
 ecg_id[ecg_id == str(1)] = 1
 ecg_id[ecg_id == str(0)] = 0
 ecg_id[ecg_id == 1] = "Y"
@@ -4399,7 +3706,7 @@ plt.show()
 
 # ECG (LVH)
 
-ecgl_fl = tsr_12.loc[:, "ecgl_fl"]
+ecgl_fl = tsr_1.loc[:, "ecgl_fl"]
 ecgl_fl[ecgl_fl == str(1)] = 1
 ecgl_fl[ecgl_fl == str(0)] = 0
 ecgl_fl[ecgl_fl == 1] = "Y"
@@ -4419,7 +3726,7 @@ plt.show()
 
 # ECG (AF)
 
-ecga_fl = tsr_12.loc[:, "ecga_fl"]
+ecga_fl = tsr_1.loc[:, "ecga_fl"]
 ecga_fl[ecga_fl == str(1)] = 1
 ecga_fl[ecga_fl == str(0)] = 0
 ecga_fl[ecga_fl == 1] = "Y"
@@ -4439,7 +3746,7 @@ plt.show()
 
 # ECG (Q wave)
 
-ecgq_fl = tsr_12.loc[:, "ecgq_fl"]
+ecgq_fl = tsr_1.loc[:, "ecgq_fl"]
 ecgq_fl[ecgq_fl == str(1)] = 1
 ecgq_fl[ecgq_fl == str(0)] = 0
 ecgq_fl[ecgq_fl == 1] = "Y"
@@ -4459,7 +3766,7 @@ plt.show()
 
 # ECG (Others)
 
-ecgo_fl = tsr_12.loc[:, "ecgo_fl"]
+ecgo_fl = tsr_1.loc[:, "ecgo_fl"]
 ecgo_fl[ecgo_fl == str(1)] = 1
 ecgo_fl[ecgo_fl == str(0)] = 0
 ecgo_fl[ecgo_fl == 1] = "Y"
@@ -4483,7 +3790,7 @@ plt.show()
 
 # HB
 
-hb_nm = tsr_12.loc[:, "hb_nm"]
+hb_nm = tsr_1.loc[:, "hb_nm"]
 
 q1 = hb_nm.quantile(0.25)
 q3 = hb_nm.quantile(0.75)
@@ -4518,7 +3825,7 @@ plt.show()
 
 # HCT
 
-hct_nm = tsr_12.loc[:, "hct_nm"]
+hct_nm = tsr_1.loc[:, "hct_nm"]
 
 q1 = hct_nm.quantile(0.25)
 q3 = hct_nm.quantile(0.75)
@@ -4553,7 +3860,7 @@ plt.show()
 
 # PLATELET
 
-platelet_nm = tsr_12.loc[:, "platelet_nm"]
+platelet_nm = tsr_1.loc[:, "platelet_nm"]
 
 q1 = platelet_nm.quantile(0.25)
 q3 = platelet_nm.quantile(0.75)
@@ -4588,7 +3895,7 @@ plt.show()
 
 # WBC
 
-wbc_nm = tsr_12.loc[:, "wbc_nm"]
+wbc_nm = tsr_1.loc[:, "wbc_nm"]
 
 q1 = wbc_nm.quantile(0.25)
 q3 = wbc_nm.quantile(0.75)
@@ -4623,7 +3930,7 @@ plt.show()
 
 # PTT1
 
-ptt1_nm = tsr_12.loc[:, "ptt1_nm"]
+ptt1_nm = tsr_1.loc[:, "ptt1_nm"]
 
 q1 = ptt1_nm.quantile(0.25)
 q3 = ptt1_nm.quantile(0.75)
@@ -4658,7 +3965,7 @@ plt.show()
 
 # PTT2
 
-ptt2_nm = tsr_12.loc[:, "ptt2_nm"]
+ptt2_nm = tsr_1.loc[:, "ptt2_nm"]
 
 q1 = ptt2_nm.quantile(0.25)
 q3 = ptt2_nm.quantile(0.75)
@@ -4693,7 +4000,7 @@ plt.show()
 
 # PT (INR)
 
-ptinr_nm = tsr_12.loc[:, "ptinr_nm"]
+ptinr_nm = tsr_1.loc[:, "ptinr_nm"]
 
 q1 = ptinr_nm.quantile(0.25)
 q3 = ptinr_nm.quantile(0.75)
@@ -4728,7 +4035,7 @@ plt.show()
 
 # GLUCOSE (ER)
 
-er_nm = tsr_12.loc[:, "er_nm"]
+er_nm = tsr_1.loc[:, "er_nm"]
 
 q1 = er_nm.quantile(0.25)
 q3 = er_nm.quantile(0.75)
@@ -4763,7 +4070,7 @@ plt.show()
 
 # BUN
 
-bun_nm = tsr_12.loc[:, "bun_nm"]
+bun_nm = tsr_1.loc[:, "bun_nm"]
 
 q1 = bun_nm.quantile(0.25)
 q3 = bun_nm.quantile(0.75)
@@ -4798,7 +4105,7 @@ plt.show()
 
 # Creatinine
 
-cre_nm = tsr_12.loc[:, "cre_nm"]
+cre_nm = tsr_1.loc[:, "cre_nm"]
 
 q1 = cre_nm.quantile(0.25)
 q3 = cre_nm.quantile(0.75)
@@ -4833,7 +4140,7 @@ plt.show()
 
 # Albumin ???
 
-alb_nm = tsr_12.loc[:, "alb_nm"]
+alb_nm = tsr_1.loc[:, "alb_nm"]
 alb_nm[alb_nm == 999.9] = np.nan
 alb_nm[alb_nm == 999] = np.nan
 alb_nm[alb_nm == 99.9] = np.nan
@@ -4858,7 +4165,7 @@ ax2.set_xlabel('Albumin(g/dL)')
 ax2.set_ylabel('Number', rotation=0)
 plt.show()
 
-alb_nm_1 = tsr_12.loc[:, "alb_nm"]
+alb_nm_1 = tsr_1.loc[:, "alb_nm"]
 alb_nm_1[alb_nm_1 == 999.9] = np.nan
 
 q1 = alb_nm_1.quantile(0.25)
@@ -4894,7 +4201,7 @@ plt.show()
 
 # CRP
 
-crp_nm = tsr_12.loc[:, "crp_nm"]
+crp_nm = tsr_1.loc[:, "crp_nm"]
 crp_nm[crp_nm == 999.9] = np.nan
 crp_nm[crp_nm == 999] = np.nan
 crp_nm[crp_nm == 99.9] = np.nan
@@ -4919,7 +4226,7 @@ ax2.set_xlabel('CRP(mg/dL)')
 ax2.set_ylabel('Number', rotation=0)
 plt.show()
 
-crp_nm_1 = tsr_12.loc[:, "crp_nm"]
+crp_nm_1 = tsr_1.loc[:, "crp_nm"]
 crp_nm_1[crp_nm_1 == 999.9] = np.nan
 
 q1 = crp_nm_1.quantile(0.25)
@@ -4955,7 +4262,7 @@ plt.show()
 
 # HbA1c
 
-hbac_nm = tsr_12.loc[:, "hbac_nm"]
+hbac_nm = tsr_1.loc[:, "hbac_nm"]
 hbac_nm[hbac_nm == 999.9] = np.nan
 hbac_nm = hbac_nm.fillna(round(hbac_nm.mean(), 3))
 # print(hbac_nm)
@@ -4978,7 +4285,7 @@ ax2.set_xlabel('HbA1c(%)')
 ax2.set_ylabel('Number', rotation=0)
 plt.show()
 
-hbac_nm_1 = tsr_12.loc[:, "hbac_nm"]
+hbac_nm_1 = tsr_1.loc[:, "hbac_nm"]
 hbac_nm_1[hbac_nm_1 == 999.9] = np.nan
 
 q1 = hbac_nm_1.quantile(0.25)
@@ -5016,7 +4323,7 @@ plt.show()
 
 # Glu (AC)
 
-ac_nm = tsr_12.loc[:, "ac_nm"]
+ac_nm = tsr_1.loc[:, "ac_nm"]
 
 q1 = ac_nm.quantile(0.25)
 q3 = ac_nm.quantile(0.75)
@@ -5051,7 +4358,7 @@ plt.show()
 
 # UA
 
-ua_nm = tsr_12.loc[:, "ua_nm"]
+ua_nm = tsr_1.loc[:, "ua_nm"]
 ua_nm[ua_nm == 999.9] = np.nan
 
 q1 = ua_nm.quantile(0.25)
@@ -5087,7 +4394,7 @@ plt.show()
 
 # T-CHO
 
-tcho_nm = tsr_12.loc[:, "tcho_nm"]
+tcho_nm = tsr_1.loc[:, "tcho_nm"]
 tcho_nm[tcho_nm == 999.9] = np.nan
 
 q1 = tcho_nm.quantile(0.25)
@@ -5123,7 +4430,7 @@ plt.show()
 
 # TG
 
-tg_nm = tsr_12.loc[:, "tg_nm"]
+tg_nm = tsr_1.loc[:, "tg_nm"]
 tg_nm[tg_nm == 999.9] = np.nan
 tg_nm[tg_nm == 2000] = np.nan
 
@@ -5160,7 +4467,7 @@ plt.show()
 
 # HDL
 
-hdl_nm = tsr_12.loc[:, "hdl_nm"]
+hdl_nm = tsr_1.loc[:, "hdl_nm"]
 hdl_nm[hdl_nm == 999.9] = np.nan
 
 q1 = hdl_nm.quantile(0.25)
@@ -5196,8 +4503,7 @@ plt.show()
 
 # LDL
 
-ldl_nm = tsr_12.loc[:, "ldl_nm"]
-ldl_nm = pd.to_numeric(ldl_nm, errors="coerce")
+ldl_nm = tsr_1.loc[:, "ldl_nm"]
 ldl_nm[ldl_nm == 999.9] = np.nan
 
 q1 = ldl_nm.quantile(0.25)
@@ -5233,9 +4539,8 @@ plt.show()
 
 # GOT
 
-got_nm = tsr_12.loc[:, "got_nm"]
+got_nm = tsr_1.loc[:, "got_nm"]
 got_nm[got_nm == 999.9] = np.nan
-got_nm = pd.to_numeric(got_nm, errors="coerce")
 
 q1 = got_nm.quantile(0.25)
 q3 = got_nm.quantile(0.75)
@@ -5271,7 +4576,7 @@ plt.show()
 
 # GPT
 
-gpt_nm = tsr_12.loc[:, "gpt_nm"]
+gpt_nm = tsr_1.loc[:, "gpt_nm"]
 gpt_nm = pd.to_numeric(gpt_nm, errors="coerce")
 gpt_nm[gpt_nm == 999.9] = np.nan
 
@@ -5308,9 +4613,9 @@ plt.show()
 
 # 離院情形
 
-off_id = tsr_12.loc[:, "off_id"]
-off_id[(off_id != 1) & (off_id != 2) & (off_id != 3)] = np.nan
+off_id = tsr_1.loc[:, "off_id"]
 off_id = pd.to_numeric(off_id, errors='coerce')
+off_id[(off_id != 1) & (off_id != 2) & (off_id != 3)] = np.nan
 off_id = off_id.fillna(off_id.mode()[0])
 # print(off_id)
 print(off_id.value_counts() / len(off_id))
@@ -5325,7 +4630,7 @@ plt.show()
 
 # 死亡日期
 
-offd_dt = tsr_12.loc[:, "offd_dt"]
+offd_dt = tsr_1.loc[:, "offd_dt"]
 offd_dt = pd.to_datetime(offd_dt, errors='coerce')
 offd_dt[(offd_dt.dt.year < 2006) | (offd_dt.dt.year > 2021)] = np.nan
 offd_dt = offd_dt.fillna(offd_dt.mode()[0])
@@ -5343,7 +4648,7 @@ plt.show()
 
 # 死因
 
-offd_id = tsr_12.loc[:, "offd_id"]
+offd_id = tsr_1.loc[:, "offd_id"]
 offd_id = pd.to_numeric(offd_id, errors="coerce")
 offd_id[(offd_id != 1) & (offd_id != 2) & (offd_id != 99)] = np.nan
 offd_id = offd_id.fillna(offd_id.mode()[0])
@@ -5352,9 +4657,8 @@ offd_id[off_id != 2] = np.nan
 print(offd_id.value_counts() / len(offd_id))
 # print(offd_id.describe())
 
-# offd_id_labels = ["中風直接致死","併發症致死","其他"]
-offd_id_labels = ["其他"]
-sns.countplot(offd_id)  # .set_xticklabels(offd_id_labels)
+offd_id_labels = ["中風直接致死", "併發症致死", "其他"]
+sns.countplot(offd_id).set_xticklabels(offd_id_labels)
 plt.title("死因 - Barplot")
 plt.xlabel('死因')
 plt.ylabel('Number', rotation=0)
@@ -5365,7 +4669,7 @@ offd_id = offd_id.fillna(999)
 
 # 離院，目的地
 
-offdt_id = tsr_12.loc[:, "offdt_id"]
+offdt_id = tsr_1.loc[:, "offdt_id"]
 offdt_id = pd.to_numeric(offdt_id, errors="coerce")
 offdt_id[(offdt_id != 1) & (offdt_id != 2) & (offdt_id != 3) & (offdt_id != 4) & (offdt_id != 5)] = np.nan
 offdt_id = offdt_id.fillna(offdt_id.mode()[0])
@@ -5382,7 +4686,7 @@ plt.show()
 
 # 離院，轉院醫院
 
-offdtorg_id = tsr_12.loc[:, "offdtorg_id"]
+offdtorg_id = tsr_1.loc[:, "offdtorg_id"]
 # print(offdtorg_id)
 print(offdtorg_id.value_counts() / len(offdtorg_id))
 # print(offdtorg_id.describe())
@@ -5391,7 +4695,7 @@ print(offdtorg_id.value_counts() / len(offdtorg_id))
 
 # 轉復健日期
 
-offre_dt = tsr_12.loc[:, "offre_dt"]
+offre_dt = tsr_1.loc[:, "offre_dt"]
 offre_dt = pd.to_datetime(offre_dt, errors='coerce')
 offre_dt[(offre_dt.dt.year < 2006) | (offre_dt.dt.year > 2021)] = np.nan
 offre_dt = offre_dt.fillna(offre_dt.mode()[0])
@@ -5409,7 +4713,7 @@ plt.show()
 
 # Feeding
 
-feeding = tsr_12.loc[:, "feeding"]
+feeding = tsr_1.loc[:, "feeding"]
 feeding = pd.to_numeric(feeding, errors="coerce")
 feeding[(feeding < 0) | (feeding > 10)] = np.nan
 feeding = feeding.fillna(feeding.mode()[0])
@@ -5433,7 +4737,7 @@ plt.show()
 
 # Transfers
 
-transfers = tsr_12.loc[:, "transfers"]
+transfers = tsr_1.loc[:, "transfers"]
 transfers = pd.to_numeric(transfers, errors="coerce")
 transfers[(transfers < 0) | (transfers > 15)] = np.nan
 transfers = transfers.fillna(transfers.mode()[0])
@@ -5457,7 +4761,7 @@ plt.show()
 
 # Bathing
 
-bathing = tsr_12.loc[:, "bathing"]
+bathing = tsr_1.loc[:, "bathing"]
 bathing = pd.to_numeric(bathing, errors="coerce")
 bathing[(bathing < 0) | (bathing > 5)] = np.nan
 bathing = bathing.fillna(bathing.mode()[0])
@@ -5481,7 +4785,7 @@ plt.show()
 
 # Toilet
 
-toilet_use = tsr_12.loc[:, "toilet_use"]
+toilet_use = tsr_1.loc[:, "toilet_use"]
 toilet_use = pd.to_numeric(toilet_use, errors="coerce")
 toilet_use[(toilet_use < 0) | (toilet_use > 10)] = np.nan
 toilet_use = toilet_use.fillna(toilet_use.mode()[0])
@@ -5505,7 +4809,7 @@ plt.show()
 
 # Grooming
 
-grooming = tsr_12.loc[:, "grooming"]
+grooming = tsr_1.loc[:, "grooming"]
 grooming = pd.to_numeric(grooming, errors="coerce")
 grooming[(grooming < 0) | (grooming > 5)] = np.nan
 grooming = grooming.fillna(grooming.mode()[0])
@@ -5529,7 +4833,7 @@ plt.show()
 
 # Mobility
 
-mobility = tsr_12.loc[:, "mobility"]
+mobility = tsr_1.loc[:, "mobility"]
 mobility = pd.to_numeric(mobility, errors="coerce")
 mobility[(mobility < 0) | (mobility > 15)] = np.nan
 mobility = mobility.fillna(mobility.mode()[0])
@@ -5553,7 +4857,7 @@ plt.show()
 
 # Stairs
 
-stairs = tsr_12.loc[:, "stairs"]
+stairs = tsr_1.loc[:, "stairs"]
 stairs = pd.to_numeric(stairs, errors="coerce")
 stairs[(stairs < 0) | (stairs > 10)] = np.nan
 stairs = stairs.fillna(stairs.mode()[0])
@@ -5577,7 +4881,7 @@ plt.show()
 
 # Dressing
 
-dressing = tsr_12.loc[:, "dressing"]
+dressing = tsr_1.loc[:, "dressing"]
 dressing = pd.to_numeric(dressing, errors="coerce")
 dressing[(dressing < 0) | (dressing > 10)] = np.nan
 dressing = dressing.fillna(dressing.mode()[0])
@@ -5601,7 +4905,7 @@ plt.show()
 
 # Bowel Control
 
-bowel_control = tsr_12.loc[:, "bowel_control"]
+bowel_control = tsr_1.loc[:, "bowel_control"]
 bowel_control = pd.to_numeric(bowel_control, errors="coerce")
 bowel_control[(bowel_control < 0) | (bowel_control > 10)] = np.nan
 bowel_control = bowel_control.fillna(bowel_control.mode()[0])
@@ -5625,7 +4929,7 @@ plt.show()
 
 # Bladder Control
 
-bladder_control = tsr_12.loc[:, "bladder_control"]
+bladder_control = tsr_1.loc[:, "bladder_control"]
 bladder_control = pd.to_numeric(bladder_control, errors="coerce")
 bladder_control[(bladder_control < 0) | (bladder_control > 10)] = np.nan
 bladder_control = bladder_control.fillna(bladder_control.mode()[0])
@@ -5649,7 +4953,8 @@ plt.show()
 
 # Total
 
-total = feeding + transfers + bathing + toilet_use + grooming + mobility + dressing + stairs + bowel_control + bladder_control
+total = feeding + transfers + bathing + toilet_use + grooming + mobility + dressing + stairs + bowel_control + \
+        bladder_control
 total = total.fillna(total.mean())
 # print(total)
 # print(total.value_counts() / len(total))
@@ -5671,10 +4976,10 @@ plt.show()
 
 # Discharged mRS
 
-discharged_mrs = tsr_12.loc[:, "discharged_mrs"]
+discharged_mrs = tsr_1.loc[:, "discharged_mrs"]
 discharged_mrs = pd.to_numeric(discharged_mrs, errors="coerce")
 discharged_mrs[(discharged_mrs != 0) & (discharged_mrs != 1) & (discharged_mrs != 2) & (discharged_mrs != 3) & (
-        discharged_mrs != 4) & (discharged_mrs != 5) & (discharged_mrs != 6)] = np.nan
+            discharged_mrs != 4) & (discharged_mrs != 5) & (discharged_mrs != 6)] = np.nan
 discharged_mrs = discharged_mrs.fillna(discharged_mrs.mode()[0])
 # print(discharged_mrs)
 print(discharged_mrs.value_counts() / len(discharged_mrs))
@@ -5688,7 +4993,7 @@ plt.show()
 
 # Ant.Circulation: Cortical ACA_CT_Right
 
-cortical_aca_ctr = tsr_12.loc[:, "cortical_aca_ctr"]
+cortical_aca_ctr = tsr_1.loc[:, "cortical_aca_ctr"]
 cortical_aca_ctr = cortical_aca_ctr.fillna(cortical_aca_ctr.mode()[0])
 # print(cortical_aca_ctr)
 print(cortical_aca_ctr.value_counts() / len(cortical_aca_ctr))
@@ -5702,7 +5007,7 @@ plt.show()
 
 # Ant.Circulation: Cortical MCA_CT_Right
 
-cortical_mca_ctr = tsr_12.loc[:, "cortical_mca_ctr"]
+cortical_mca_ctr = tsr_1.loc[:, "cortical_mca_ctr"]
 cortical_mca_ctr[cortical_mca_ctr == '0'] = "N"
 cortical_mca_ctr = cortical_mca_ctr.fillna(cortical_mca_ctr.mode()[0])
 # print(cortical_mca_ctr)
@@ -5717,7 +5022,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical ACA_CT_Right
 
-subcortical_aca_ctr = tsr_12.loc[:, "subcortical_aca_ctr"]
+subcortical_aca_ctr = tsr_1.loc[:, "subcortical_aca_ctr"]
 subcortical_aca_ctr = subcortical_aca_ctr.fillna(subcortical_aca_ctr.mode()[0])
 # print(subcortical_aca_ctr)
 print(subcortical_aca_ctr.value_counts() / len(subcortical_aca_ctr))
@@ -5731,7 +5036,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical MCA_CT_Right
 
-subcortical_mca_ctr = tsr_12.loc[:, "subcortical_mca_ctr"]
+subcortical_mca_ctr = tsr_1.loc[:, "subcortical_mca_ctr"]
 subcortical_mca_ctr[subcortical_mca_ctr == '0'] = "N"
 subcortical_mca_ctr = subcortical_mca_ctr.fillna(subcortical_mca_ctr.mode()[0])
 # print(subcortical_mca_ctr)
@@ -5746,7 +5051,7 @@ plt.show()
 
 # Posterior Circulation PCA_cortex_CT_Right
 
-pca_cortex_ctr = tsr_12.loc[:, "pca_cortex_ctr"]
+pca_cortex_ctr = tsr_1.loc[:, "pca_cortex_ctr"]
 pca_cortex_ctr[pca_cortex_ctr == '0'] = "N"
 pca_cortex_ctr = pca_cortex_ctr.fillna(pca_cortex_ctr.mode()[0])
 # print(pca_cortex_ctr)
@@ -5761,7 +5066,7 @@ plt.show()
 
 # Posterior Circulation Thalamus_CT_Right
 
-thalamus_ctr = tsr_12.loc[:, "thalamus_ctr"]
+thalamus_ctr = tsr_1.loc[:, "thalamus_ctr"]
 thalamus_ctr[thalamus_ctr == '0'] = "N"
 thalamus_ctr = thalamus_ctr.fillna(thalamus_ctr.mode()[0])
 # print(thalamus_ctr)
@@ -5776,7 +5081,7 @@ plt.show()
 
 # Posterior Circulation Brainstem_CT_Right
 
-brainstem_ctr = tsr_12.loc[:, "brainstem_ctr"]
+brainstem_ctr = tsr_1.loc[:, "brainstem_ctr"]
 brainstem_ctr = brainstem_ctr.fillna(brainstem_ctr.mode()[0])
 # print(brainstem_ctr)
 print(brainstem_ctr.value_counts() / len(brainstem_ctr))
@@ -5790,7 +5095,7 @@ plt.show()
 
 # Posterior Circulation Cerebellum_CT_Right
 
-cerebellum_ctr = tsr_12.loc[:, "cerebellum_ctr"]
+cerebellum_ctr = tsr_1.loc[:, "cerebellum_ctr"]
 cerebellum_ctr = cerebellum_ctr.fillna(cerebellum_ctr.mode()[0])
 # print(cerebellum_ctr)
 print(cerebellum_ctr.value_counts() / len(cerebellum_ctr))
@@ -5804,7 +5109,7 @@ plt.show()
 
 # Watershed_CT_Right
 
-watershed_ctr = tsr_12.loc[:, "watershed_ctr"]
+watershed_ctr = tsr_1.loc[:, "watershed_ctr"]
 watershed_ctr[watershed_ctr == '0'] = "N"
 watershed_ctr = watershed_ctr.fillna(watershed_ctr.mode()[0])
 # print(watershed_ctr)
@@ -5819,7 +5124,7 @@ plt.show()
 
 # Hemorrhagic_infarct_CT_Right
 
-hemorrhagic_infarct_ctr = tsr_12.loc[:, "hemorrhagic_infarct_ctr"]
+hemorrhagic_infarct_ctr = tsr_1.loc[:, "hemorrhagic_infarct_ctr"]
 hemorrhagic_infarct_ctr[hemorrhagic_infarct_ctr == '0'] = "N"
 hemorrhagic_infarct_ctr = hemorrhagic_infarct_ctr.fillna(hemorrhagic_infarct_ctr.mode()[0])
 # print(hemorrhagic_infarct_ctr)
@@ -5834,7 +5139,7 @@ plt.show()
 
 # Old_stroke_CTci
 
-old_stroke_ctci = tsr_12.loc[:, "old_stroke_ctci"]
+old_stroke_ctci = tsr_1.loc[:, "old_stroke_ctci"]
 old_stroke_ctci[old_stroke_ctci == '0'] = 'N'
 old_stroke_ctci = old_stroke_ctci.fillna(old_stroke_ctci.mode()[0])
 # print(old_stroke_ctci)
@@ -5849,7 +5154,7 @@ plt.show()
 
 # Ant.Circulation: Cortical ACA_CT_Left
 
-cortical_aca_ctl = tsr_12.loc[:, "cortical_aca_ctl"]
+cortical_aca_ctl = tsr_1.loc[:, "cortical_aca_ctl"]
 cortical_aca_ctl[cortical_aca_ctl == '0'] = 'N'
 cortical_aca_ctl = cortical_aca_ctl.fillna(cortical_aca_ctl.mode()[0])
 # print(cortical_aca_ctl)
@@ -5864,7 +5169,7 @@ plt.show()
 
 # Ant.Circulation: Cortical MCA_CT_Left
 
-cortical_mca_ctl = tsr_12.loc[:, "cortical_mca_ctl"]
+cortical_mca_ctl = tsr_1.loc[:, "cortical_mca_ctl"]
 cortical_mca_ctl = cortical_mca_ctl.fillna(cortical_mca_ctl.mode()[0])
 # print(cortical_mca_ctl)
 print(cortical_mca_ctl.value_counts() / len(cortical_mca_ctl))
@@ -5878,7 +5183,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical ACA_CT_Left
 
-subcortical_aca_ctl = tsr_12.loc[:, "subcortical_aca_ctl"]
+subcortical_aca_ctl = tsr_1.loc[:, "subcortical_aca_ctl"]
 subcortical_aca_ctl = subcortical_aca_ctl.fillna(subcortical_aca_ctl.mode()[0])
 # print(subcortical_aca_ctl)
 print(subcortical_aca_ctl.value_counts() / len(subcortical_aca_ctl))
@@ -5892,7 +5197,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical MCA_CT_Left
 
-subcortical_mca_ctl = tsr_12.loc[:, "subcortical_mca_ctl"]
+subcortical_mca_ctl = tsr_1.loc[:, "subcortical_mca_ctl"]
 subcortical_mca_ctl = subcortical_mca_ctl.fillna(subcortical_mca_ctl.mode()[0])
 # print(subcortical_mca_ctl)
 print(subcortical_mca_ctl.value_counts() / len(subcortical_mca_ctl))
@@ -5906,7 +5211,7 @@ plt.show()
 
 # Posterior Circulation PCA_cortex_CT_Left
 
-pca_cortex_ctl = tsr_12.loc[:, "pca_cortex_ctl"]
+pca_cortex_ctl = tsr_1.loc[:, "pca_cortex_ctl"]
 pca_cortex_ctl[pca_cortex_ctl == '0'] = 'N'
 pca_cortex_ctl = pca_cortex_ctl.fillna(pca_cortex_ctl.mode()[0])
 # print(pca_cortex_ctl)
@@ -5921,7 +5226,7 @@ plt.show()
 
 # Posterior Circulation Thalamus_CT_Left
 
-thalamus_ctl = tsr_12.loc[:, "thalamus_ctl"]
+thalamus_ctl = tsr_1.loc[:, "thalamus_ctl"]
 thalamus_ctl = thalamus_ctl.fillna(thalamus_ctl.mode()[0])
 # print(thalamus_ctl)
 print(thalamus_ctl.value_counts() / len(thalamus_ctl))
@@ -5935,7 +5240,7 @@ plt.show()
 
 # Posterior Circulation Brainstem_CT_Left
 
-brainstem_ctl = tsr_12.loc[:, "brainstem_ctl"]
+brainstem_ctl = tsr_1.loc[:, "brainstem_ctl"]
 brainstem_ctl[brainstem_ctl == '0'] = 'N'
 brainstem_ctl = brainstem_ctl.fillna(brainstem_ctl.mode()[0])
 # print(brainstem_ctl)
@@ -5950,7 +5255,7 @@ plt.show()
 
 # Posterior Circulation Cerebellum_CT_Left
 
-cerebellum_ctl = tsr_12.loc[:, "cerebellum_ctl"]
+cerebellum_ctl = tsr_1.loc[:, "cerebellum_ctl"]
 cerebellum_ctl = cerebellum_ctl.fillna(cerebellum_ctl.mode()[0])
 # print(cerebellum_ctl)
 print(cerebellum_ctl.value_counts() / len(cerebellum_ctl))
@@ -5964,7 +5269,7 @@ plt.show()
 
 # Watershed_CT_Left
 
-watershed_ctl = tsr_12.loc[:, "watershed_ctl"]
+watershed_ctl = tsr_1.loc[:, "watershed_ctl"]
 watershed_ctl = watershed_ctl.fillna(watershed_ctl.mode()[0])
 # print(watershed_ctl)
 print(watershed_ctl.value_counts() / len(watershed_ctl))
@@ -5978,7 +5283,7 @@ plt.show()
 
 # Hemorrhagic_infarct_CT_Left
 
-hemorrhagic_infarct_ctl = tsr_12.loc[:, "hemorrhagic_infarct_ctl"]
+hemorrhagic_infarct_ctl = tsr_1.loc[:, "hemorrhagic_infarct_ctl"]
 hemorrhagic_infarct_ctl[hemorrhagic_infarct_ctl == '0'] = 'N'
 hemorrhagic_infarct_ctl = hemorrhagic_infarct_ctl.fillna(hemorrhagic_infarct_ctl.mode()[0])
 # print(hemorrhagic_infarct_ctl)
@@ -5993,7 +5298,7 @@ plt.show()
 
 # Old_stroke_CTch
 
-old_stroke_ctch = tsr_12.loc[:, "old_stroke_ctch"]
+old_stroke_ctch = tsr_1.loc[:, "old_stroke_ctch"]
 old_stroke_ctch[old_stroke_ctch == '0'] = 'N'
 old_stroke_ctch = old_stroke_ctch.fillna(old_stroke_ctch.mode()[0])
 # print(old_stroke_ctch)
@@ -6008,7 +5313,7 @@ plt.show()
 
 # Ant.Circulation: Cortical ACA_MRI_Right
 
-cortical_aca_mrir = tsr_12.loc[:, "cortical_aca_mrir"]
+cortical_aca_mrir = tsr_1.loc[:, "cortical_aca_mrir"]
 cortical_aca_mrir[cortical_aca_mrir == '0'] = 'N'
 cortical_aca_mrir = cortical_aca_mrir.fillna(cortical_aca_mrir.mode()[0])
 # print(cortical_aca_mrir)
@@ -6023,7 +5328,7 @@ plt.show()
 
 # Ant.Circulation: Cortical MCA_MRI_Right
 
-cortical_mca_mrir = tsr_12.loc[:, "cortical_mca_mrir"]
+cortical_mca_mrir = tsr_1.loc[:, "cortical_mca_mrir"]
 cortical_mca_mrir = cortical_mca_mrir.fillna(cortical_mca_mrir.mode()[0])
 # print(cortical_mca_mrir)
 print(cortical_mca_mrir.value_counts() / len(cortical_mca_mrir))
@@ -6037,7 +5342,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical ACA_MRI_Right
 
-subcortical_aca_mrir = tsr_12.loc[:, "subcortical_aca_mrir"]
+subcortical_aca_mrir = tsr_1.loc[:, "subcortical_aca_mrir"]
 subcortical_aca_mrir = subcortical_aca_mrir.fillna(subcortical_aca_mrir.mode()[0])
 # print(subcortical_aca_mrir)
 print(subcortical_aca_mrir.value_counts() / len(subcortical_aca_mrir))
@@ -6051,7 +5356,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical MCA_MRI_Right
 
-subcortical_mca_mrir = tsr_12.loc[:, "subcortical_mca_mrir"]
+subcortical_mca_mrir = tsr_1.loc[:, "subcortical_mca_mrir"]
 subcortical_mca_mrir[subcortical_mca_mrir == '1'] = "Y"
 subcortical_mca_mrir = subcortical_mca_mrir.fillna(subcortical_mca_mrir.mode()[0])
 # print(subcortical_mca_mrir)
@@ -6066,7 +5371,7 @@ plt.show()
 
 # Posterior Circulation PCA_cortex_MRI_Right
 
-pca_cortex_mrir = tsr_12.loc[:, "pca_cortex_mrir"]
+pca_cortex_mrir = tsr_1.loc[:, "pca_cortex_mrir"]
 pca_cortex_mrir = pca_cortex_mrir.fillna(pca_cortex_mrir.mode()[0])
 # print(pca_cortex_mrir)
 print(pca_cortex_mrir.value_counts() / len(pca_cortex_mrir))
@@ -6080,7 +5385,7 @@ plt.show()
 
 # Posterior Circulation Thalamus_MRI_Right
 
-thalamus_mrir = tsr_12.loc[:, "thalamus_mrir"]
+thalamus_mrir = tsr_1.loc[:, "thalamus_mrir"]
 thalamus_mrir = thalamus_mrir.fillna(thalamus_mrir.mode()[0])
 # print(thalamus_mrir)
 print(thalamus_mrir.value_counts() / len(thalamus_mrir))
@@ -6094,7 +5399,7 @@ plt.show()
 
 # Posterior Circulation Brainstem_MRI_Right
 
-brainstem_mrir = tsr_12.loc[:, "brainstem_mrir"]
+brainstem_mrir = tsr_1.loc[:, "brainstem_mrir"]
 brainstem_mrir[brainstem_mrir == '0'] = "N"
 brainstem_mrir = brainstem_mrir.fillna(brainstem_mrir.mode()[0])
 # print(brainstem_mrir)
@@ -6109,7 +5414,7 @@ plt.show()
 
 # Posterior Circulation Cerebellum_MRI_Right
 
-cerebellum_mrir = tsr_12.loc[:, "cerebellum_mrir"]
+cerebellum_mrir = tsr_1.loc[:, "cerebellum_mrir"]
 cerebellum_mrir = cerebellum_mrir.fillna(cerebellum_mrir.mode()[0])
 # print(cerebellum_mrir)
 print(cerebellum_mrir.value_counts() / len(cerebellum_mrir))
@@ -6123,7 +5428,7 @@ plt.show()
 
 # Watershed_MRI_Right
 
-watershed_mrir = tsr_12.loc[:, "watershed_mrir"]
+watershed_mrir = tsr_1.loc[:, "watershed_mrir"]
 watershed_mrir[watershed_mrir == '0'] = "N"
 watershed_mrir = watershed_mrir.fillna(watershed_mrir.mode()[0])
 # print(watershed_mrir)
@@ -6138,7 +5443,7 @@ plt.show()
 
 # Hemorrhagic_infarct_MRI_Right
 
-hemorrhagic_infarct_mrir = tsr_12.loc[:, "hemorrhagic_infarct_mrir"]
+hemorrhagic_infarct_mrir = tsr_1.loc[:, "hemorrhagic_infarct_mrir"]
 hemorrhagic_infarct_mrir[hemorrhagic_infarct_mrir == '0'] = 'N'
 hemorrhagic_infarct_mrir = hemorrhagic_infarct_mrir.fillna(hemorrhagic_infarct_mrir.mode()[0])
 # print(hemorrhagic_infarct_mrir)
@@ -6153,7 +5458,7 @@ plt.show()
 
 # Old_stroke_MRIci
 
-old_stroke_mrici = tsr_12.loc[:, "old_stroke_mrici"]
+old_stroke_mrici = tsr_1.loc[:, "old_stroke_mrici"]
 old_stroke_mrici = old_stroke_mrici.fillna(old_stroke_mrici.mode()[0])
 # print(old_stroke_mrici)
 print(old_stroke_mrici.value_counts() / len(old_stroke_mrici))
@@ -6167,7 +5472,7 @@ plt.show()
 
 # Ant.Circulation: Cortical ACA_MRI_Left
 
-cortical_aca_mril = tsr_12.loc[:, "cortical_aca_mril"]
+cortical_aca_mril = tsr_1.loc[:, "cortical_aca_mril"]
 cortical_aca_mril[cortical_aca_mril == '0'] = 'N'
 cortical_aca_mril = cortical_aca_mril.fillna(cortical_aca_mril.mode()[0])
 # print(cortical_aca_mril)
@@ -6182,7 +5487,7 @@ plt.show()
 
 # Ant.Circulation: Cortical MCA_MRI_Left
 
-cortical_mca_mril = tsr_12.loc[:, "cortical_mca_mril"]
+cortical_mca_mril = tsr_1.loc[:, "cortical_mca_mril"]
 cortical_mca_mril = cortical_mca_mril.fillna(cortical_mca_mril.mode()[0])
 # print(cortical_mca_mril)
 print(cortical_mca_mril.value_counts() / len(cortical_mca_mril))
@@ -6196,7 +5501,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical ACA_MRI_Left
 
-subcortical_aca_mril = tsr_12.loc[:, "subcortical_aca_mril"]
+subcortical_aca_mril = tsr_1.loc[:, "subcortical_aca_mril"]
 subcortical_aca_mril = subcortical_aca_mril.fillna(subcortical_aca_mril.mode()[0])
 # print(subcortical_aca_mril)
 print(subcortical_aca_mril.value_counts() / len(subcortical_aca_mril))
@@ -6210,7 +5515,7 @@ plt.show()
 
 # Ant.Circulation: Subcortical MCA_MRI_Left
 
-subcortical_mca_mril = tsr_12.loc[:, "subcortical_mca_mril"]
+subcortical_mca_mril = tsr_1.loc[:, "subcortical_mca_mril"]
 subcortical_mca_mril = subcortical_mca_mril.fillna(subcortical_mca_mril.mode()[0])
 # print(subcortical_mca_mril)
 print(subcortical_mca_mril.value_counts() / len(subcortical_mca_mril))
@@ -6224,7 +5529,7 @@ plt.show()
 
 # Posterior Circulation PCA_cortex_MRI_Left
 
-pca_cortex_mril = tsr_12.loc[:, "pca_cortex_mril"]
+pca_cortex_mril = tsr_1.loc[:, "pca_cortex_mril"]
 pca_cortex_mril = pca_cortex_mril.fillna(pca_cortex_mril.mode()[0])
 # print(pca_cortex_mril)
 print(pca_cortex_mril.value_counts() / len(pca_cortex_mril))
@@ -6238,7 +5543,7 @@ plt.show()
 
 # Posterior Circulation Thalamus_MRI_Left
 
-thalamus_mril = tsr_12.loc[:, "thalamus_mril"]
+thalamus_mril = tsr_1.loc[:, "thalamus_mril"]
 thalamus_mril[(thalamus_mril != "N") & (thalamus_mril != "Y")] = np.nan
 thalamus_mril = thalamus_mril.fillna(thalamus_mril.mode()[0])
 # print(thalamus_mril)
@@ -6253,7 +5558,7 @@ plt.show()
 
 # Posterior Circulation Brainstem_MRI_Left
 
-brainstem_mril = tsr_12.loc[:, "brainstem_mril"]
+brainstem_mril = tsr_1.loc[:, "brainstem_mril"]
 brainstem_mril[(brainstem_mril != "N") & (brainstem_mril != "Y")] = np.nan
 brainstem_mril = brainstem_mril.fillna(brainstem_mril.mode()[0])
 # print(brainstem_mril)
@@ -6268,7 +5573,7 @@ plt.show()
 
 # Posterior Circulation Cerebellum_MRI_Left
 
-cerebellum_mril = tsr_12.loc[:, "cerebellum_mril"]
+cerebellum_mril = tsr_1.loc[:, "cerebellum_mril"]
 cerebellum_mril[(cerebellum_mril != "N") & (cerebellum_mril != "Y")] = np.nan
 cerebellum_mril = cerebellum_mril.fillna(cerebellum_mril.mode()[0])
 # print(cerebellum_mril)
@@ -6283,7 +5588,7 @@ plt.show()
 
 # Watershed_MRI_Left
 
-watershed_mril = tsr_12.loc[:, "watershed_mril"]
+watershed_mril = tsr_1.loc[:, "watershed_mril"]
 watershed_mril[(watershed_mril != "N") & (watershed_mril != "Y")] = np.nan
 watershed_mril = watershed_mril.fillna(watershed_mril.mode()[0])
 # print(watershed_mril)
@@ -6298,7 +5603,7 @@ plt.show()
 
 # Hemorrhagic_infarct_MRI_Left
 
-hemorrhagic_infarct_mril = tsr_12.loc[:, "hemorrhagic_infarct_mril"]
+hemorrhagic_infarct_mril = tsr_1.loc[:, "hemorrhagic_infarct_mril"]
 hemorrhagic_infarct_mril[(hemorrhagic_infarct_mril != "N") & (hemorrhagic_infarct_mril != "Y")] = np.nan
 hemorrhagic_infarct_mril = hemorrhagic_infarct_mril.fillna(hemorrhagic_infarct_mril.mode()[0])
 # print(hemorrhagic_infarct_mril)
@@ -6313,7 +5618,7 @@ plt.show()
 
 # Old_stroke_MRIch
 
-old_stroke_mrich = tsr_12.loc[:, "old_stroke_mrich"]
+old_stroke_mrich = tsr_1.loc[:, "old_stroke_mrich"]
 old_stroke_mrich[(old_stroke_mrich != "N") & (old_stroke_mrich != "Y")] = np.nan
 old_stroke_mrich = old_stroke_mrich.fillna(old_stroke_mrich.mode()[0])
 # print(old_stroke_mrich)
@@ -6330,7 +5635,7 @@ plt.show()
 
 # Heart Disease
 
-hd_id = tsr_12.loc[:, "hd_id"]
+hd_id = tsr_1.loc[:, "hd_id"]
 hd_id[(hd_id != 0) & (hd_id != 1) & (hd_id != 2)] = np.nan
 hd_id = hd_id.fillna(hd_id.mode()[0])
 # print(hd_id)
@@ -6346,8 +5651,8 @@ plt.show()
 
 # Previous CVA
 
-pcva_id = tsr_12.loc[:, "pcva_id"]
-pcva_id = pd.to_numeric(pcva_id, errors = 'coerce')
+pcva_id = tsr_1.loc[:, "pcva_id"]
+pcva_id = pd.to_numeric(pcva_id, errors="coerce")
 pcva_id[(pcva_id != 0) & (pcva_id != 1) & (pcva_id != 2)] = np.nan
 pcva_id = pcva_id.fillna(pcva_id.mode()[0])
 # print(pcva_id)
@@ -6355,7 +5660,6 @@ print(pcva_id.value_counts() / len(pcva_id))
 # print(pcva_id.describe())
 
 pcva_id_labels = ["No", "Yes", "Unknown"]
-
 sns.countplot(pcva_id).set_xticklabels(pcva_id_labels)
 plt.title("Previous CVA - Barplot")
 plt.xlabel('Previous CVA')
@@ -6364,7 +5668,7 @@ plt.show()
 
 # Previous CVA (Cerebral Infraction)
 
-pcvaci_id = tsr_12.loc[:, "pcvaci_id"]
+pcvaci_id = tsr_1.loc[:, "pcvaci_id"]
 pcvaci_id = pcvaci_id.fillna(pcvaci_id.mode()[0])
 # print(pcvaci_id)
 print(pcvaci_id.value_counts() / len(pcvaci_id))
@@ -6379,7 +5683,7 @@ plt.show()
 
 # Previous CVA (Cerebral Hemorrhage)
 
-pcvach_id = tsr_12.loc[:, "pcvach_id"]
+pcvach_id = tsr_1.loc[:, "pcvach_id"]
 pcvach_id = pcvach_id.fillna(pcvach_id.mode()[0])
 # print(pcvach_id)
 print(pcvach_id.value_counts() / len(pcvach_id))
@@ -6394,7 +5698,7 @@ plt.show()
 
 # Polycythemia
 
-po_id = tsr_12.loc[:, "po_id"]
+po_id = tsr_1.loc[:, "po_id"]
 po_id = po_id.fillna(po_id.mode()[0])
 # print(po_id)
 print(po_id.value_counts() / len(po_id))
@@ -6409,7 +5713,7 @@ plt.show()
 
 # Uremia
 
-ur_id = tsr_12.loc[:, "ur_id"]
+ur_id = tsr_1.loc[:, "ur_id"]
 ur_id[(ur_id != 0) & (ur_id != 1) & (ur_id != 2)] = np.nan
 ur_id = ur_id.fillna(ur_id.mode()[0])
 # print(ur_id)
@@ -6425,7 +5729,7 @@ plt.show()
 
 # Smoking
 
-sm_id = tsr_12.loc[:, "sm_id"]
+sm_id = tsr_1.loc[:, "sm_id"]
 sm_id[(sm_id != 0) & (sm_id != 1) & (sm_id != 2)] = np.nan
 sm_id = sm_id.fillna(sm_id.mode()[0])
 # print(sm_id)
@@ -6441,7 +5745,7 @@ plt.show()
 
 # Smoking (支/天)
 
-smc_nm = tsr_12.loc[:, "smc_nm"]
+smc_nm = tsr_1.loc[:, "smc_nm"]
 
 q1 = smc_nm.quantile(0.25)
 q3 = smc_nm.quantile(0.75)
@@ -6476,7 +5780,7 @@ plt.show()
 
 # Smoking (年)
 
-smy_nm = tsr_12.loc[:, "smy_nm"]
+smy_nm = tsr_1.loc[:, "smy_nm"]
 
 q1 = smy_nm.quantile(0.25)
 q3 = smy_nm.quantile(0.75)
@@ -6511,7 +5815,7 @@ plt.show()
 
 # Smoking Status
 
-smcp_id = tsr_12.loc[:, "smcp_id"]
+smcp_id = tsr_1.loc[:, "smcp_id"]
 smcp_id[(smcp_id != 1) & (smcp_id != 2)] = np.nan
 smcp_id = smcp_id.fillna(smcp_id.mode()[0])
 # print(smcp_id)
@@ -6527,7 +5831,7 @@ plt.show()
 
 # Previous TIA
 
-ptia_id = tsr_12.loc[:, "ptia_id"]
+ptia_id = tsr_1.loc[:, "ptia_id"]
 ptia_id[(ptia_id != 0) & (ptia_id != 1) & (ptia_id != 2)] = np.nan
 ptia_id = ptia_id.fillna(ptia_id.mode()[0])
 # print(ptia_id)
@@ -6543,7 +5847,7 @@ plt.show()
 
 # Dyslipidemia
 
-hc_id = tsr_12.loc[:, "hc_id"]
+hc_id = tsr_1.loc[:, "hc_id"]
 hc_id[(hc_id != 0) & (hc_id != 1) & (hc_id != 2)] = np.nan
 hc_id = hc_id.fillna(hc_id.mode()[0])
 # print(hc_id)
@@ -6559,7 +5863,7 @@ plt.show()
 
 # Dyslipidemia (Hypertriglyceridemia)
 
-hcht_id = tsr_12.loc[:, "hcht_id"]
+hcht_id = tsr_1.loc[:, "hcht_id"]
 hcht_id = hcht_id.fillna(hcht_id.mode()[0])
 # print(hcht_id)
 print(hcht_id.value_counts() / len(hcht_id))
@@ -6574,7 +5878,7 @@ plt.show()
 
 # Dyslipidemia (Hypercholesterolemia)
 
-hchc_id = tsr_12.loc[:, "hchc_id"]
+hchc_id = tsr_1.loc[:, "hchc_id"]
 hchc_id = hchc_id.fillna(hchc_id.mode()[0])
 # print(hchc_id)
 print(hchc_id.value_counts() / len(hchc_id))
@@ -6589,7 +5893,7 @@ plt.show()
 
 # Hypertension
 
-ht_id = tsr_12.loc[:, "ht_id"]
+ht_id = tsr_1.loc[:, "ht_id"]
 ht_id[(ht_id != 0) & (ht_id != 1) & (ht_id != 2)] = np.nan
 ht_id = ht_id.fillna(ht_id.mode()[0])
 # print(ht_id)
@@ -6605,7 +5909,7 @@ plt.show()
 
 # DM
 
-dm_id = tsr_12.loc[:, "dm_id"]
+dm_id = tsr_1.loc[:, "dm_id"]
 dm_id[(dm_id != 0) & (dm_id != 1) & (dm_id != 2)] = np.nan
 dm_id = dm_id.fillna(dm_id.mode()[0])
 # print(dm_id)
@@ -6621,7 +5925,7 @@ plt.show()
 
 # PAD
 
-pad_id = tsr_12.loc[:, "pad_id"]
+pad_id = tsr_1.loc[:, "pad_id"]
 pad_id = pad_id.fillna(pad_id.mode()[0])
 # print(pad_id)
 print(pad_id.value_counts() / len(pad_id))
@@ -6636,10 +5940,10 @@ plt.show()
 
 # Alcohol
 
-al_id = tsr_12.loc[:, "al_id"]
+al_id = tsr_1.loc[:, "al_id"]
 al_id = pd.to_numeric(al_id, errors='coerce')
 al_id[(al_id != 0) & (al_id != 1) & (al_id != 2)] = np.nan
-# al_id = al_id.fillna(al_id.mode()[0])
+al_id = al_id.fillna(al_id.mode()[0])
 # print(al_id)
 print(al_id.value_counts() / len(al_id))
 # print(al_id.describe())
@@ -6650,32 +5954,29 @@ plt.title("Alcohol - Barplot")
 plt.xlabel('Alcohol')
 plt.ylabel('Number', rotation=0)
 plt.show()
-al_id = al_id.fillna(999)
 
 # Cancer
 
-ca_id = tsr_12.loc[:, "ca_id"]
+ca_id = tsr_1.loc[:, "ca_id"]
 ca_id = pd.to_numeric(ca_id, errors='coerce')
 ca_id[(ca_id != 0) & (ca_id != 1) & (ca_id != 2)] = np.nan
-# ca_id = ca_id.fillna(ca_id.mode()[0])
+ca_id = ca_id.fillna(ca_id.mode()[0])
 # print(ca_id)
 print(ca_id.value_counts() / len(ca_id))
 # print(ca_id.describe())
 
-# ca_id_labels = ["No","Yes", "Unknown"]
-ca_id_labels = ["No", "Yes"]
+ca_id_labels = ["No", "Yes", "Unknown"]
 sns.countplot(ca_id).set_xticklabels(ca_id_labels)
 plt.title("Cancer - Barplot")
 plt.xlabel('Cancer')
 plt.ylabel('Number', rotation=0)
 plt.show()
-ca_id = ca_id.fillna(999)
 
 # CA_TX
 
 # Others
 
-ot_id = tsr_12.loc[:, "ot_id"]
+ot_id = tsr_1.loc[:, "ot_id"]
 ot_id = pd.to_numeric(ot_id, errors='coerce')
 ot_id[(ot_id != 0) & (ot_id != 1) & (ot_id != 2)] = np.nan
 ot_id = ot_id.fillna(ot_id.mode()[0])
@@ -6694,7 +5995,7 @@ plt.show()
 
 # Hypertension Was Diagnosed at This Visit
 
-thishy_id = tsr_12.loc[:, "thishy_id"]
+thishy_id = tsr_1.loc[:, "thishy_id"]
 thishy_id[thishy_id == "1"] = "Y"
 thishy_id[(thishy_id != "N") & (thishy_id != "Y")] = np.nan
 thishy_id = thishy_id.fillna(thishy_id.mode()[0])
@@ -6710,7 +6011,7 @@ plt.show()
 
 # DM Was Diagnosed at This Visit
 
-thisdi_id = tsr_12.loc[:, "thisdi_id"]
+thisdi_id = tsr_1.loc[:, "thisdi_id"]
 thisdi_id[thisdi_id == "1"] = 1
 thisdi_id[thisdi_id == "0"] = 0
 thisdi_id[thisdi_id == 1] = "Y"
@@ -6729,7 +6030,7 @@ plt.show()
 
 # FAHIID_PARENTS_1
 
-fahiid_parents_1 = tsr_12.loc[:, "fahiid_parents_1"]
+fahiid_parents_1 = tsr_1.loc[:, "fahiid_parents_1"]
 fahiid_parents_1 = fahiid_parents_1.fillna(fahiid_parents_1.mode()[0])
 # print(fahiid_parents_1)
 print(fahiid_parents_1.value_counts() / len(fahiid_parents_1))
@@ -6744,8 +6045,7 @@ plt.show()
 
 # FAHIID_PARENTS_2
 
-fahiid_parents_2 = tsr_12.loc[:, "fahiid_parents_2"]
-fahiid_parents_2[(fahiid_parents_2 != 0) & (fahiid_parents_2 != 1) & (fahiid_parents_2 != 2)] = np.nan
+fahiid_parents_2 = tsr_1.loc[:, "fahiid_parents_2"]
 fahiid_parents_2 = fahiid_parents_2.fillna(fahiid_parents_2.mode()[0])
 # print(fahiid_parents_2)
 print(fahiid_parents_2.value_counts() / len(fahiid_parents_2))
@@ -6760,8 +6060,7 @@ plt.show()
 
 # FAHIID_PARENTS_3
 
-fahiid_parents_3 = tsr_12.loc[:, "fahiid_parents_3"]
-fahiid_parents_3 = pd.to_numeric(fahiid_parents_3, errors = 'coerce')
+fahiid_parents_3 = tsr_1.loc[:, "fahiid_parents_3"]
 fahiid_parents_3[(fahiid_parents_3 != 0) & (fahiid_parents_3 != 1) & (fahiid_parents_3 != 2)] = np.nan
 fahiid_parents_3 = fahiid_parents_3.fillna(fahiid_parents_3.mode()[0])
 # print(fahiid_parents_3)
@@ -6777,8 +6076,7 @@ plt.show()
 
 # FAHIID_PARENTS_4
 
-fahiid_parents_4 = tsr_12.loc[:, "fahiid_parents_4"]
-fahiid_parents_4 = pd.to_numeric(fahiid_parents_4, errors = 'coerce')
+fahiid_parents_4 = tsr_1.loc[:, "fahiid_parents_4"]
 fahiid_parents_4[(fahiid_parents_4 != 0) & (fahiid_parents_4 != 1) & (fahiid_parents_4 != 2)] = np.nan
 fahiid_parents_4 = fahiid_parents_4.fillna(fahiid_parents_4.mode()[0])
 # print(fahiid_parents_4)
@@ -6794,8 +6092,7 @@ plt.show()
 
 # FAHIID_BRSI_1
 
-fahiid_brsi_1 = tsr_12.loc[:, "fahiid_brsi_1"]
-fahiid_brsi_1 = pd.to_numeric(fahiid_brsi_1, errors = 'coerce')
+fahiid_brsi_1 = tsr_1.loc[:, "fahiid_brsi_1"]
 fahiid_brsi_1[(fahiid_brsi_1 != 0) & (fahiid_brsi_1 != 1) & (fahiid_brsi_1 != 2)] = np.nan
 fahiid_brsi_1 = fahiid_brsi_1.fillna(fahiid_brsi_1.mode()[0])
 # print(fahiid_brsi_1)
@@ -6811,8 +6108,8 @@ plt.show()
 
 # FAHIID_BRSI_2
 
-fahiid_brsi_2 = tsr_12.loc[:, "fahiid_brsi_2"]
-fahiid_brsi_2 = pd.to_numeric(fahiid_brsi_2, errors = 'coerce')
+fahiid_brsi_2 = tsr_1.loc[:, "fahiid_brsi_2"]
+fahiid_brsi_2 = pd.to_numeric(fahiid_brsi_2, errors='coerce')
 fahiid_brsi_2[(fahiid_brsi_2 != 0) & (fahiid_brsi_2 != 1) & (fahiid_brsi_2 != 2)] = np.nan
 fahiid_brsi_2 = fahiid_brsi_2.fillna(fahiid_brsi_2.mode()[0])
 # print(fahiid_brsi_2)
@@ -6828,8 +6125,9 @@ plt.show()
 
 # FAHIID_BRSI_3
 
-fahiid_brsi_3 = tsr_12.loc[:, "fahiid_brsi_3"]
-fahiid_brsi_3[(fahiid_brsi_3 != '0') & (fahiid_brsi_3 != '1') & (fahiid_brsi_3 != '2')] = np.nan
+fahiid_brsi_3 = tsr_1.loc[:, "fahiid_brsi_3"]
+fahiid_brsi_3 = pd.to_numeric(fahiid_brsi_3, errors='coerce')
+fahiid_brsi_3[(fahiid_brsi_3 != 0) & (fahiid_brsi_3 != 1) & (fahiid_brsi_3 != 2)] = np.nan
 fahiid_brsi_3 = fahiid_brsi_3.fillna(fahiid_brsi_3.mode()[0])
 # print(fahiid_brsi_3)
 print(fahiid_brsi_3.value_counts() / len(fahiid_brsi_3))
@@ -6844,8 +6142,9 @@ plt.show()
 
 # FAHIID_BRSI_4
 
-fahiid_brsi_4 = tsr_12.loc[:, "fahiid_brsi_4"]
-fahiid_brsi_4[(fahiid_brsi_4 != '0') & (fahiid_brsi_4 != '1') & (fahiid_brsi_4 != '2')] = np.nan
+fahiid_brsi_4 = tsr_1.loc[:, "fahiid_brsi_4"]
+fahiid_brsi_4 = pd.to_numeric(fahiid_brsi_4, errors='coerce')
+fahiid_brsi_4[(fahiid_brsi_4 != 0) & (fahiid_brsi_4 != 1) & (fahiid_brsi_4 != 2)] = np.nan
 fahiid_brsi_4 = fahiid_brsi_4.fillna(fahiid_brsi_4.mode()[0])
 # print(fahiid_brsi_4)
 print(fahiid_brsi_4.value_counts() / len(fahiid_brsi_4))
@@ -6860,7 +6159,7 @@ plt.show()
 
 # NIHS_1a_in
 
-nihs_1a_in = tsr_12.loc[:, "nihs_1a_in"]
+nihs_1a_in = tsr_1.loc[:, "nihs_1a_in"]
 nihs_1a_in[(nihs_1a_in < 0) | (nihs_1a_in > 3)] = np.nan
 nihs_1a_in = nihs_1a_in.fillna(nihs_1a_in.mode()[0])
 # print(nihs_1a_in)
@@ -6883,7 +6182,7 @@ plt.show()
 
 # NIHS_1b_in
 
-nihs_1b_in = tsr_12.loc[:, "nihs_1b_in"]
+nihs_1b_in = tsr_1.loc[:, "nihs_1b_in"]
 nihs_1b_in[(nihs_1b_in < 0) | (nihs_1b_in > 2)] = np.nan
 nihs_1b_in = nihs_1b_in.fillna(nihs_1b_in.mode()[0])
 # print(nihs_1b_in)
@@ -6906,7 +6205,7 @@ plt.show()
 
 # NIHS_1c_in
 
-nihs_1c_in = tsr_12.loc[:, "nihs_1c_in"]
+nihs_1c_in = tsr_1.loc[:, "nihs_1c_in"]
 nihs_1c_in[(nihs_1c_in < 0) | (nihs_1c_in > 2)] = np.nan
 nihs_1c_in = nihs_1c_in.fillna(nihs_1c_in.mode()[0])
 # print(nihs_1c_in)
@@ -6929,7 +6228,7 @@ plt.show()
 
 # NIHS_2_in
 
-nihs_2_in = tsr_12.loc[:, "nihs_2_in"]
+nihs_2_in = tsr_1.loc[:, "nihs_2_in"]
 nihs_2_in[(nihs_2_in < 0) | (nihs_2_in > 2)] = np.nan
 nihs_2_in = nihs_2_in.fillna(nihs_2_in.mode()[0])
 # print(nihs_2_in)
@@ -6952,7 +6251,7 @@ plt.show()
 
 # NIHS_3_in
 
-nihs_3_in = tsr_12.loc[:, "nihs_3_in"]
+nihs_3_in = tsr_1.loc[:, "nihs_3_in"]
 nihs_3_in[(nihs_3_in < 0) | (nihs_3_in > 3)] = np.nan
 nihs_3_in = nihs_3_in.fillna(nihs_3_in.mode()[0])
 # print(nihs_3_in)
@@ -6975,7 +6274,7 @@ plt.show()
 
 # NIHS_4_in
 
-nihs_4_in = tsr_12.loc[:, "nihs_4_in"]
+nihs_4_in = tsr_1.loc[:, "nihs_4_in"]
 nihs_4_in[(nihs_4_in < 0) | (nihs_4_in > 3)] = np.nan
 nihs_4_in = nihs_4_in.fillna(nihs_4_in.mode()[0])
 # print(nihs_4_in)
@@ -6998,7 +6297,7 @@ plt.show()
 
 # NIHS_5aL_in
 
-nihs_5al_in = tsr_12.loc[:, "nihs_5al_in"]
+nihs_5al_in = tsr_1.loc[:, "nihs_5al_in"]
 nihs_5al_in[(nihs_5al_in < 0) | (nihs_5al_in > 4)] = np.nan
 nihs_5al_in = nihs_5al_in.fillna(nihs_5al_in.mode()[0])
 # print(nihs_5al_in)
@@ -7021,7 +6320,7 @@ plt.show()
 
 # NIHS_5bR_in
 
-nihs_5br_in = tsr_12.loc[:, "nihs_5br_in"]
+nihs_5br_in = tsr_1.loc[:, "nihs_5br_in"]
 nihs_5br_in[(nihs_5br_in < 0) | (nihs_5br_in > 4)] = np.nan
 nihs_5br_in = nihs_5br_in.fillna(nihs_5br_in.mode()[0])
 # print(nihs_5br_in)
@@ -7044,7 +6343,7 @@ plt.show()
 
 # NIHS_6aL_in
 
-nihs_6al_in = tsr_12.loc[:, "nihs_6al_in"]
+nihs_6al_in = tsr_1.loc[:, "nihs_6al_in"]
 nihs_6al_in[(nihs_6al_in < 0) | (nihs_6al_in > 4)] = np.nan
 nihs_6al_in = nihs_6al_in.fillna(nihs_6al_in.mode()[0])
 # print(nihs_6al_in)
@@ -7067,7 +6366,7 @@ plt.show()
 
 # NIHS_6bR_in
 
-nihs_6br_in = tsr_12.loc[:, "nihs_6br_in"]
+nihs_6br_in = tsr_1.loc[:, "nihs_6br_in"]
 nihs_6br_in[(nihs_6br_in < 0) | (nihs_6br_in > 4)] = np.nan
 nihs_6br_in = nihs_6br_in.fillna(nihs_6br_in.mode()[0])
 # print(nihs_6br_in)
@@ -7090,7 +6389,7 @@ plt.show()
 
 # NIHS_7_in
 
-nihs_7_in = tsr_12.loc[:, "nihs_7_in"]
+nihs_7_in = tsr_1.loc[:, "nihs_7_in"]
 nihs_7_in[(nihs_7_in < 0) | (nihs_7_in > 2)] = np.nan
 nihs_7_in = nihs_7_in.fillna(nihs_7_in.mode()[0])
 # print(nihs_7_in)
@@ -7113,7 +6412,7 @@ plt.show()
 
 # NIHS_8_in
 
-nihs_8_in = tsr_12.loc[:, "nihs_8_in"]
+nihs_8_in = tsr_1.loc[:, "nihs_8_in"]
 nihs_8_in[(nihs_8_in < 0) | (nihs_8_in > 2)] = np.nan
 nihs_8_in = nihs_8_in.fillna(nihs_8_in.mode()[0])
 # print(nihs_8_in)
@@ -7136,7 +6435,7 @@ plt.show()
 
 # NIHS_9_in
 
-nihs_9_in = tsr_12.loc[:, "nihs_9_in"]
+nihs_9_in = tsr_1.loc[:, "nihs_9_in"]
 nihs_9_in[(nihs_9_in < 0) | (nihs_9_in > 3)] = np.nan
 nihs_9_in = nihs_9_in.fillna(nihs_9_in.mode()[0])
 # print(nihs_9_in)
@@ -7159,7 +6458,7 @@ plt.show()
 
 # NIHS_10_in
 
-nihs_10_in = tsr_12.loc[:, "nihs_10_in"]
+nihs_10_in = tsr_1.loc[:, "nihs_10_in"]
 nihs_10_in[(nihs_10_in < 0) | (nihs_10_in > 2)] = np.nan
 nihs_10_in = nihs_10_in.fillna(nihs_10_in.mode()[0])
 # print(nihs_10_in)
@@ -7182,7 +6481,7 @@ plt.show()
 
 # NIHS_11_in
 
-nihs_11_in = tsr_12.loc[:, "nihs_11_in"]
+nihs_11_in = tsr_1.loc[:, "nihs_11_in"]
 nihs_11_in[(nihs_11_in < 0) | (nihs_11_in > 2)] = np.nan
 nihs_11_in = nihs_11_in.fillna(nihs_11_in.mode()[0])
 # print(nihs_11_in)
@@ -7226,7 +6525,7 @@ plt.show()
 
 # NIHS_1a_out
 
-nihs_1a_out = tsr_12.loc[:, "nihs_1a_out"]
+nihs_1a_out = tsr_1.loc[:, "nihs_1a_out"]
 nihs_1a_out[(nihs_1a_out < 0) | (nihs_1a_out > 3)] = np.nan
 nihs_1a_out = nihs_1a_out.fillna(nihs_1a_out.mode()[0])
 # print(nihs_1a_out)
@@ -7249,7 +6548,7 @@ plt.show()
 
 # NIHS_1b_out
 
-nihs_1b_out = tsr_12.loc[:, "nihs_1b_out"]
+nihs_1b_out = tsr_1.loc[:, "nihs_1b_out"]
 nihs_1b_out[(nihs_1b_out < 0) | (nihs_1b_out > 2)] = np.nan
 nihs_1b_out = nihs_1b_out.fillna(nihs_1b_out.mode()[0])
 # print(nihs_1b_out)
@@ -7272,7 +6571,7 @@ plt.show()
 
 # NIHS_1c_out
 
-nihs_1c_out = tsr_12.loc[:, "nihs_1c_out"]
+nihs_1c_out = tsr_1.loc[:, "nihs_1c_out"]
 nihs_1c_out[(nihs_1c_out < 0) | (nihs_1c_out > 2)] = np.nan
 nihs_1c_out = nihs_1c_out.fillna(nihs_1c_out.mode()[0])
 # print(nihs_1c_out)
@@ -7295,7 +6594,7 @@ plt.show()
 
 # NIHS_2_out
 
-nihs_2_out = tsr_12.loc[:, "nihs_2_out"]
+nihs_2_out = tsr_1.loc[:, "nihs_2_out"]
 nihs_2_out[(nihs_2_out < 0) | (nihs_2_out > 2)] = np.nan
 nihs_2_out = nihs_2_out.fillna(nihs_2_out.mode()[0])
 # print(nihs_2_out)
@@ -7318,7 +6617,7 @@ plt.show()
 
 # NIHS_3_out
 
-nihs_3_out = tsr_12.loc[:, "nihs_3_out"]
+nihs_3_out = tsr_1.loc[:, "nihs_3_out"]
 nihs_3_out[(nihs_3_out < 0) | (nihs_3_out > 3)] = np.nan
 nihs_3_out = nihs_3_out.fillna(nihs_3_out.mode()[0])
 # print(nihs_3_out)
@@ -7341,7 +6640,7 @@ plt.show()
 
 # NIHS_4_out
 
-nihs_4_out = tsr_12.loc[:, "nihs_4_out"]
+nihs_4_out = tsr_1.loc[:, "nihs_4_out"]
 nihs_4_out[(nihs_4_out < 0) | (nihs_4_out > 3)] = np.nan
 nihs_4_out = nihs_4_out.fillna(nihs_4_out.mode()[0])
 # print(nihs_4_out)
@@ -7364,7 +6663,7 @@ plt.show()
 
 # NIHS_5aL_out
 
-nihs_5al_out = tsr_12.loc[:, "nihs_5al_out"]
+nihs_5al_out = tsr_1.loc[:, "nihs_5al_out"]
 nihs_5al_out[(nihs_5al_out < 0) | (nihs_5al_out > 4)] = np.nan
 nihs_5al_out = nihs_5al_out.fillna(nihs_5al_out.mode()[0])
 # print(nihs_5al_out)
@@ -7387,7 +6686,7 @@ plt.show()
 
 # NIHS_5bR_out
 
-nihs_5br_out = tsr_12.loc[:, "nihs_5br_out"]
+nihs_5br_out = tsr_1.loc[:, "nihs_5br_out"]
 nihs_5br_out[(nihs_5br_out < 0) | (nihs_5br_out > 4)] = np.nan
 nihs_5br_out = nihs_5br_out.fillna(nihs_5br_out.mode()[0])
 # print(nihs_5br_out)
@@ -7410,7 +6709,7 @@ plt.show()
 
 # NIHS_6aL_out
 
-nihs_6al_out = tsr_12.loc[:, "nihs_6al_out"]
+nihs_6al_out = tsr_1.loc[:, "nihs_6al_out"]
 nihs_6al_out[(nihs_6al_out < 0) | (nihs_6al_out > 4)] = np.nan
 nihs_6al_out = nihs_6al_out.fillna(nihs_6al_out.mode()[0])
 # print(nihs_6al_out)
@@ -7433,7 +6732,7 @@ plt.show()
 
 # NIHS_6bR_out
 
-nihs_6br_out = tsr_12.loc[:, "nihs_6br_out"]
+nihs_6br_out = tsr_1.loc[:, "nihs_6br_out"]
 nihs_6br_out[(nihs_6br_out < 0) | (nihs_6br_out > 4)] = np.nan
 nihs_6br_out = nihs_6br_out.fillna(nihs_6br_out.mode()[0])
 # print(nihs_6br_out)
@@ -7456,7 +6755,7 @@ plt.show()
 
 # NIHS_7_out
 
-nihs_7_out = tsr_12.loc[:, "nihs_7_out"]
+nihs_7_out = tsr_1.loc[:, "nihs_7_out"]
 nihs_7_out[(nihs_7_out < 0) | (nihs_7_out > 2)] = np.nan
 nihs_7_out = nihs_7_out.fillna(nihs_7_out.mode()[0])
 # print(nihs_7_out)
@@ -7479,7 +6778,7 @@ plt.show()
 
 # NIHS_8_out
 
-nihs_8_out = tsr_12.loc[:, "nihs_8_out"]
+nihs_8_out = tsr_1.loc[:, "nihs_8_out"]
 nihs_8_out[(nihs_8_out < 0) | (nihs_8_out > 2)] = np.nan
 nihs_8_out = nihs_8_out.fillna(nihs_8_out.mode()[0])
 # print(nihs_8_out)
@@ -7502,7 +6801,7 @@ plt.show()
 
 # NIHS_9_out
 
-nihs_9_out = tsr_12.loc[:, "nihs_9_out"]
+nihs_9_out = tsr_1.loc[:, "nihs_9_out"]
 nihs_9_out[(nihs_9_out < 0) | (nihs_9_out > 3)] = np.nan
 nihs_9_out = nihs_9_out.fillna(nihs_9_out.mode()[0])
 # print(nihs_9_out)
@@ -7525,7 +6824,7 @@ plt.show()
 
 # NIHS_10_out
 
-nihs_10_out = tsr_12.loc[:, "nihs_10_out"]
+nihs_10_out = tsr_1.loc[:, "nihs_10_out"]
 nihs_10_out[(nihs_10_out < 0) | (nihs_10_out > 2)] = np.nan
 nihs_10_out = nihs_10_out.fillna(nihs_10_out.mode()[0])
 # print(nihs_10_out)
@@ -7547,8 +6846,7 @@ ax2.set_ylabel('Number', rotation=0)
 plt.show()
 
 # NIHS_11_out
-
-nihs_11_out = tsr_12.loc[:, "nihs_11_out"]
+nihs_11_out = tsr_1.loc[:, "nihs_11_out"]
 nihs_11_out[(nihs_11_out < 0) | (nihs_11_out > 2)] = np.nan
 nihs_11_out = nihs_11_out.fillna(nihs_11_out.mode()[0])
 # print(nihs_11_out)
@@ -7592,7 +6890,7 @@ plt.show()
 
 # SEX
 
-SexName = tsr_12.loc[:, "SexName"]
+SexName = tsr_1.loc[:, "SexName"]
 # print(SexName)
 print(SexName.value_counts() / len(SexName))
 # print(SexName.describe())
@@ -7606,7 +6904,7 @@ plt.show()
 
 # AGE
 
-Age = tsr_12.loc[:, "Age"]
+Age = tsr_1.loc[:, "Age"]
 
 q1 = Age.quantile(0.25)
 q3 = Age.quantile(0.75)
@@ -7637,7 +6935,7 @@ ax2.set_xlabel('AGE(Year)')
 ax2.set_ylabel('Number', rotation=0)
 plt.show()
 
-TSR_12_CLEANED = pd.DataFrame([height_nm ,  weight_nm ,  edu_id ,  pro_id ,  opc_id ,  ih_fl ,  ivtpamg_nm , hospitalised_time, 
+TSR_1_CLEANED = pd.DataFrame([height_nm ,  weight_nm ,  edu_id ,  pro_id ,  opc_id ,  ih_fl ,  ivtpamg_nm , hospitalised_time, 
                           nivtpa_id, nivtpa1_fl ,  nivtpa2_fl , nivtpa3_fl ,  nivtpa4_fl ,  nivtpa5_fl ,  nivtpa6_fl , 
                           nivtpa7_fl , nivtpa8_fl ,  nivtpa9_fl ,  nivtpa10_fl , nivtpa11_fl ,  nivtpa99_fl ,  gcse_nm , 
                           gcsv_nm ,  gcsm_nm ,  sbp_nm  , dbp_nm ,  bt_nm ,  hr_nm ,  rr_nm ,  icd_id ,  icdtia_id ,  
@@ -7681,10 +6979,9 @@ TSR_12_CLEANED = pd.DataFrame([height_nm ,  weight_nm ,  edu_id ,  pro_id ,  opc
                           nihs_6br_in ,  nihs_7_in ,  nihs_8_in ,  nihs_9_in ,  nihs_10_in , nihs_11_in ,  total_in , 
                           nihs_1a_out ,  nihs_1b_out ,  nihs_1c_out ,  nihs_2_out ,  nihs_3_out ,  nihs_4_out ,
                           nihs_5al_out ,  nihs_5br_out ,  nihs_6al_out ,  nihs_6br_out ,  nihs_7_out ,  nihs_8_out ,
-                          nihs_9_out ,  nihs_10_out ,  nihs_11_out ,  total_out ,  SexName ,  Age, mrs_tx_1, mrs_tx_3,
-                          mrs_tx_6, mrs_tx_12]).T
-TSR_12_CLEANED[TSR_12_CLEANED == "N"] = 0
-TSR_12_CLEANED[TSR_12_CLEANED == "Y"] = 1
+                          nihs_9_out ,  nihs_10_out ,  nihs_11_out ,  total_out ,  SexName ,  Age, mrs_tx_1]).T
+TSR_1_CLEANED[TSR_1_CLEANED == "N"] = 0
+TSR_1_CLEANED[TSR_1_CLEANED == "Y"] = 1
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_EHR", "TSR_12_CLEANED.csv")
-TSR_12_CLEANED.to_csv(csv_save, index=False)
+csv_save = os.path.join("../..", "data", "LINKED_DATA", "TSR_EHR", "TSR_1_CLEANED.csv")
+TSR_1_CLEANED.to_csv(csv_save, index=False)

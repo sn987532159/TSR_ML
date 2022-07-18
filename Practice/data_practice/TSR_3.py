@@ -7,14 +7,14 @@ import numpy as np
 
 os.chdir('/data_cleansing')
 
-font_path = os.path.join("..", "kaiu.ttf")
+font_path = os.path.join("../..", "kaiu.ttf")
 myfont = FontProperties(fname=font_path, size=14)
 sns.set(font=myfont.get_name())
 
 plt.rcParams['figure.figsize'] = (10, 5)
 plt.rc('axes', unicode_minus=False)
 
-csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_EHR", "TSR_3.csv")
+csv_path = os.path.join("../..", "data", "LINKED_DATA", "TSR_EHR", "TSR_3.csv")
 tsr_3 = pd.read_csv(csv_path, low_memory=False, encoding='unicode_escape')
 tsr_3.head()
 
@@ -7215,5 +7215,5 @@ TSR_3_CLEANED = pd.DataFrame([height_nm ,  weight_nm ,  edu_id ,  pro_id ,  opc_
 TSR_3_CLEANED[TSR_3_CLEANED == "N"] = 0
 TSR_3_CLEANED[TSR_3_CLEANED == "Y"] = 1
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_EHR", "TSR_3_CLEANED.csv")
+csv_save = os.path.join("../..", "data", "LINKED_DATA", "TSR_EHR", "TSR_3_CLEANED.csv")
 TSR_3_CLEANED.to_csv(csv_save, index=False)
