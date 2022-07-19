@@ -54,7 +54,7 @@ continuous = ["height_nm", "weight_nm", "sbp_nm", "dbp_nm", "bt_nm", "hr_nm", "r
               "cre_nm", "ua_nm", "tcho_nm", "tg_nm", "hdl_nm",
               "ldl_nm", "gpt_nm", "age", "hospitalised_time"]
 labels = ["mrs_tx_1"]
-column_names_B = ["Height", "Weight", "GCS-E", "GCS-V", "GCS-M", "Systolic BP", "Diastolic BP", "Bleeding time",
+column_names_B = ["idcase_id", "Height", "Weight", "GCS-E", "GCS-V", "GCS-M", "Systolic BP", "Diastolic BP", "Bleeding time",
                   "Heart rate", "Respiratory rate", "Large artery atherosclerosis-extra",
                   "Large artery atherosclerosis-intra", "Cerebral venous thrombosis", "Moyamoya Syndrome", "Radiation",
                   "Dissection", "Migraine", "Antiphospholipid Ab Syndrome", "Autoimmune disease", "Hyperfibrinogenemia",
@@ -160,13 +160,13 @@ for i in [G_train, G_validation, G_test]:
     i["CHANGE"][i["mrs_tx_1"].isin([0,1,2])] = 0 #no changes
 
 ## input dataset
-G_X_train = G_train.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+G_X_train = G_train.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(G_X_train.shape)
 
-G_X_validation = G_validation.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+G_X_validation = G_validation.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(G_X_validation.shape)
 
-G_X_test = G_test.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+G_X_test = G_test.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(G_X_test.shape)
 
 ## output dataset
@@ -179,13 +179,13 @@ print(G_y_validation.shape)
 G_y_test = G_test.CHANGE
 print(G_y_test.shape)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_TRAIN_withID.csv")
 pd.DataFrame(G_y_train).to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_VALIDATION.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_VALIDATION_withID.csv")
 pd.DataFrame(G_y_validation).to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_y_TEST_withID.csv")
 pd.DataFrame(G_y_test).to_csv(csv_save, index=False)
 
 ## scale G_X_train
@@ -201,7 +201,7 @@ G_X_train = pd.concat([G_X_train, pd.DataFrame(nominal_train)], axis=1)
 G_X_train = G_X_train.drop(nominal_features, axis=1)
 G_X_train.columns = column_names_G
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TRAIN_withID.csv")
 G_X_train.to_csv(csv_save, index=False)
 
 ## scale G_X_validation
@@ -214,7 +214,7 @@ G_X_validation = pd.concat([G_X_validation, pd.DataFrame(nominal_test)], axis=1)
 G_X_validation = G_X_validation.drop(nominal_features, axis=1)
 G_X_validation.columns = column_names_G
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_VALIDATION.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_VALIDATION_withID.csv")
 G_X_validation.to_csv(csv_save, index=False)
 
 ## scale G_X_test
@@ -227,7 +227,7 @@ G_X_test = pd.concat([G_X_test, pd.DataFrame(nominal_test)], axis=1)
 G_X_test = G_X_test.drop(nominal_features, axis=1)
 G_X_test.columns = column_names_G
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1G_X_TEST_withID.csv")
 G_X_test.to_csv(csv_save, index=False)
 
 # Machine Learning
@@ -243,13 +243,13 @@ for i in [B_train, B_validation, B_test]:
     i["CHANGE"][~i["mrs_tx_1"].isin([0,1,2])] = 0 #no changes
 
 ## input dataset
-B_X_train = B_train.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+B_X_train = B_train.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(B_X_train.shape)
 
-B_X_validation = B_validation.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+B_X_validation = B_validation.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(B_X_validation.shape)
 
-B_X_test = B_test.drop(["icase_id", "idcase_id", "mrs_tx_1", "CHANGE"], axis=1)
+B_X_test = B_test.drop(["icase_id", "mrs_tx_1", "CHANGE"], axis=1)
 print(B_X_test.shape)
 
 ## output dataset
@@ -262,13 +262,13 @@ print(B_y_validation.shape)
 B_y_test = B_test.CHANGE
 print(B_y_test.shape)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_TRAIN_withID.csv")
 pd.DataFrame(B_y_train).to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_VALIDATION.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_VALIDATION_withID.csv")
 pd.DataFrame(B_y_validation).to_csv(csv_save, index=False)
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_y_TEST_withID.csv")
 pd.DataFrame(B_y_test).to_csv(csv_save, index=False)
 
 ## scale B_X_train
@@ -284,7 +284,7 @@ B_X_train = pd.concat([B_X_train, pd.DataFrame(nominal_train)], axis=1)
 B_X_train = B_X_train.drop(nominal_features, axis=1)
 B_X_train.columns = column_names_B
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TRAIN.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TRAIN_withID.csv")
 B_X_train.to_csv(csv_save, index=False)
 
 ## scale B_X_validation
@@ -297,7 +297,7 @@ B_X_validation = pd.concat([B_X_validation, pd.DataFrame(nominal_test)], axis=1)
 B_X_validation = B_X_validation.drop(nominal_features, axis=1)
 B_X_validation.columns = column_names_B
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_VALIDATION.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_VALIDATION_withID.csv")
 B_X_validation.to_csv(csv_save, index=False)
 
 ## scale B_X_test
@@ -310,5 +310,5 @@ B_X_test = pd.concat([B_X_test, pd.DataFrame(nominal_test)], axis=1)
 B_X_test = B_X_test.drop(nominal_features, axis=1)
 B_X_test.columns = column_names_B
 
-csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TEST.csv")
+csv_save = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL1", "TSR_ALL1B_X_TEST_withID.csv")
 B_X_test.to_csv(csv_save, index=False)

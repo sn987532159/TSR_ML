@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 
-# Import datasets
+# Import datasets (GOOD group's MICE is 4, while POOR group's MICE is 1)
 csv_path = os.path.join("..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL3", "TSR_ALL3_TRAIN_MICE5.csv")
 tsr_all31_train = pd.read_csv(csv_path)
 
