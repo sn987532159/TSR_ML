@@ -57,7 +57,7 @@ csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31
 G_y_train = pd.read_csv(csv_path)
 
 ### XGBClassifier
-pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE2", "TSR_ALL31G_XGBC_CALIBRATED.pkl")
+pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE4", "TSR_ALL31G_XGBC_CALIBRATED.pkl")
 G_XGBC_CALIBRATED = joblib.load(pkl_path)
 y_train_xgbc_G_pred = G_XGBC_CALIBRATED.predict_proba(G_X_train)[:, 1]
 
@@ -79,12 +79,12 @@ csv_path = os.path.join("..", "..", "data", "LINKED_DATA", "TSR_ALL", "TSR_ALL31
 P_y_train = pd.read_csv(csv_path)
 
 ### XGBClassifier
-pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE3", "TSR_ALL31B_XGBC_CALIBRATED.pkl")
+pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL31B_XGBC_CALIBRATED.pkl")
 P_XGBC_CALIBRATED = joblib.load(pkl_path)
 y_train_xgbc_P_pred = P_XGBC_CALIBRATED.predict_proba(P_X_train)[:, 1]
 
 ### Logistic Regression
-pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE3", "TSR_ALL31B_LR_CALIBRATED.pkl")
+pkl_path = os.path.join("..", "..", "model", "model_pickle", "MICE1", "TSR_ALL31B_LR_CALIBRATED.pkl")
 P_LR_CALIBRATED = joblib.load(pkl_path)
 y_train_lr_P_pred = P_LR_CALIBRATED.predict_proba(P_X_train)[:, 1]
 
