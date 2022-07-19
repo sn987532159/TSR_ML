@@ -1,5 +1,7 @@
 # TSR_ML
 
+* script names contained "combined" meant that the dataset was not split into GOOD group or POOR group
+
 Based on whether mrs_tx_3 were included in the feature list
   - YES => TSR_ALL31 
   - NO  => TSR_ALL1 (Example in this file)
@@ -10,7 +12,7 @@ TSR_ALL1 wnet through feature selection (TSR_ALL1_EXTRACTION.py), data preproces
   - For TSR_ALL1 -> GOOD group's MICE is 1, while POOR group's MICE is 5
 
 ## data modelling step (model file)
-Fed dataset into ET (extra trees), LR (logistic regression), XGBC (xgb classifier)
+Fed dataset into ET (extra trees), LR (logistic regression), XGBC (xgb classifier), Clinical (clinical scores)
 
 ## results step (result)
 - For AUROC, utilisied TSR_ALL1_VALIDATION_AUC.py and TSR_ALL1_TEST_AUC.py
